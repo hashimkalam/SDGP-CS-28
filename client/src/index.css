@@ -1,0 +1,29 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@200;400;600;700&display=swap");
+
+* {
+  margin: 0;
+  padding: 0;
+  font-family: "poppins";
+}
+:root {
+  --bg-image: url("./assets/pattern.png");
+}
+
+@layer components {
+  .justifyCenter {
+    @apply flex justify-center items-center;
+  }
+  .link {
+    @apply p-3 bg-[#F0EDFF] marker:rounded-xl outline-none w-[60%] xxs:w-[80%] sm:w-[40vw] lg:w-[75%] my-2 text-[#1c1c1c] text-center lg:text-left;
+  }
+  .registerOptions {
+    @apply text-[#0f3dde] cursor-pointer hover:underline ml-2;
+  }
+  .registerImg {
+    @apply absolute lg:bottom-0 lg:text-lg xl:text-xl;
+  }
+}
