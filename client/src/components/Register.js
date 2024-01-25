@@ -32,7 +32,7 @@ const customStyles = {
   }),
   option: (provided, state) => ({
     ...provided,
-    backgroundColor: state.isSelected ? "#111" : "#F0EDFF", // Change these colors as needed
+    backgroundColor: state.isSelected ? "#111" : "#F0EDFF",
     cursor: "pointer",
   }),
 };
