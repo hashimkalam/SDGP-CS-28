@@ -14,7 +14,7 @@
 }
 
 @layer components {
-  .justifyCenter {
+  .displayFlex {
     @apply flex justify-center items-center;
   }
   .link {

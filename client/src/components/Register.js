@@ -116,12 +116,12 @@ function Register() {
         </Link>
 
         <div className="grid place-items-center h-[85vh] lg:h-[83vh]">
-          <div className="justifyCenter flex-col w-full -mt-[4vh]">
+          <div className="displayFlex flex-col w-full -mt-[4vh]">
             <h2 className="uppercase font-bold text-2xl text-center pt-5 pb-10">
               {loginPage ? "login" : "get started now"}
             </h2>
             <form
-              className="w-3/4 sm:w-2/4 md:w-3/4 justifyCenter flex-col "
+              className="w-3/4 sm:w-2/4 md:w-3/4 displayFlex flex-col "
               onSubmit={submitHandler}
             >
               <div className="link ">
