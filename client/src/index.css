@@ -29,4 +29,7 @@
   .registerImg {
     @apply absolute lg:bottom-0 lg:text-lg xl:text-xl;
   }
+  .hoverEffect {
+    @apply duration-150 ease-in-out cursor-pointer flex-1;
+  }
 }
