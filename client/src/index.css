@@ -14,16 +14,22 @@
 }
 
 @layer components {
-  .justifyCenter {
+  .displayFlex {
     @apply flex justify-center items-center;
   }
   .link {
-    @apply p-3 bg-[#F0EDFF] marker:rounded-xl outline-none w-[60%] xxs:w-[80%] sm:w-[40vw] lg:w-[75%] my-2 text-[#1c1c1c] text-center lg:text-left;
+    @apply p-3 py-4 bg-[#F0EDFF] flex items-center rounded-2xl w-[60%] xxs:w-[80%] sm:w-[40vw] lg:w-[75%] my-2 text-[#1c1c1c] lg:text-left;
+  }
+  .innerLink {
+    @apply ml-2 bg-[#F0EDFF] w-[90%] outline-none border-none;
   }
   .registerOptions {
     @apply text-[#0f3dde] cursor-pointer hover:underline ml-2;
   }
   .registerImg {
     @apply absolute lg:bottom-0 lg:text-lg xl:text-xl;
+  }
+  .hoverEffect {
+    @apply duration-150 ease-in-out cursor-pointer flex-1;
   }
 }
