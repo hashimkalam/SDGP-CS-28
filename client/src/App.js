@@ -2,6 +2,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Home from "./components/Home";
 import ForgotPassword from "./components/ForgotPassword";
 import Register from "./components/Register";
+import Download from "./components/Download";
 
 function App() {
   return (
@@ -33,7 +34,14 @@ function App() {
               </div>
             }
           />
-
+          <Route
+            path="/download"
+            element={
+              <div className="bg-[#090E34]">
+                <Download />
+              </div>
+            }
+          />
           <Route
             path="/"
             element={
