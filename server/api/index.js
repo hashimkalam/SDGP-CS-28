@@ -4,6 +4,7 @@ import mongoose from "mongoose";
 import dotenv from "dotenv";
 import cors from "cors";
 import userRoutes from "./routes/user.route.js";
+import authRoutes from "./routes/auth.route.js";
 
 // Load environment variables
 dotenv.config();
@@ -28,6 +29,9 @@ app.use(
 
 // Add the user routes to the express application
 app.use('/api/user', userRoutes);
+
+// Add the auth routes to the express application
+app.use('/api/auth', authRoutes);
 
 // connect to the database
 mongoose
