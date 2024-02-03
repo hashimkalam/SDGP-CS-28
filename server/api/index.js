@@ -57,3 +57,14 @@ app.get("/", (req, res) => {
 app.on('error', (err) => {
     console.error('Express App Error:', err.message);
 });
+
+// Add error handling middleware
+app.use((err, req, res, next) => {
+    const status = err.status || 500;
+    const message = err.message || 'Internal Server Error';
+    res.status(status).json({
+        success: false,
+        status,
+        message,
+    });
+});

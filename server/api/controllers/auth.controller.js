@@ -1,7 +1,7 @@
 import User from "../models/user.model.js";
 import bcrypt from "bcryptjs";
 
-export const signup = async (req, res) => {
+export const signup = async (req, res, next) => {
   // Get the name, email, role and password from the request body
   const { name, email, role, password } = req.body;
 
@@ -28,9 +28,6 @@ export const signup = async (req, res) => {
     // send an error response if there is an error
     console.error(error.message);
 
-    // send a 500 response to the client
-    res.status(500).send({
-      message: error.message,
-    });
+    next(error);
   }
 };
