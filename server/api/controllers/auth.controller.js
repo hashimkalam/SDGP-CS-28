@@ -1,6 +1,36 @@
+import User from "../models/user.model.js";
+import bcrypt from "bcryptjs";
+
 export const signup = async (req, res) => {
-    console.log(req.body);
-    res.json({
-        message: req.body
-    })
+  // Get the name, email, role and password from the request body
+  const { name, email, role, password } = req.body;
+
+  // add hashpassword to the password
+  const hashedPassword = bcrypt.hashSync(password, 10);
+
+  // create a new user with the details
+  const newUser = new User({
+    name,
+    email,
+    role,
+    password: hashedPassword,
+  });
+
+  try {
+    // save the user to the database
+    await newUser.save();
+
+    // send a success response
+    res.status(201).send({
+      message: "User created successfully",
+    });
+  } catch (error) {
+    // send an error response if there is an error
+    console.error(error.message);
+
+    // send a 500 response to the client
+    res.status(500).send({
+      message: error.message,
+    });
+  }
 };
