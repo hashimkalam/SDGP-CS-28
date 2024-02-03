@@ -3,6 +3,7 @@ import express from "express";
 import mongoose from "mongoose";
 import dotenv from "dotenv";
 import cors from "cors";
+import userRoutes from "./routes/user.route.js";
 
 // Load environment variables
 dotenv.config();
@@ -24,6 +25,9 @@ app.use(
     allowedHeaders: ["Content-Type"],
   })
 );
+
+// Add the user routes to the express application
+app.use('/api/user', userRoutes);
 
 // connect to the database
 mongoose
