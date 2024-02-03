@@ -2,6 +2,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Home from "./components/Home";
 import ForgotPassword from "./components/ForgotPassword";
 import Register from "./components/Register";
+import ArchitectPage from "./components/ArchitectPage";
 
 function App() {
   return (
@@ -30,6 +31,15 @@ function App() {
             element={
               <div className="bg-[#5E5ABA] h-screen">
                 <ForgotPassword />
+              </div>
+            }
+          />
+
+          <Route
+            path="/architectpage"
+            element={
+              <div className="bg-[#5E5ABA] h-screen">
+                <ArchitectPage />
               </div>
             }
           />
