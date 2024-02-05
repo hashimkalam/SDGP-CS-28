@@ -48,6 +48,7 @@ function Register() {
   const [passPlaceholder, setPassPlaceholder] = useState(true);
   const [visibility, setVisibility] = useState(false);
   const [errorMsg, setErrorMessage] = useState(false);
+  const [formData, setFormData] = useState({});
 
   //console.log(selectOption.label);
 
@@ -73,7 +74,7 @@ function Register() {
     boxShadow: "0px 8px 21px 0px rgba(0, 0, 0, .16)",
   };
 
-  const submitHandler = (e) => {
+  const submitHandler = async (e) => {
     e.preventDefault();
 
     if (username === "" || password === "") {
@@ -85,10 +86,16 @@ function Register() {
     } else {
       setErrorMessage(false);
 
-      setUsername("");
-      setEmail("");
-      setSelectOption("");
-      setPassword("");
+      const res = await fetch("http://localhost:3000/api/auth/signup", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
+      console.log(formData);
+      const data = await res.json();
+      console.log(data);
     }
   };
 
@@ -131,7 +138,12 @@ function Register() {
                   placeholder="Username"
                   className="innerLink "
                   value={username}
-                  onChange={(e) => setUsername(e.target.value)}
+                  onChange={(e) => {
+                    setUsername(e.target.value);
+                    setFormData((prevFormData) => {
+                      return { ...prevFormData, username: e.target.value };
+                    })
+                  }}
                 />
               </div>
 
@@ -144,7 +156,12 @@ function Register() {
                       placeholder="Email"
                       className="innerLink"
                       value={email}
-                      onChange={(e) => setEmail(e.target.value)}
+                      onChange={(e) => {
+                        setEmail(e.target.value);
+                        setFormData((prevFormData) => {
+                          return { ...prevFormData, email: e.target.value };
+                        })
+                      }}
                     />
                   </div>
 
@@ -155,7 +172,13 @@ function Register() {
                       styles={customStyles}
                       options={options}
                       value={selectOption}
-                      onChange={(selected) => setSelectOption(selected)}
+                      onChange={(selected) => {
+                        setSelectOption(selected);
+                        setFormData((prevFormData) => ({
+                          ...prevFormData,
+                          role: selected.value,
+                        }));
+                      }}
                       placeholder="Select your role"
                     />
                   </div>
@@ -169,7 +192,12 @@ function Register() {
                   placeholder="Password"
                   className="innerLink mr-2"
                   value={password}
-                  onChange={(e) => setPassword(e.target.value)}
+                  onChange={(e) => {
+                    setPassword(e.target.value);
+                    setFormData((prevFormData) => {
+                      return { ...prevFormData, password: e.target.value };
+                    })
+                  }}
                 />
 
                 <IconButton
