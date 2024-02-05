@@ -19,13 +19,7 @@ const app = express();
 app.use(express.json());
 
 // middleware for handling CORS
-app.use(
-  cors({
-    origin: process.env.CORS_ORIGIN,
-    methods: ["GET", "POST", "PUT", "DELETE"],
-    allowedHeaders: ["Content-Type"],
-  })
-);
+app.use(cors());
 
 // Add the user routes to the express application
 app.use('/api/user', userRoutes);
