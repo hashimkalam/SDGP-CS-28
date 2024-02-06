@@ -7,4 +7,7 @@ const router = express.Router();
 // Add a route to handle user signup
 router.post("/signup", signup)
 
+// add a route to handle user login
+router.post("/signin", )
+
 export default router;

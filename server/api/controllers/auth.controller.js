@@ -1,5 +1,6 @@
 import User from "../models/user.model.js";
 import bcrypt from "bcryptjs";
+import jwt from "jsonwebtoken";
 
 export const signup = async (req, res, next) => {
   // Get the name, email, role and password from the request body
@@ -31,3 +32,29 @@ export const signup = async (req, res, next) => {
     next(error);
   }
 };
+
+export const signin = async (req, res, next) => {
+  // Get the email and password from the request body
+  const { email, password } = req.body;
+
+  try {
+    const validUser = await User.findOne({ email });
+    if (!validUser) {
+      return res.status(404).send({
+        message: "User not found",
+      });
+    }
+    const validPassword = bcrypt.compareSync(password, validUser.password);
+    if (!validPassword) {
+      return res.status(401).send({
+        message: "Wrong credentials",
+      });
+    }
+    res.status(200).send({
+      message: "User logged in successfully",
+    });
+
+  } catch (error) {
+    next(error);
+  }
+}

@@ -93,7 +93,6 @@ function Register() {
         },
         body: JSON.stringify(formData),
       });
-      console.log(formData);
       const data = await res.json();
       console.log(data);
     }
