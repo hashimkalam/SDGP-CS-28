@@ -1,8 +1,8 @@
 import { Button } from "@mui/material";
 import React from "react";
 
-import tick_image from "../assets/tick_svg.svg";
-import person_image from "../assets/download_person.png";
+import tick_image from "../../assets/tick_svg.svg";
+import person_image from "../../assets/download_person.png";
 
 const options = [
   { text: "Premium quality" },
