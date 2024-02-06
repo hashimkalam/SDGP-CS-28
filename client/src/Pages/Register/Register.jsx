@@ -99,9 +99,8 @@ function Register() {
     setPassword("");
 
     setLoginPage(!loginPage);
-    {
-      loginPage ? navigate("/login") : navigate("/signup");
-    }
+
+    loginPage ? navigate("/login") : navigate("/signup");
   };
 
   return (

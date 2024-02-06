@@ -1,8 +1,8 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import Home from "./components/Home/Home";
-import ForgotPassword from "./components/ForgotPassword/ForgotPassword";
-import Register from "./components/Register/Register";
-import Download from "./components/Download/Download";
+import Home from "./Pages/Home/Home";
+import ForgotPassword from "./Pages/ForgotPassword/ForgotPassword";
+import Register from "./Pages/Register/Register";
+import Download from "./Pages/Download/Download";
 
 function App() {
   return (
@@ -36,6 +36,7 @@ function App() {
           />
           <Route
             path="/download"
+
             element={
               <div className="bg-[#090E34]">
                 <Download />
@@ -45,7 +46,7 @@ function App() {
           <Route
             path="/"
             element={
-              <div className="bg-[#5E5ABA] h-screen">
+              <div className="bg-[#ffffff] h-screen">
                 <Home />
               </div>
             }
