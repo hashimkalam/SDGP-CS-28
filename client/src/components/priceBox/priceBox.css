@@ -1,0 +1,25 @@
+.PriceBox {
+  width: 360px;
+  height: 447px;
+  flex-shrink: 0;
+  border-radius: 16px;
+  background: #090e34;
+  background-image: url("../../../public/images/img_svg.png");
+  background-size: 179px 158px;
+  background-repeat: no-repeat;
+  background-position: bottom right;
+  margin: 30px;
+}
+
+h1{
+    margin-top: 30px;
+}
+
+.feature{
+    display: flex;
+    flex-direction: column;
+    height: 220px;
+    margin: 35px 0;
+    font-weight: 600;
+
+}

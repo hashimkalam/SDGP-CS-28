@@ -1,0 +1,15 @@
+.payment {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  color: black;
+}
+
+.payment_form {
+  margin: 25px;
+  padding: 10px;
+  border-radius: 10px;
+  box-shadow: 0 0 50px rgba(0, 0, 0, 0.5);
+  background: white;
+}

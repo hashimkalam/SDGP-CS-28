@@ -4,6 +4,7 @@ import Navbar from "../../components/navbar/navbar";
 import Hero from "../../components/hero/hero";
 import HowItWorks from "../../components/how-it-works/howitworks";  
 import  Footer  from "../../components/footer/footer";
+import  PriceSection  from "../../components/priceSection/PriceSection";
 
 function Home() {
   return (
@@ -11,7 +12,7 @@ function Home() {
       <Navbar />
       <Hero />
       <HowItWorks />
-      {/* <Pricing /> */}
+      <PriceSection/>
       <Footer />
     </div>
   );
