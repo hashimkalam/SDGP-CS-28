@@ -25,12 +25,12 @@ function PriceSection() {
         if (event.target.checked) {
             setPriceList((prevList) => [
                 { ...prevList[0], price: 299 },
-                { ...prevList[1], price: 599 }
+                { ...prevList[1], price: 599,f3: "Unlimited Clients" }
             ]);
         } else {
             setPriceList((prevList) => [
                 { ...prevList[0], price: 20 },
-                { ...prevList[1], price: 50 }
+                { ...prevList[1], price: 50,f3: "Architect consultation" }
             ]);
         }
     }
@@ -41,13 +41,18 @@ function PriceSection() {
                 <div className='title'>
                     <h1>Simple And Affordable Pricing</h1>
                     <p>Skip the subscriptions, say goodbye to recurring fees. Build your forever home with one-time access to unlimited floor plan generation.</p>
-                    <label className="switch" htmlFor="lifetimeCheckbox"> Lifetime
-                        <input
-                            type="checkbox"
-                            id="lifetimeCheckbox"
-                            onChange={handleOnChange}
-                        />
-                    </label>
+                    <div>
+                        Indivdual
+                        <label className="switch" htmlFor="lifetimeCheckbox">
+                            <input
+                                type="checkbox"
+                                id="lifetimeCheckbox"
+                                onChange={handleOnChange}
+                            />
+                            <span class="slider round"></span>
+                        </label>
+                        Architect
+                    </div>
                 </div>
                 <div className='priceBox'>
                     {priceList.map((data, index) => (
@@ -61,8 +66,8 @@ function PriceSection() {
                     ))}
                 </div>
             </div>
-            
-            
+
+
         </>
     );
 }

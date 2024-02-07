@@ -16,7 +16,7 @@ function PriceBox(prop) {
            
             </div>
             <div className='buy_button'>
-                <button>proceed</button>
+                <button>Proceed</button>
                 
             </div>
             
