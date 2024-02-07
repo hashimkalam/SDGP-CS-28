@@ -77,7 +77,7 @@ function Register() {
   const submitHandler = async (e) => {
     e.preventDefault();
 
-    if (username === "" || password === "") {
+    if (email === "" || password === "") {
       setErrorMessage(true);
 
       setTimeout(() => {
@@ -86,13 +86,18 @@ function Register() {
     } else {
       setErrorMessage(false);
 
-      const res = await fetch("http://localhost:3000/api/auth/signup", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(formData),
-      });
+      const res = await fetch(
+        !loginPage
+          ? "http://localhost:3000/api/auth/signup"
+          : "http://localhost:3000/api/auth/signin",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(formData),
+        }
+      );
       const data = await res.json();
       console.log(data);
     }
@@ -130,58 +135,57 @@ function Register() {
               className="w-3/4 sm:w-2/4 md:w-3/4 displayFlex flex-col "
               onSubmit={submitHandler}
             >
-              <div className="link ">
-                <PersonOutlineIcon />
+              {!loginPage && (
+                <div className="link ">
+                  <PersonOutlineIcon />
+                  <input
+                    type="text"
+                    placeholder="Username"
+                    className="innerLink "
+                    value={username}
+                    onChange={(e) => {
+                      setUsername(e.target.value);
+                      setFormData((prevFormData) => {
+                        return { ...prevFormData, username: e.target.value };
+                      });
+                    }}
+                  />
+                </div>
+              )}
+
+              <div className="link">
+                <MailOutlineIcon />
                 <input
-                  type="text"
-                  placeholder="Username"
-                  className="innerLink "
-                  value={username}
+                  type="email"
+                  placeholder="Email"
+                  className="innerLink"
+                  value={email}
                   onChange={(e) => {
-                    setUsername(e.target.value);
+                    setEmail(e.target.value);
                     setFormData((prevFormData) => {
-                      return { ...prevFormData, username: e.target.value };
-                    })
+                      return { ...prevFormData, email: e.target.value };
+                    });
                   }}
                 />
               </div>
-
               {!loginPage && (
-                <>
-                  <div className="link">
-                    <MailOutlineIcon />
-                    <input
-                      type="email"
-                      placeholder="Email"
-                      className="innerLink"
-                      value={email}
-                      onChange={(e) => {
-                        setEmail(e.target.value);
-                        setFormData((prevFormData) => {
-                          return { ...prevFormData, email: e.target.value };
-                        })
-                      }}
-                    />
-                  </div>
-
-                  <div className="link py-2.5">
-                    <AddCardIcon />
-                    <Select
-                      className="innerLink"
-                      styles={customStyles}
-                      options={options}
-                      value={selectOption}
-                      onChange={(selected) => {
-                        setSelectOption(selected);
-                        setFormData((prevFormData) => ({
-                          ...prevFormData,
-                          role: selected.value,
-                        }));
-                      }}
-                      placeholder="Select your role"
-                    />
-                  </div>
-                </>
+                <div className="link py-2.5">
+                  <AddCardIcon />
+                  <Select
+                    className="innerLink"
+                    styles={customStyles}
+                    options={options}
+                    value={selectOption}
+                    onChange={(selected) => {
+                      setSelectOption(selected);
+                      setFormData((prevFormData) => ({
+                        ...prevFormData,
+                        role: selected.value,
+                      }));
+                    }}
+                    placeholder="Select your role"
+                  />
+                </div>
               )}
 
               <div className="link p-3 py-2">
@@ -195,7 +199,7 @@ function Register() {
                     setPassword(e.target.value);
                     setFormData((prevFormData) => {
                       return { ...prevFormData, password: e.target.value };
-                    })
+                    });
                   }}
                 />
 

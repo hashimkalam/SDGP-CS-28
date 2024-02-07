@@ -37,24 +37,47 @@ export const signin = async (req, res, next) => {
   // Get the email and password from the request body
   const { email, password } = req.body;
 
+  // find the user with the email
   try {
     const validUser = await User.findOne({ email });
+
+    // send a not found error if the user is not found
     if (!validUser) {
       return res.status(404).send({
         message: "User not found",
       });
     }
+
+    // compare the password with the hashed password
     const validPassword = bcrypt.compareSync(password, validUser.password);
     if (!validPassword) {
       return res.status(401).send({
         message: "Wrong credentials",
       });
     }
-    res.status(200).send({
-      message: "User logged in successfully",
-    });
 
+    // create a token with the user id
+    const token = jwt.sign(
+      { id: validUser._id },    
+      process.env.JWT_SECRET,     // secret key
+      {
+        expiresIn: "1d",          // token expires in 1 day
+      }
+    );
+    const { password: hashedPassword, ...user } = validUser._doc;
+
+    // send the token and user details as a response
+    res
+      .cookie("access_token", token, {
+        httpOnly: true,                   // cookie is not accessible via client-side script
+        secure: process.env.NODE_ENV === "production",      // cookie will only be sent over HTTPS
+      })
+      .status(200)
+      .send({                                     // send the token and user details as a response
+        message: "User logged in successfully",
+        user,
+      });
   } catch (error) {
-    next(error);
+    next(error);      // send an error response if there is an error
   }
-}
+};

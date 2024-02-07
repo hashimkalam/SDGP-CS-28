@@ -1,5 +1,5 @@
 import express from 'express';
-import { signup } from '../controllers/auth.controller.js';
+import { signup, signin } from '../controllers/auth.controller.js';
 
 // Create a new router
 const router = express.Router();
@@ -8,6 +8,6 @@ const router = express.Router();
 router.post("/signup", signup)
 
 // add a route to handle user login
-router.post("/signin", )
+router.post("/signin", signin)
 
 export default router;
