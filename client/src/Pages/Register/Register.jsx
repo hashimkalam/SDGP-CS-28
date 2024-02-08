@@ -48,6 +48,9 @@ function Register() {
   const [passPlaceholder, setPassPlaceholder] = useState(true);
   const [visibility, setVisibility] = useState(false);
   const [errorMsg, setErrorMessage] = useState(false);
+  const [formData, setFormData] = useState({});
+  const [message, setMessage] = useState("");
+
 
   //console.log(selectOption.label);
 
@@ -73,10 +76,10 @@ function Register() {
     boxShadow: "0px 8px 21px 0px rgba(0, 0, 0, .16)",
   };
 
-  const submitHandler = (e) => {
+  const submitHandler = async (e) => {
     e.preventDefault();
 
-    if (username === "" || password === "") {
+    if (email === "" || password === "") {
       setErrorMessage(true);
 
       setTimeout(() => {
@@ -85,10 +88,23 @@ function Register() {
     } else {
       setErrorMessage(false);
 
-      setUsername("");
-      setEmail("");
-      setSelectOption("");
-      setPassword("");
+      const res = await fetch(
+        !loginPage
+          ? "http://localhost:3000/api/auth/signup"
+          : "http://localhost:3000/api/auth/signin",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(formData),
+        }
+      );
+      var data = await res.json();
+      setMessage( () => {
+        setMessage(data.message);
+      });
+      console.log(data);
     }
   };
 
@@ -99,8 +115,9 @@ function Register() {
     setPassword("");
 
     setLoginPage(!loginPage);
-
-    loginPage ? navigate("/login") : navigate("/signup");
+    {
+      loginPage ? navigate("/login") : navigate("/signup");
+    }
   };
 
   return (
@@ -121,43 +138,59 @@ function Register() {
             </h2>
             <form
               className="w-3/4 sm:w-2/4 md:w-3/4 displayFlex flex-col "
-              onSubmit={submitHandler}>
-              <div className="link ">
-                <PersonOutlineIcon />
+              onSubmit={submitHandler}
+            >
+              {!loginPage && (
+                <div className="link ">
+                  <PersonOutlineIcon />
+                  <input
+                    type="text"
+                    placeholder="Username"
+                    className="innerLink "
+                    value={username}
+                    onChange={(e) => {
+                      setUsername(e.target.value);
+                      setFormData((prevFormData) => {
+                        return { ...prevFormData, username: e.target.value };
+                      });
+                    }}
+                  />
+                </div>
+              )}
+
+              <div className="link">
+                <MailOutlineIcon />
                 <input
-                  type="text"
-                  placeholder="Username"
-                  className="innerLink "
-                  value={username}
-                  onChange={(e) => setUsername(e.target.value)}
+                  type="email"
+                  placeholder="Email"
+                  className="innerLink"
+                  value={email}
+                  onChange={(e) => {
+                    setEmail(e.target.value);
+                    setFormData((prevFormData) => {
+                      return { ...prevFormData, email: e.target.value };
+                    });
+                  }}
                 />
               </div>
-
               {!loginPage && (
-                <>
-                  <div className="link">
-                    <MailOutlineIcon />
-                    <input
-                      type="email"
-                      placeholder="Email"
-                      className="innerLink"
-                      value={email}
-                      onChange={(e) => setEmail(e.target.value)}
-                    />
-                  </div>
-
-                  <div className="link py-2.5">
-                    <AddCardIcon />
-                    <Select
-                      className="innerLink"
-                      styles={customStyles}
-                      options={options}
-                      value={selectOption}
-                      onChange={(selected) => setSelectOption(selected)}
-                      placeholder="Select your role"
-                    />
-                  </div>
-                </>
+                <div className="link py-2.5">
+                  <AddCardIcon />
+                  <Select
+                    className="innerLink"
+                    styles={customStyles}
+                    options={options}
+                    value={selectOption}
+                    onChange={(selected) => {
+                      setSelectOption(selected);
+                      setFormData((prevFormData) => ({
+                        ...prevFormData,
+                        role: selected.value,
+                      }));
+                    }}
+                    placeholder="Select your role"
+                  />
+                </div>
               )}
 
               <div className="link p-3 py-2">
@@ -167,30 +200,35 @@ function Register() {
                   placeholder="Password"
                   className="innerLink mr-2"
                   value={password}
-                  onChange={(e) => setPassword(e.target.value)}
+                  onChange={(e) => {
+                    setPassword(e.target.value);
+                    setFormData((prevFormData) => {
+                      return { ...prevFormData, password: e.target.value };
+                    });
+                  }}
                 />
 
                 <IconButton
                   onClick={() => {
                     setPassPlaceholder(!passPlaceholder);
                     setVisibility(!visibility);
-                  }}>
+                  }}
+                >
                   {visibility ? <VisibilityOffIcon /> : <VisibilityIcon />}
                 </IconButton>
               </div>
 
               {errorMsg && (
                 <p className="text-red-700 font-semibold text-center">
-                  {loginPage
-                    ? "Please fill in both username and password"
-                    : "Please fill in all the containers"}
+                  {message}
                 </p>
               )}
 
               {loginPage && (
                 <Link
                   to="/forgotpassword"
-                  className="text-sm text-center text-blue-700 opacity-75 hover:opacity-100 cursor-pointer">
+                  className="text-sm text-center text-blue-700 opacity-75 hover:opacity-100 cursor-pointer"
+                >
                   forgot password?
                 </Link>
               )}
@@ -199,18 +237,21 @@ function Register() {
                 <Button
                   type="submit"
                   style={buttonStyles}
-                  onSubmit={submitHandler}>
+                  onSubmit={submitHandler}
+                >
                   Login Now
                 </Button>
               ) : (
                 <Button
                   type="submit"
                   style={buttonStyles}
-                  onSubmit={submitHandler}>
+                  onSubmit={submitHandler}
+                >
                   Sign Up
                 </Button>
               )}
             </form>
+            
             <div className="flex items-center">
               <hr className="w-[13vw] bg-[#525252] " />
               <p className="mx-4 text-[#707070]">or</p>
@@ -240,14 +281,16 @@ function Register() {
                     <Link
                       to="/signup"
                       className="registerOptions"
-                      onClick={switchScreen}>
+                      onClick={switchScreen}
+                    >
                       Sign Up
                     </Link>
                   ) : (
                     <Link
                       to="/login"
                       className="registerOptions"
-                      onClick={switchScreen}>
+                      onClick={switchScreen}
+                    >
                       Log In
                     </Link>
                   )}
@@ -260,7 +303,8 @@ function Register() {
 
       <div
         style={{ backgroundImage: `url(${pattern_img})` }}
-        className="bg-cover hidden sm:hidden lg:flex justify-center items-center md:w-1/2">
+        className="bg-cover hidden sm:hidden lg:flex justify-center items-center md:w-1/2"
+      >
         <div className="relative md:w-[40vw] lg:w-[30vw] lg:h-[65vh] xl:h-[55vh] border border-[white] -z-1 p-5 rounded-2xl lg:text-center xl:text-left backdrop-blur-lg">
           <p className="text-white text-sm md:text-md lg:text-lg xl:text-xl font-extrabold xl:w-1/2">
             No more complex CAD operations. Describe your ideal space, and we'll
