@@ -1,8 +1,8 @@
 import { Button } from "@mui/material";
 import React from "react";
 
-import tick_image from "../assets/tick_svg.svg";
-import person_image from "../assets/download_person.png";
+import tick_image from "../../assets/tick_svg.svg";
+import person_image from "../../assets/download_person.png";
 
 const options = [
   { text: "Premium quality" },
@@ -41,7 +41,7 @@ function Download() {
               <img
                 key={index}
                 src={tick_image}
-                alt="Tick Image"
+                alt="Tick_Image"
                 className="p-[12px] bg-gray-500/25"
               />
               <p className="text-[#959CB1]">{option.text}</p>
@@ -50,7 +50,7 @@ function Download() {
 
           <img
             src={person_image}
-            alt="Person Image"
+            alt="Person_Image"
             className="absolute -bottom-32 lg:-bottom-10 right-0 lg:right-10 xl:right-20 w-[250px] lg:w-[275px] xl:w-[300px] hidden sm:block"
           />
         </div>

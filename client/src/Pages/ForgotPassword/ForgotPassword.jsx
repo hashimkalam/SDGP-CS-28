@@ -12,7 +12,6 @@ function ForgotPassword() {
   const [newPassword, setNewPassword] = useState("");
 
   const OTP = "2468"; // Use string to compare easily
-  //hi
 
   const styles = {
     margin: "20px",

@@ -10,11 +10,11 @@ import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import AddCardIcon from "@mui/icons-material/AddCard";
 
-import pattern_img from "../assets/pattern.png";
-import logInPersonImage from "../assets/login_person.png";
-import signUpPersonImage from "../assets/signup_person.png";
-import googleLogo from "../assets/google_logo.jpg";
-import logo from "../assets/Logo.png";
+import pattern_img from "../../assets/pattern.png";
+import logInPersonImage from "../../assets/login_person.png";
+import signUpPersonImage from "../../assets/signup_person.png";
+import googleLogo from "../../assets/google_logo.jpg";
+import logo from "../../assets/Logo.png";
 
 import Select from "react-select";
 
