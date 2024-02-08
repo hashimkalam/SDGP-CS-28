@@ -49,6 +49,8 @@ function Register() {
   const [visibility, setVisibility] = useState(false);
   const [errorMsg, setErrorMessage] = useState(false);
   const [formData, setFormData] = useState({});
+  const [message, setMessage] = useState("");
+
 
   //console.log(selectOption.label);
 
@@ -98,7 +100,10 @@ function Register() {
           body: JSON.stringify(formData),
         }
       );
-      const data = await res.json();
+      var data = await res.json();
+      setMessage( () => {
+        setMessage(data.message);
+      });
       console.log(data);
     }
   };
@@ -215,9 +220,7 @@ function Register() {
 
               {errorMsg && (
                 <p className="text-red-700 font-semibold text-center">
-                  {loginPage
-                    ? "Please fill in both username and password"
-                    : "Please fill in all the containers"}
+                  {message}
                 </p>
               )}
 
@@ -248,6 +251,7 @@ function Register() {
                 </Button>
               )}
             </form>
+            
             <div className="flex items-center">
               <hr className="w-[13vw] bg-[#525252] " />
               <p className="mx-4 text-[#707070]">or</p>
