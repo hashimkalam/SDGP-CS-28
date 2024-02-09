@@ -49,8 +49,7 @@ function Register() {
   const [visibility, setVisibility] = useState(false);
   const [errorMsg, setErrorMessage] = useState(false);
   const [formData, setFormData] = useState({});
-
-  //console.log(selectOption.label);
+  const [message, setMessage] = useState("");
 
   const styles = {
     border: "1px solid #d9d9d9",
@@ -73,9 +72,6 @@ function Register() {
     fontWeight: "700",
     boxShadow: "0px 8px 21px 0px rgba(0, 0, 0, .16)",
   };
-
-  const isSignup = location.pathname === "/signup"
-
 
   const submitHandler = async (e) => {
     e.preventDefault();
@@ -101,17 +97,11 @@ function Register() {
           body: JSON.stringify(formData),
         }
       );
-      console.log(loginPage);
-      const data = await res.json();
+      var data = await res.json();
+      setMessage(data.message);
       console.log(data);
-
-      if (res.ok) {
-        navigate('/workspace')
-      }
     }
   };
-
-  console.log(loginPage);
 
   const switchScreen = (e) => {
     setUsername("");
@@ -119,18 +109,12 @@ function Register() {
     setSelectOption("");
     setPassword("");
 
-    //setLoginPage(isSignup = '/signup' ? setLoginPage(false) : setLoginPage(true));
-
     setLoginPage(!loginPage);
     {
       loginPage ? navigate("/login") : navigate("/signup");
     }
   };
 
-  
-  
-
-  
   return (
     <div className="md:flex">
       <div className="lg:w-1/2 bg-white z-20 h-screen w-full">
@@ -151,7 +135,7 @@ function Register() {
               className="w-3/4 sm:w-2/4 md:w-3/4 displayFlex flex-col "
               onSubmit={submitHandler}
             >
-              {isSignup && (
+              {!isSignup && (
                 <div className="link ">
                   <PersonOutlineIcon />
                   <input
@@ -184,7 +168,7 @@ function Register() {
                   }}
                 />
               </div>
-              {isSignup && (
+              {!isSignup && (
                 <div className="link py-2.5">
                   <AddCardIcon />
                   <Select
@@ -231,9 +215,7 @@ function Register() {
 
               {errorMsg && (
                 <p className="text-red-700 font-semibold text-center">
-                  {!isSignup
-                    ? "Please fill in both username and password"
-                    : "Please fill in all the containers"}
+                  {message}
                 </p>
               )}
 
@@ -264,6 +246,7 @@ function Register() {
                 </Button>
               )}
             </form>
+            
             <div className="flex items-center">
               <hr className="w-[13vw] bg-[#525252] " />
               <p className="mx-4 text-[#707070]">or</p>
