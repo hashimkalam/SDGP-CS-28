@@ -1,18 +1,17 @@
 import React from "react";
 import "./navbar.css";
 import { Logo } from "../Logo/logo";
-import { useNavigate } from 'react-router-dom';
-
+import { useNavigate } from "react-router-dom";
 
 const Navbar = () => {
   const navigate = useNavigate();
 
   const navigateToLogin = () => {
-    navigate('/login');
+    navigate("/login");
   };
 
   const navigateToSignup = () => {
-    navigate('/signup');
+    navigate("/signup");
   };
 
   return (
@@ -38,8 +37,12 @@ const Navbar = () => {
         </li>
       </ul>
       <div className="login-signup">
-      <button className="login" onClick={navigateToLogin}>Login</button>
-      <button className="signup" onClick={navigateToSignup} >Sign Up</button>
+        <button className="login" onClick={navigateToLogin}>
+          Login
+        </button>
+        <button className="signup" onClick={navigateToSignup}>
+          Sign Up
+        </button>
       </div>
     </header>
   );

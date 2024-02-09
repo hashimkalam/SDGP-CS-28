@@ -40,7 +40,7 @@ function Register() {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const [loginPage, setLoginPage] = useState(true);
+  const [loginPage, setLoginPage] = useState(location.pathname === "/login");
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [selectOption, setSelectOption] = useState("");
@@ -86,9 +86,9 @@ function Register() {
       setErrorMessage(false);
 
       const res = await fetch(
-        !loginPage
-          ? "http://localhost:3000/api/auth/signup"
-          : "http://localhost:3000/api/auth/signin",
+        loginPage
+          ? "http://localhost:3000/api/auth/signin"
+          : "http://localhost:3000/api/auth/signup",
         {
           method: "POST",
           headers: {
@@ -99,6 +99,10 @@ function Register() {
       );
       var data = await res.json();
       setMessage(data.message);
+
+      if (res.ok) {
+        navigate("/workspace");
+      }
       console.log(data);
     }
   };
@@ -110,10 +114,10 @@ function Register() {
     setPassword("");
 
     setLoginPage(!loginPage);
-    {
-      loginPage ? navigate("/login") : navigate("/signup");
-    }
+    navigate(loginPage ? "/signup" : "/login");
   };
+
+  console.log(loginPage);
 
   return (
     <div className="md:flex">
@@ -129,19 +133,19 @@ function Register() {
         <div className="grid place-items-center h-[85vh] lg:h-[83vh]">
           <div className="displayFlex flex-col w-full -mt-[4vh]">
             <h2 className="uppercase font-bold text-2xl text-center pt-5 pb-10">
-              {!isSignup ? "login" : "get started now"}
+              {loginPage ? "login" : "get started now"}
             </h2>
             <form
               className="w-3/4 sm:w-2/4 md:w-3/4 displayFlex flex-col "
               onSubmit={submitHandler}
             >
-              {!isSignup && (
+              {!loginPage && (
                 <div className="link ">
                   <PersonOutlineIcon />
                   <input
                     type="text"
                     placeholder="Username"
-                    className="innerLink "
+                    className="innerLink"
                     value={username}
                     onChange={(e) => {
                       setUsername(e.target.value);
@@ -168,7 +172,7 @@ function Register() {
                   }}
                 />
               </div>
-              {!isSignup && (
+              {!loginPage && (
                 <div className="link py-2.5">
                   <AddCardIcon />
                   <Select
@@ -219,7 +223,7 @@ function Register() {
                 </p>
               )}
 
-              {!isSignup && (
+              {loginPage && (
                 <Link
                   to="/forgotpassword"
                   className="text-sm text-center text-blue-700 opacity-75 hover:opacity-100 cursor-pointer"
@@ -228,7 +232,7 @@ function Register() {
                 </Link>
               )}
 
-              {!isSignup ? (
+              {loginPage ? (
                 <Button
                   type="submit"
                   style={buttonStyles}
@@ -246,7 +250,7 @@ function Register() {
                 </Button>
               )}
             </form>
-            
+
             <div className="flex items-center">
               <hr className="w-[13vw] bg-[#525252] " />
               <p className="mx-4 text-[#707070]">or</p>
@@ -272,7 +276,7 @@ function Register() {
               <div className="mt-4 -mb-[4vh]">
                 <p className="font-semibold text-center">
                   Don't have an account?
-                  {!isSignup ? (
+                  {loginPage ? (
                     <Link
                       to="/signup"
                       className="registerOptions"
@@ -306,7 +310,7 @@ function Register() {
             bring it to life
           </p>
 
-          {!isSignup ? (
+          {loginPage ? (
             <img
               src={logInPersonImage}
               className="registerImg lg:right-[-20px] xl:right-[-80px] scale-90 lg:scale-100"
