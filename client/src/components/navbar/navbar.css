@@ -1,0 +1,67 @@
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px;
+    background: linear-gradient(91deg, #002865 0.25%, #004EC3 100%);
+    position:relative;
+    top: 0;
+    z-index: 999;
+  }
+  
+  .logo-container {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+  }
+  
+  .logo {
+    width: 60px;
+    height: 60px;
+    
+  }
+  
+  .logo-text {
+    color: #fff;
+    margin-left: 10px;
+    font-size: 24px;    
+  }
+  
+  .nav-links {
+    display: flex;
+    color: white;
+    font-size: 22px;
+    font-family: 'Work Sans', sans-serif;
+    font-weight: 600;
+    justify-content: space-between;
+    align-items: center;
+    width: 30%;
+    list-style-type: none;
+  }
+  
+  .nav-links li a {
+    color: #fff;
+    text-decoration: none;
+    cursor: pointer;
+    
+  }
+  .login-signup{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .navbar button {
+    padding: 10px 30px;
+    color: #0B113A;
+    font-size: 22px;
+    font-family: 'Work Sans', sans-serif;
+    font-weight: 600;
+    word-wrap: break-word;
+    border-radius: 12px;
+    border: none;
+    margin-right: 15px;
+    cursor: pointer;
+    background: #fff;
+  }
+
+  

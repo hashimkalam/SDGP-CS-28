@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 
 import { Button, IconButton } from "@mui/material";
 import AppleIcon from "@mui/icons-material/Apple";
@@ -15,7 +15,6 @@ import logInPersonImage from "../../assets/login_person.png";
 import signUpPersonImage from "../../assets/signup_person.png";
 import googleLogo from "../../assets/google_logo.jpg";
 import logo from "../../assets/Logo.png";
-
 import Select from "react-select";
 
 const options = [
@@ -39,6 +38,7 @@ const customStyles = {
 
 function Register() {
   const navigate = useNavigate();
+  const location = useLocation();
 
   const [loginPage, setLoginPage] = useState(true);
   const [username, setUsername] = useState("");
@@ -50,9 +50,6 @@ function Register() {
   const [errorMsg, setErrorMessage] = useState(false);
   const [formData, setFormData] = useState({});
   const [message, setMessage] = useState("");
-
-
-  //console.log(selectOption.label);
 
   const styles = {
     border: "1px solid #d9d9d9",
@@ -101,9 +98,7 @@ function Register() {
         }
       );
       var data = await res.json();
-      setMessage( () => {
-        setMessage(data.message);
-      });
+      setMessage(data.message);
       console.log(data);
     }
   };
@@ -134,13 +129,13 @@ function Register() {
         <div className="grid place-items-center h-[85vh] lg:h-[83vh]">
           <div className="displayFlex flex-col w-full -mt-[4vh]">
             <h2 className="uppercase font-bold text-2xl text-center pt-5 pb-10">
-              {loginPage ? "login" : "get started now"}
+              {!isSignup ? "login" : "get started now"}
             </h2>
             <form
               className="w-3/4 sm:w-2/4 md:w-3/4 displayFlex flex-col "
               onSubmit={submitHandler}
             >
-              {!loginPage && (
+              {!isSignup && (
                 <div className="link ">
                   <PersonOutlineIcon />
                   <input
@@ -173,7 +168,7 @@ function Register() {
                   }}
                 />
               </div>
-              {!loginPage && (
+              {!isSignup && (
                 <div className="link py-2.5">
                   <AddCardIcon />
                   <Select
@@ -224,7 +219,7 @@ function Register() {
                 </p>
               )}
 
-              {loginPage && (
+              {!isSignup && (
                 <Link
                   to="/forgotpassword"
                   className="text-sm text-center text-blue-700 opacity-75 hover:opacity-100 cursor-pointer"
@@ -233,7 +228,7 @@ function Register() {
                 </Link>
               )}
 
-              {loginPage ? (
+              {!isSignup ? (
                 <Button
                   type="submit"
                   style={buttonStyles}
@@ -277,7 +272,7 @@ function Register() {
               <div className="mt-4 -mb-[4vh]">
                 <p className="font-semibold text-center">
                   Don't have an account?
-                  {loginPage ? (
+                  {!isSignup ? (
                     <Link
                       to="/signup"
                       className="registerOptions"
@@ -311,7 +306,7 @@ function Register() {
             bring it to life
           </p>
 
-          {loginPage ? (
+          {!isSignup ? (
             <img
               src={logInPersonImage}
               className="registerImg lg:right-[-20px] xl:right-[-80px] scale-90 lg:scale-100"
