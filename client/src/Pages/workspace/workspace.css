@@ -1,0 +1,54 @@
+.workspace-area{
+    background-color: rgba(9, 14, 52, 1);
+    height: 100vh;
+}
+
+.header-workspace {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+  }
+  
+  .profile-icon {
+    font-size: 35px;
+    color: #ffffff;
+    margin: 5px 20px;
+  }
+  
+  .workspace-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items:baseline;
+    background-color: #fff;
+    margin: 10px 100px;
+    padding: 20px;
+    height: 620px;
+    border-radius: 28px;
+  }
+  
+  .input-field {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    margin: 20px 0;
+    margin-top: auto;
+    
+    
+  }
+  
+  .input-field input {
+    flex: 1;
+    background-color: rgba(0, 71, 255, 0.2);
+    border-radius: 20px;
+    margin-right: 10px;
+  }
+  
+  .input-field button {
+    border-radius: 30px;
+    padding: 10px 20px;
+    background-color: rgba(0, 101, 255, 1);
+    color: #fff;
+    border: none;
+  }

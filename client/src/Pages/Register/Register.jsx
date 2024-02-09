@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 
 import { Button, IconButton } from "@mui/material";
 import AppleIcon from "@mui/icons-material/Apple";
@@ -15,7 +15,6 @@ import logInPersonImage from "../../assets/login_person.png";
 import signUpPersonImage from "../../assets/signup_person.png";
 import googleLogo from "../../assets/google_logo.jpg";
 import logo from "../../assets/Logo.png";
-
 import Select from "react-select";
 
 const options = [
@@ -39,6 +38,7 @@ const customStyles = {
 
 function Register() {
   const navigate = useNavigate();
+  const location = useLocation();
 
   const [loginPage, setLoginPage] = useState(true);
   const [username, setUsername] = useState("");
@@ -48,6 +48,7 @@ function Register() {
   const [passPlaceholder, setPassPlaceholder] = useState(true);
   const [visibility, setVisibility] = useState(false);
   const [errorMsg, setErrorMessage] = useState(false);
+  const [formData, setFormData] = useState({});
 
   //console.log(selectOption.label);
 
@@ -73,10 +74,13 @@ function Register() {
     boxShadow: "0px 8px 21px 0px rgba(0, 0, 0, .16)",
   };
 
-  const submitHandler = (e) => {
+  const isSignup = location.pathname === "/signup"
+
+
+  const submitHandler = async (e) => {
     e.preventDefault();
 
-    if (username === "" || password === "") {
+    if (email === "" || password === "") {
       setErrorMessage(true);
 
       setTimeout(() => {
@@ -85,12 +89,29 @@ function Register() {
     } else {
       setErrorMessage(false);
 
-      setUsername("");
-      setEmail("");
-      setSelectOption("");
-      setPassword("");
+      const res = await fetch(
+        !loginPage
+          ? "http://localhost:3000/api/auth/signup"
+          : "http://localhost:3000/api/auth/signin",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(formData),
+        }
+      );
+      console.log(loginPage);
+      const data = await res.json();
+      console.log(data);
+
+      if (res.ok) {
+        navigate('/workspace')
+      }
     }
   };
+
+  console.log(loginPage);
 
   const switchScreen = (e) => {
     setUsername("");
@@ -98,11 +119,18 @@ function Register() {
     setSelectOption("");
     setPassword("");
 
-    setLoginPage(!loginPage);
+    //setLoginPage(isSignup = '/signup' ? setLoginPage(false) : setLoginPage(true));
 
-    loginPage ? navigate("/login") : navigate("/signup");
+    setLoginPage(!loginPage);
+    {
+      loginPage ? navigate("/login") : navigate("/signup");
+    }
   };
 
+  
+  
+
+  
   return (
     <div className="md:flex">
       <div className="lg:w-1/2 bg-white z-20 h-screen w-full">
@@ -117,47 +145,63 @@ function Register() {
         <div className="grid place-items-center h-[85vh] lg:h-[83vh]">
           <div className="displayFlex flex-col w-full -mt-[4vh]">
             <h2 className="uppercase font-bold text-2xl text-center pt-5 pb-10">
-              {loginPage ? "login" : "get started now"}
+              {!isSignup ? "login" : "get started now"}
             </h2>
             <form
               className="w-3/4 sm:w-2/4 md:w-3/4 displayFlex flex-col "
-              onSubmit={submitHandler}>
-              <div className="link ">
-                <PersonOutlineIcon />
+              onSubmit={submitHandler}
+            >
+              {isSignup && (
+                <div className="link ">
+                  <PersonOutlineIcon />
+                  <input
+                    type="text"
+                    placeholder="Username"
+                    className="innerLink "
+                    value={username}
+                    onChange={(e) => {
+                      setUsername(e.target.value);
+                      setFormData((prevFormData) => {
+                        return { ...prevFormData, username: e.target.value };
+                      });
+                    }}
+                  />
+                </div>
+              )}
+
+              <div className="link">
+                <MailOutlineIcon />
                 <input
-                  type="text"
-                  placeholder="Username"
-                  className="innerLink "
-                  value={username}
-                  onChange={(e) => setUsername(e.target.value)}
+                  type="email"
+                  placeholder="Email"
+                  className="innerLink"
+                  value={email}
+                  onChange={(e) => {
+                    setEmail(e.target.value);
+                    setFormData((prevFormData) => {
+                      return { ...prevFormData, email: e.target.value };
+                    });
+                  }}
                 />
               </div>
-
-              {!loginPage && (
-                <>
-                  <div className="link">
-                    <MailOutlineIcon />
-                    <input
-                      type="email"
-                      placeholder="Email"
-                      className="innerLink"
-                      value={email}
-                      onChange={(e) => setEmail(e.target.value)}
-                    />
-                  </div>
-
-                  <div className="link py-2.5">
-                    <AddCardIcon />
-                    <Select
-                      className="innerLink"
-                      styles={customStyles}
-                      options={options}
-                      value={selectOption}
-                      onChange={(selected) => setSelectOption(selected)}
-                      placeholder="Select your role"
-                    />
-                  </div>
-                </>
+              {isSignup && (
+                <div className="link py-2.5">
+                  <AddCardIcon />
+                  <Select
+                    className="innerLink"
+                    styles={customStyles}
+                    options={options}
+                    value={selectOption}
+                    onChange={(selected) => {
+                      setSelectOption(selected);
+                      setFormData((prevFormData) => ({
+                        ...prevFormData,
+                        role: selected.value,
+                      }));
+                    }}
+                    placeholder="Select your role"
+                  />
+                </div>
               )}
 
               <div className="link p-3 py-2">
@@ -167,46 +211,55 @@ function Register() {
                   placeholder="Password"
                   className="innerLink mr-2"
                   value={password}
-                  onChange={(e) => setPassword(e.target.value)}
+                  onChange={(e) => {
+                    setPassword(e.target.value);
+                    setFormData((prevFormData) => {
+                      return { ...prevFormData, password: e.target.value };
+                    });
+                  }}
                 />
 
                 <IconButton
                   onClick={() => {
                     setPassPlaceholder(!passPlaceholder);
                     setVisibility(!visibility);
-                  }}>
+                  }}
+                >
                   {visibility ? <VisibilityOffIcon /> : <VisibilityIcon />}
                 </IconButton>
               </div>
 
               {errorMsg && (
                 <p className="text-red-700 font-semibold text-center">
-                  {loginPage
+                  {!isSignup
                     ? "Please fill in both username and password"
                     : "Please fill in all the containers"}
                 </p>
               )}
 
-              {loginPage && (
+              {!isSignup && (
                 <Link
                   to="/forgotpassword"
-                  className="text-sm text-center text-blue-700 opacity-75 hover:opacity-100 cursor-pointer">
+                  className="text-sm text-center text-blue-700 opacity-75 hover:opacity-100 cursor-pointer"
+                >
                   forgot password?
                 </Link>
               )}
 
-              {loginPage ? (
+              {!isSignup ? (
                 <Button
                   type="submit"
                   style={buttonStyles}
-                  onSubmit={submitHandler}>
+                  onSubmit={submitHandler}
+                >
                   Login Now
                 </Button>
               ) : (
                 <Button
                   type="submit"
                   style={buttonStyles}
-                  onSubmit={submitHandler}>
+                  onSubmit={submitHandler}
+                >
                   Sign Up
                 </Button>
               )}
@@ -236,18 +289,20 @@ function Register() {
               <div className="mt-4 -mb-[4vh]">
                 <p className="font-semibold text-center">
                   Don't have an account?
-                  {loginPage ? (
+                  {!isSignup ? (
                     <Link
                       to="/signup"
                       className="registerOptions"
-                      onClick={switchScreen}>
+                      onClick={switchScreen}
+                    >
                       Sign Up
                     </Link>
                   ) : (
                     <Link
                       to="/login"
                       className="registerOptions"
-                      onClick={switchScreen}>
+                      onClick={switchScreen}
+                    >
                       Log In
                     </Link>
                   )}
@@ -260,14 +315,15 @@ function Register() {
 
       <div
         style={{ backgroundImage: `url(${pattern_img})` }}
-        className="bg-cover hidden sm:hidden lg:flex justify-center items-center md:w-1/2">
+        className="bg-cover hidden sm:hidden lg:flex justify-center items-center md:w-1/2"
+      >
         <div className="relative md:w-[40vw] lg:w-[30vw] lg:h-[65vh] xl:h-[55vh] border border-[white] -z-1 p-5 rounded-2xl lg:text-center xl:text-left backdrop-blur-lg">
           <p className="text-white text-sm md:text-md lg:text-lg xl:text-xl font-extrabold xl:w-1/2">
             No more complex CAD operations. Describe your ideal space, and we'll
             bring it to life
           </p>
 
-          {loginPage ? (
+          {!isSignup ? (
             <img
               src={logInPersonImage}
               className="registerImg lg:right-[-20px] xl:right-[-80px] scale-90 lg:scale-100"
