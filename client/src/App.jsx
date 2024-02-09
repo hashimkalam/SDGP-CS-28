@@ -4,7 +4,6 @@ import ForgotPassword from "./Pages//ForgotPassword/ForgotPassword";
 import Register from "./Pages/Register/Register";
 import Download from "./Pages/Download/Download";
 import Workspace from "./Pages/workspace/Workspace";
-import "./App.css";
 
 function App() {
   return (
