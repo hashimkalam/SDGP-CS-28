@@ -37,7 +37,7 @@ function PriceSection() {
 
     return (
         <>
-            <div className='PriceSection'>
+            <div className='PriceSection' id='pricing-section'>
                 <div className='title'>
                     <h1>Simple And Affordable Pricing</h1>
                     <p>Skip the subscriptions, say goodbye to recurring fees. Build your forever home with one-time access to unlimited floor plan generation.</p>

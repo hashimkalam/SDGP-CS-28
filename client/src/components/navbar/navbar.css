@@ -4,7 +4,7 @@
     align-items: center;
     padding: 15px;
     background: linear-gradient(91deg, #002865 0.25%, #004EC3 100%);
-    position:relative;
+    position:sticky;
     top: 0;
     z-index: 999;
   }

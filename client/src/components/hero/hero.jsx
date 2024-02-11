@@ -2,10 +2,10 @@ import React from "react";
 import "./hero.css";
 function Hero() {
   return (
-    <div className="hero-section">
+    <div className="hero-section" id="hero-section">
       <div className="box">
         <div className="hero-content">
-          <p className="build-a-space-that">
+          <p className="hero-sub">
             BUILD A SPACE THAT REFLECTS YOUR UNIQUE STYLE AND NEEDS,
             EFFORTLESSLY WITH A DESCRIPTION USING ELITEBLUPRINT
           </p>

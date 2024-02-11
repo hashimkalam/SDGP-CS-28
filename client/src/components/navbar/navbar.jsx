@@ -1,18 +1,18 @@
 import React from "react";
 import "./navbar.css";
 import { Logo } from "../Logo/logo";
-import { useNavigate } from 'react-router-dom';
-
+import { useNavigate } from "react-router-dom";
+import { Link } from 'react-scroll';
 
 const Navbar = () => {
   const navigate = useNavigate();
 
   const navigateToLogin = () => {
-    navigate('/login');
+    navigate("/login");
   };
 
   const navigateToSignup = () => {
-    navigate('/signup');
+    navigate("/signup");
   };
 
   return (
@@ -22,24 +22,49 @@ const Navbar = () => {
       </div>
       <ul className="nav-links">
         <li>
-          <a href="home-section">
-            <span>Home</span>
-          </a>
+        <Link
+            activeClass="active"
+            to="hero-section"
+            spy={true}
+            smooth={true}
+            offset={-100}
+            duration={200}
+          >
+            Home
+          </Link>
         </li>
         <li>
-          <a href="#how-it-works-section">
-            <span>How it works</span>
-          </a>
+          <Link
+            activeClass="active"
+            to="how-it-works-section"
+            spy={true}
+            smooth={true}
+            offset={-90}
+            duration={200}
+          >
+            How It Works
+          </Link>
         </li>
         <li>
-          <a href="#pricing-section">
-            <span>Pricing</span>
-          </a>
+        <Link
+            activeClass="active"
+            to="pricing-section"
+            spy={true}
+            smooth={true}
+            offset={-90}
+            duration={200}
+          >
+            Pricing
+          </Link>
         </li>
       </ul>
       <div className="login-signup">
-      <button className="login" onClick={navigateToLogin}>Login</button>
-      <button className="signup" onClick={navigateToSignup} >Sign Up</button>
+        <button className="login" onClick={navigateToLogin}>
+          Login
+        </button>
+        <button className="signup" onClick={navigateToSignup}>
+          Sign Up
+        </button>
       </div>
     </header>
   );

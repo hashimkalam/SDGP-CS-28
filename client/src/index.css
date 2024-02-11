@@ -12,6 +12,11 @@
   box-sizing: border-box;
   font-family: "poppins";
 }
+body {
+  overflow-x: hidden; /* Prevent horizontal scroll */
+  
+}
+
 :root {
   --bg-image: url("./assets/pattern.png");
 }
@@ -35,4 +40,8 @@
   .hoverEffect {
     @apply duration-150 ease-in-out cursor-pointer flex-1;
   }
+}
+
+html {
+  scroll-behavior: smooth;
 }
