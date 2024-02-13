@@ -1,0 +1,37 @@
+.logo {
+    height: 70px;
+    width: 222px;
+}
+.logo:hover {
+    cursor: pointer;
+}
+
+.logo .overlap-group {
+    height: 70px;
+    position: relative;
+}
+
+.logo .elite-blu-print {
+    color: #ffffff;
+    font-family: "Inter-BoldItalic", Helvetica;
+    font-size: 26px;
+    font-style: italic;
+    font-weight: 700;
+    height: 24px;
+    left: 53px;
+    letter-spacing: 0;
+    line-height: 24px;
+    position: absolute;
+    top: 22px;
+    white-space: nowrap;
+    margin-left: 10px;
+}
+
+.logo .logo-icon {
+    height: 70px;
+    left: 0;
+    position: absolute;
+    top: 0;
+    width: 70px;
+    
+}
