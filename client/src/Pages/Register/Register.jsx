@@ -144,6 +144,7 @@ function Register() {
         if (option) {
           setShowRoleSelectionModal(false);
           try {
+
             const provider = new GoogleAuthProvider();
             const auth = getAuth(app);
 
@@ -158,7 +159,7 @@ function Register() {
                 name: result.user.displayName,
                 email: result.user.email,
                 photo: result.user.photoURL,
-                role: result.user.option,
+                role: option,   
               }),
             });
             const data = await res.json();

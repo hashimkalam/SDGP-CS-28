@@ -52,7 +52,7 @@ function SignInModel({ handleClose, handleContinue }) {
                 ? "bg-black text-white"
                 : "bg-[#F0EDFF] hover:bg-[#bbb0f0] duration-150 ease-in-out"
             }`}
-            onClick={() => dispatch(setSelectedOption("Individual"))}
+            onClick={() => dispatch(setSelectedOption("individual"))}
           >
             Individual
           </span>
@@ -65,7 +65,7 @@ function SignInModel({ handleClose, handleContinue }) {
                 ? "bg-black text-white"
                 : "bg-[#F0EDFF] hover:bg-[#bbb0f0] duration-150 ease-in-out"
             }`}
-            onClick={() => dispatch(setSelectedOption("Architect"))}
+            onClick={() => dispatch(setSelectedOption("architect"))}
           >
             Architect
           </span>
