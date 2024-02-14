@@ -125,6 +125,7 @@ function Register() {
 
     try {
       dispatch(signInStart());
+      
       const res = await fetch(
         loginPage
           ? "http://localhost:3000/api/auth/signin"
@@ -137,6 +138,7 @@ function Register() {
           body: JSON.stringify(formData),
         }
       );
+
       const data = await res.json();
 
       if (res.ok === false) {
@@ -144,6 +146,7 @@ function Register() {
         return;
       }
       dispatch(signInSuccess(data));
+
       setMessage(data.message);
 
       if (res.ok) {
@@ -321,6 +324,7 @@ function Register() {
                 {errorMsg}
               </p>
 
+
               {loginPage && (
                 <Link
                   to="/forgotpassword"
@@ -358,6 +362,7 @@ function Register() {
             <div className="flex flex-col justify-center mt-6">
               <div className="flex flex-col sm:flex-row gap-x-2">
                 <Button style={styles} onClick={handleGoogleButton}>
+
                   <img
                     src={googleLogo}
                     className="w-6 mr-1.5"
@@ -404,7 +409,6 @@ function Register() {
           handleContinue={() => handleRoleSelection(selectedOption)}
         />
       )}
-
       <div
         style={{ backgroundImage: `url(${pattern_img})` }}
         className="bg-cover hidden sm:hidden lg:flex justify-center items-center md:w-1/2"

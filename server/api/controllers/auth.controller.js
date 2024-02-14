@@ -63,7 +63,6 @@ export const signin = async (req, res, next) => {
     );
     const { password: hashedPassword, ...user } = validUser._doc;
     const expiryDate = new Date(Date.now() + 3600000); // 1 hour
-
     // send the token and user details as a response
     res
       .cookie("access_token", token, {

@@ -49,6 +49,7 @@ const HowItWorks = () => {
         ))}
       </div>
       <button className="custom-button" onClick={handleButtonClick}>
+
         Try It Out
       </button>
     </div>

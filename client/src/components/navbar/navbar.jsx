@@ -16,6 +16,7 @@ const Navbar = () => {
       : navigate("/Workspace");
   };
 
+
   const navigateToLogin = () => {
     navigate("/login");
   };
@@ -23,6 +24,7 @@ const Navbar = () => {
   const navigateToSignup = () => {
     navigate("/signup");
   };
+
 
   const navigateToLogout = async () => {
     try {
