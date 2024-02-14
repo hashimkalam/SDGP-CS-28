@@ -6,13 +6,13 @@ import {
   setSelectedOption,
 } from "../../redux/user/userSlice";
 
-function SignInModel({ handleClose, handleContinue }) {
+function SignInModel({ handleClose }) {
   const [modalOpen, setModalOpen] = useState(true);
 
   const dispatch = useDispatch();
   const selectedOption = useSelector(selectSelectedOption);
 
-  const buttonStyles = {
+  /*const buttonStyles = {
     margin: "20px",
     background:
       "linear-gradient(100deg, rgba(56, 52, 247, 0.91) -5.85%, rgba(80, 56, 237, 0.93) 109.55%)",
@@ -27,7 +27,7 @@ function SignInModel({ handleClose, handleContinue }) {
   const handleContinueClick = () => {
     setModalOpen(false);
     handleContinue();
-  };
+  };*/
 
   const handleCloseModal = () => {
     setModalOpen(false);

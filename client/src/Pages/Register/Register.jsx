@@ -89,47 +89,68 @@ function Register() {
     boxShadow: "0px 8px 21px 0px rgba(0, 0, 0, .16)",
   };
 
+  const setErrorWithTimeout = (message) => {
+    setErrorMessage(message);
+    setTimeout(() => {
+      setErrorMessage(false);
+    }, 3000);
+  };
+
   const submitHandler = async (e) => {
     e.preventDefault();
 
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const passwordPattern = /^(?=.*\d)/;
+
     if (email === "" || password === "") {
-      setErrorMessage(true);
+      setErrorWithTimeout("Fill in the containers!");
+      return;
+    }
 
-      setTimeout(() => {
-        setErrorMessage(false);
-      }, 3500);
-    } else {
-      setErrorMessage(false);
+    if (!emailPattern.test(email)) {
+      setErrorWithTimeout("Please enter a valid email address.");
+      return;
+    }
 
-      try {
-        dispatch(signInStart());
-        const res = await fetch(
-          loginPage
-            ? "http://localhost:3000/api/auth/signin"
-            : "http://localhost:3000/api/auth/signup",
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify(formData),
-          }
-        );
-        const data = await res.json();
+    if (password === "") {
+      setErrorWithTimeout("Password is required.");
+      return;
+    } else if (password.length < 8) {
+      setErrorWithTimeout("Password must be at least 8 characters long.");
+      return;
+    } else if (!passwordPattern.test(password)) {
+      setErrorWithTimeout("Password must contain at least one digit.");
+      return;
+    }
 
-        if (res.ok === false) {
-          dispatch(signInFailure(data.message));
-          return;
+    try {
+      dispatch(signInStart());
+      const res = await fetch(
+        loginPage
+          ? "http://localhost:3000/api/auth/signin"
+          : "http://localhost:3000/api/auth/signup",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(formData),
         }
-        dispatch(signInSuccess(data));
-        setMessage(data.message);
+      );
+      const data = await res.json();
 
-        if (res.ok) {
-          navigate("/workspace");
-        }
-      } catch (error) {
-        dispatch(signInFailure(error));
+      if (res.ok === false) {
+        dispatch(signInFailure(data.message));
+        return;
       }
+      dispatch(signInSuccess(data));
+      setMessage(data.message);
+
+      if (res.ok) {
+        navigate("/workspace");
+      }
+    } catch (error) {
+      dispatch(signInFailure(error));
     }
   };
 
@@ -141,8 +162,9 @@ function Register() {
     const fetchData = async () => {
       if (showRoleSelectionModal) {
         const option = await selectedOption;
-        if (option) {
+        if (option || location.pathname === "/login") {
           setShowRoleSelectionModal(false);
+
           try {
             const provider = new GoogleAuthProvider();
             const auth = getAuth(app);
@@ -157,13 +179,16 @@ function Register() {
               body: JSON.stringify({
                 name: result.user.displayName,
                 email: result.user.email,
-                photo: result.user.photoURL,
+                photo: result?.user?.photoURL,
                 role: option,
               }),
             });
             const data = await res.json();
             dispatch(signInSuccess(data));
             console.log(data);
+            if (res.ok) {
+              navigate("/workspace");
+            }
           } catch (error) {
             console.log("Could not login with google: " + error);
           }
@@ -292,7 +317,8 @@ function Register() {
               </div>
 
               <p className="text-red-700 font-semibold text-center">
-                {error ? error || "Something went wrong!" : ""}
+                {/*{error ? error || "Something went wrong!" : ""}*/}
+                {errorMsg}
               </p>
 
               {loginPage && (
@@ -372,7 +398,7 @@ function Register() {
         </div>
       </div>
 
-      {showRoleSelectionModal && (
+      {showRoleSelectionModal && location.pathname === "/signup" && (
         <SignInModel
           handleClose={() => setShowRoleSelectionModal(false)}
           handleContinue={() => handleRoleSelection(selectedOption)}

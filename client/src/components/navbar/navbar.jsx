@@ -2,7 +2,7 @@ import React from "react";
 import "./navbar.css";
 import { Logo } from "../Logo/logo";
 import { useNavigate } from "react-router-dom";
-import { useSelector, useDispatch} from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { signOut } from "firebase/auth";
 
 const Navbar = () => {
@@ -28,11 +28,9 @@ const Navbar = () => {
     try {
       await fetch("http://localhost:3000/api/auth/signout");
       dispatch(signOut());
-    } catch (error) {
-      
-    }
+    } catch (error) {}
     navigate("/login");
-  }
+  };
 
   return (
     <header className="navbar">
@@ -41,35 +39,34 @@ const Navbar = () => {
       </div>
       <ul className="nav-links">
         <li>
-          <a href="home-section">
+          <a>
             <span>Home</span>
           </a>
         </li>
         <li>
-          <a href="#how-it-works-section">
+          <a href="#how_it_works">
             <span>How it works</span>
           </a>
         </li>
         <li>
-          <a href="#pricing-section">
+          <a href="#pricing">
             <span>Pricing</span>
           </a>
         </li>
       </ul>
       <div className="login-signup">
         {currentUser ? (
-          <>  
+          <>
             <button className="logout" onClick={navigateToLogout}>
               Logout
-            </button>        
+            </button>
             <img
-              src={currentUser.user.profilePicture}
+              src={currentUser?.user?.profilePicture}
               alt="profilePicture"
               className="h-9 w-9 rounded-full object-cover"
               onClick={navigateToProfileOrDashboard}
             />
           </>
-
         ) : (
           <>
             <button className="login" onClick={navigateToLogin}>
