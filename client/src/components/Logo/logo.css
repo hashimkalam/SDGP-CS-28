@@ -2,6 +2,9 @@
     height: 70px;
     width: 222px;
 }
+.logo:hover {
+    cursor: pointer;
+}
 
 .logo .overlap-group {
     height: 70px;

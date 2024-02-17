@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 
 import { Button, IconButton } from "@mui/material";
 import AppleIcon from "@mui/icons-material/Apple";
@@ -15,8 +15,18 @@ import logInPersonImage from "../../assets/login_person.png";
 import signUpPersonImage from "../../assets/signup_person.png";
 import googleLogo from "../../assets/google_logo.jpg";
 import logo from "../../assets/Logo.png";
-
 import Select from "react-select";
+import {
+  signInStart,
+  signInFailure,
+  signInSuccess,
+  selectSelectedOption,
+  setSelectedOption,
+} from "../../redux/user/userSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { GoogleAuthProvider, getAuth, signInWithPopup } from "firebase/auth";
+import { app } from "../../firebase";
+import SignInModel from "../../components/model/SignInModel";
 
 const options = [
   { value: "individual", label: "Individual" },
@@ -39,17 +49,23 @@ const customStyles = {
 
 function Register() {
   const navigate = useNavigate();
+  const location = useLocation();
+  const dispatch = useDispatch();
 
-  const [loginPage, setLoginPage] = useState(true);
+  const [loginPage, setLoginPage] = useState(location.pathname === "/login");
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
-  const [selectOption, setSelectOption] = useState("");
   const [password, setPassword] = useState("");
   const [passPlaceholder, setPassPlaceholder] = useState(true);
   const [visibility, setVisibility] = useState(false);
   const [errorMsg, setErrorMessage] = useState(false);
+  const [formData, setFormData] = useState({});
+  const [message, setMessage] = useState("");
 
-  //console.log(selectOption.label);
+  const { error, loading } = useSelector((state) => state.user);
+
+  const [showRoleSelectionModal, setShowRoleSelectionModal] = useState(false);
+  const selectedOption = useSelector(selectSelectedOption);
 
   const styles = {
     border: "1px solid #d9d9d9",
@@ -73,35 +89,136 @@ function Register() {
     boxShadow: "0px 8px 21px 0px rgba(0, 0, 0, .16)",
   };
 
-  const submitHandler = (e) => {
+  const setErrorWithTimeout = (message) => {
+    setErrorMessage(message);
+    setTimeout(() => {
+      setErrorMessage(false);
+    }, 3000);
+  };
+
+  const submitHandler = async (e) => {
     e.preventDefault();
 
-    if (username === "" || password === "") {
-      setErrorMessage(true);
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const passwordPattern = /^(?=.*\d)/;
 
-      setTimeout(() => {
-        setErrorMessage(false);
-      }, 3500);
-    } else {
-      setErrorMessage(false);
-
-      setUsername("");
-      setEmail("");
-      setSelectOption("");
-      setPassword("");
+    if (email === "" || password === "") {
+      setErrorWithTimeout("Fill in the containers!");
+      return;
     }
+
+    if (!emailPattern.test(email)) {
+      setErrorWithTimeout("Please enter a valid email address.");
+      return;
+    }
+
+    if (password === "") {
+      setErrorWithTimeout("Password is required.");
+      return;
+    } else if (password.length < 8) {
+      setErrorWithTimeout("Password must be at least 8 characters long.");
+      return;
+    } else if (!passwordPattern.test(password)) {
+      setErrorWithTimeout("Password must contain at least one digit.");
+      return;
+    }
+
+    try {
+      dispatch(signInStart());
+      
+      const res = await fetch(
+        loginPage
+          ? "http://localhost:3000/api/auth/signin"
+          : "http://localhost:3000/api/auth/signup",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(formData),
+        }
+      );
+
+      const data = await res.json();
+
+      if (res.ok === false) {
+        dispatch(signInFailure(data.message));
+        return;
+      }
+      dispatch(signInSuccess(data));
+
+      setMessage(data.message);
+
+      if (res.ok) {
+        navigate("/workspace");
+      }
+    } catch (error) {
+      dispatch(signInFailure(error));
+    }
+  };
+
+  const handleGoogleButton = async () => {
+    setShowRoleSelectionModal(true);
+  };
+
+  useEffect(() => {
+    const fetchData = async () => {
+      if (showRoleSelectionModal) {
+        const option = await selectedOption;
+        if (option || location.pathname === "/login") {
+          setShowRoleSelectionModal(false);
+
+          try {
+            const provider = new GoogleAuthProvider();
+            const auth = getAuth(app);
+
+            const result = await signInWithPopup(auth, provider);
+
+            const res = await fetch("http://localhost:3000/api/auth/google", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({
+                name: result.user.displayName,
+                email: result.user.email,
+                photo: result?.user?.photoURL,
+                role: option,
+              }),
+            });
+            const data = await res.json();
+            dispatch(signInSuccess(data));
+            console.log(data);
+            if (res.ok) {
+              navigate("/workspace");
+            }
+          } catch (error) {
+            console.log("Could not login with google: " + error);
+          }
+        }
+        dispatch(setSelectedOption("")); // empty it
+      }
+    };
+
+    fetchData();
+  }, [showRoleSelectionModal, selectedOption]);
+
+  const handleRoleSelection = (option) => {
+    dispatch(setSelectedOption(option));
+    setShowRoleSelectionModal(false);
   };
 
   const switchScreen = (e) => {
     setUsername("");
     setEmail("");
-    setSelectOption("");
+    dispatch(setSelectedOption(""));
     setPassword("");
 
     setLoginPage(!loginPage);
-
-    loginPage ? navigate("/login") : navigate("/signup");
+    navigate(loginPage ? "/signup" : "/login");
   };
+
+  console.log(selectedOption);
 
   return (
     <div className="md:flex">
@@ -121,43 +238,60 @@ function Register() {
             </h2>
             <form
               className="w-3/4 sm:w-2/4 md:w-3/4 displayFlex flex-col "
-              onSubmit={submitHandler}>
-              <div className="link ">
-                <PersonOutlineIcon />
+              onSubmit={submitHandler}
+            >
+              {!loginPage && (
+                <div className="link ">
+                  <PersonOutlineIcon />
+                  <input
+                    type="text"
+                    placeholder="Username"
+                    className="innerLink"
+                    value={username}
+                    onChange={(e) => {
+                      setUsername(e.target.value);
+                      setFormData((prevFormData) => {
+                        return { ...prevFormData, username: e.target.value };
+                      });
+                    }}
+                  />
+                </div>
+              )}
+
+              <div className="link">
+                <MailOutlineIcon />
                 <input
-                  type="text"
-                  placeholder="Username"
-                  className="innerLink "
-                  value={username}
-                  onChange={(e) => setUsername(e.target.value)}
+                  type="email"
+                  placeholder="Email"
+                  className="innerLink"
+                  value={email}
+                  onChange={(e) => {
+                    setEmail(e.target.value);
+                    setFormData((prevFormData) => {
+                      return { ...prevFormData, email: e.target.value };
+                    });
+                  }}
                 />
               </div>
 
               {!loginPage && (
-                <>
-                  <div className="link">
-                    <MailOutlineIcon />
-                    <input
-                      type="email"
-                      placeholder="Email"
-                      className="innerLink"
-                      value={email}
-                      onChange={(e) => setEmail(e.target.value)}
-                    />
-                  </div>
-
-                  <div className="link py-2.5">
-                    <AddCardIcon />
-                    <Select
-                      className="innerLink"
-                      styles={customStyles}
-                      options={options}
-                      value={selectOption}
-                      onChange={(selected) => setSelectOption(selected)}
-                      placeholder="Select your role"
-                    />
-                  </div>
-                </>
+                <div className="link py-2.5">
+                  <AddCardIcon />
+                  <Select
+                    className="innerLink"
+                    styles={customStyles}
+                    options={options}
+                    value={selectedOption}
+                    onChange={(selected) => {
+                      dispatch(setSelectedOption(selected));
+                      setFormData((prevFormData) => ({
+                        ...prevFormData,
+                        role: selected.value,
+                      }));
+                    }}
+                    placeholder="Select your role"
+                  />
+                </div>
               )}
 
               <div className="link p-3 py-2">
@@ -167,30 +301,35 @@ function Register() {
                   placeholder="Password"
                   className="innerLink mr-2"
                   value={password}
-                  onChange={(e) => setPassword(e.target.value)}
+                  onChange={(e) => {
+                    setPassword(e.target.value);
+                    setFormData((prevFormData) => {
+                      return { ...prevFormData, password: e.target.value };
+                    });
+                  }}
                 />
 
                 <IconButton
                   onClick={() => {
                     setPassPlaceholder(!passPlaceholder);
                     setVisibility(!visibility);
-                  }}>
+                  }}
+                >
                   {visibility ? <VisibilityOffIcon /> : <VisibilityIcon />}
                 </IconButton>
               </div>
 
-              {errorMsg && (
-                <p className="text-red-700 font-semibold text-center">
-                  {loginPage
-                    ? "Please fill in both username and password"
-                    : "Please fill in all the containers"}
-                </p>
-              )}
+              <p className="text-red-700 font-semibold text-center">
+                {/*{error ? error || "Something went wrong!" : ""}*/}
+                {errorMsg}
+              </p>
+
 
               {loginPage && (
                 <Link
                   to="/forgotpassword"
-                  className="text-sm text-center text-blue-700 opacity-75 hover:opacity-100 cursor-pointer">
+                  className="text-sm text-center text-blue-700 opacity-75 hover:opacity-100 cursor-pointer"
+                >
                   forgot password?
                 </Link>
               )}
@@ -199,18 +338,21 @@ function Register() {
                 <Button
                   type="submit"
                   style={buttonStyles}
-                  onSubmit={submitHandler}>
+                  onSubmit={submitHandler}
+                >
                   Login Now
                 </Button>
               ) : (
                 <Button
                   type="submit"
                   style={buttonStyles}
-                  onSubmit={submitHandler}>
+                  onSubmit={submitHandler}
+                >
                   Sign Up
                 </Button>
               )}
             </form>
+
             <div className="flex items-center">
               <hr className="w-[13vw] bg-[#525252] " />
               <p className="mx-4 text-[#707070]">or</p>
@@ -219,7 +361,8 @@ function Register() {
 
             <div className="flex flex-col justify-center mt-6">
               <div className="flex flex-col sm:flex-row gap-x-2">
-                <Button style={styles}>
+                <Button style={styles} onClick={handleGoogleButton}>
+
                   <img
                     src={googleLogo}
                     className="w-6 mr-1.5"
@@ -240,14 +383,16 @@ function Register() {
                     <Link
                       to="/signup"
                       className="registerOptions"
-                      onClick={switchScreen}>
+                      onClick={switchScreen}
+                    >
                       Sign Up
                     </Link>
                   ) : (
                     <Link
                       to="/login"
                       className="registerOptions"
-                      onClick={switchScreen}>
+                      onClick={switchScreen}
+                    >
                       Log In
                     </Link>
                   )}
@@ -258,9 +403,16 @@ function Register() {
         </div>
       </div>
 
+      {showRoleSelectionModal && location.pathname === "/signup" && (
+        <SignInModel
+          handleClose={() => setShowRoleSelectionModal(false)}
+          handleContinue={() => handleRoleSelection(selectedOption)}
+        />
+      )}
       <div
         style={{ backgroundImage: `url(${pattern_img})` }}
-        className="bg-cover hidden sm:hidden lg:flex justify-center items-center md:w-1/2">
+        className="bg-cover hidden sm:hidden lg:flex justify-center items-center md:w-1/2"
+      >
         <div className="relative md:w-[40vw] lg:w-[30vw] lg:h-[65vh] xl:h-[55vh] border border-[white] -z-1 p-5 rounded-2xl lg:text-center xl:text-left backdrop-blur-lg">
           <p className="text-white text-sm md:text-md lg:text-lg xl:text-xl font-extrabold xl:w-1/2">
             No more complex CAD operations. Describe your ideal space, and we'll
