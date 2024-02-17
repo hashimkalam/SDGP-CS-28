@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 
 import { Button, IconButton } from "@mui/material";
@@ -16,6 +16,17 @@ import signUpPersonImage from "../../assets/signup_person.png";
 import googleLogo from "../../assets/google_logo.jpg";
 import logo from "../../assets/Logo.png";
 import Select from "react-select";
+import {
+  signInStart,
+  signInFailure,
+  signInSuccess,
+  selectSelectedOption,
+  setSelectedOption,
+} from "../../redux/user/userSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { GoogleAuthProvider, getAuth, signInWithPopup } from "firebase/auth";
+import { app } from "../../firebase";
+import SignInModel from "../../components/model/SignInModel";
 
 const options = [
   { value: "individual", label: "Individual" },
@@ -39,17 +50,22 @@ const customStyles = {
 function Register() {
   const navigate = useNavigate();
   const location = useLocation();
+  const dispatch = useDispatch();
 
   const [loginPage, setLoginPage] = useState(location.pathname === "/login");
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
-  const [selectOption, setSelectOption] = useState("");
   const [password, setPassword] = useState("");
   const [passPlaceholder, setPassPlaceholder] = useState(true);
   const [visibility, setVisibility] = useState(false);
   const [errorMsg, setErrorMessage] = useState(false);
   const [formData, setFormData] = useState({});
   const [message, setMessage] = useState("");
+
+  const { error, loading } = useSelector((state) => state.user);
+
+  const [showRoleSelectionModal, setShowRoleSelectionModal] = useState(false);
+  const selectedOption = useSelector(selectSelectedOption);
 
   const styles = {
     border: "1px solid #d9d9d9",
@@ -73,18 +89,43 @@ function Register() {
     boxShadow: "0px 8px 21px 0px rgba(0, 0, 0, .16)",
   };
 
+  const setErrorWithTimeout = (message) => {
+    setErrorMessage(message);
+    setTimeout(() => {
+      setErrorMessage(false);
+    }, 3000);
+  };
+
   const submitHandler = async (e) => {
     e.preventDefault();
 
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const passwordPattern = /^(?=.*\d)/;
+
     if (email === "" || password === "") {
-      setErrorMessage(true);
+      setErrorWithTimeout("Fill in the containers!");
+      return;
+    }
 
-      setTimeout(() => {
-        setErrorMessage(false);
-      }, 3500);
-    } else {
-      setErrorMessage(false);
+    if (!emailPattern.test(email)) {
+      setErrorWithTimeout("Please enter a valid email address.");
+      return;
+    }
 
+    if (password === "") {
+      setErrorWithTimeout("Password is required.");
+      return;
+    } else if (password.length < 8) {
+      setErrorWithTimeout("Password must be at least 8 characters long.");
+      return;
+    } else if (!passwordPattern.test(password)) {
+      setErrorWithTimeout("Password must contain at least one digit.");
+      return;
+    }
+
+    try {
+      dispatch(signInStart());
+      
       const res = await fetch(
         loginPage
           ? "http://localhost:3000/api/auth/signin"
@@ -97,27 +138,87 @@ function Register() {
           body: JSON.stringify(formData),
         }
       );
-      var data = await res.json();
+
+      const data = await res.json();
+
+      if (res.ok === false) {
+        dispatch(signInFailure(data.message));
+        return;
+      }
+      dispatch(signInSuccess(data));
+
       setMessage(data.message);
 
       if (res.ok) {
         navigate("/workspace");
       }
-      console.log(data);
+    } catch (error) {
+      dispatch(signInFailure(error));
     }
+  };
+
+  const handleGoogleButton = async () => {
+    setShowRoleSelectionModal(true);
+  };
+
+  useEffect(() => {
+    const fetchData = async () => {
+      if (showRoleSelectionModal) {
+        const option = await selectedOption;
+        if (option || location.pathname === "/login") {
+          setShowRoleSelectionModal(false);
+
+          try {
+            const provider = new GoogleAuthProvider();
+            const auth = getAuth(app);
+
+            const result = await signInWithPopup(auth, provider);
+
+            const res = await fetch("http://localhost:3000/api/auth/google", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({
+                name: result.user.displayName,
+                email: result.user.email,
+                photo: result?.user?.photoURL,
+                role: option,
+              }),
+            });
+            const data = await res.json();
+            dispatch(signInSuccess(data));
+            console.log(data);
+            if (res.ok) {
+              navigate("/workspace");
+            }
+          } catch (error) {
+            console.log("Could not login with google: " + error);
+          }
+        }
+        dispatch(setSelectedOption("")); // empty it
+      }
+    };
+
+    fetchData();
+  }, [showRoleSelectionModal, selectedOption]);
+
+  const handleRoleSelection = (option) => {
+    dispatch(setSelectedOption(option));
+    setShowRoleSelectionModal(false);
   };
 
   const switchScreen = (e) => {
     setUsername("");
     setEmail("");
-    setSelectOption("");
+    dispatch(setSelectedOption(""));
     setPassword("");
 
     setLoginPage(!loginPage);
     navigate(loginPage ? "/signup" : "/login");
   };
 
-  console.log(loginPage);
+  console.log(selectedOption);
 
   return (
     <div className="md:flex">
@@ -172,6 +273,7 @@ function Register() {
                   }}
                 />
               </div>
+
               {!loginPage && (
                 <div className="link py-2.5">
                   <AddCardIcon />
@@ -179,9 +281,9 @@ function Register() {
                     className="innerLink"
                     styles={customStyles}
                     options={options}
-                    value={selectOption}
+                    value={selectedOption}
                     onChange={(selected) => {
-                      setSelectOption(selected);
+                      dispatch(setSelectedOption(selected));
                       setFormData((prevFormData) => ({
                         ...prevFormData,
                         role: selected.value,
@@ -217,11 +319,11 @@ function Register() {
                 </IconButton>
               </div>
 
-              {errorMsg && (
-                <p className="text-red-700 font-semibold text-center">
-                  {message}
-                </p>
-              )}
+              <p className="text-red-700 font-semibold text-center">
+                {/*{error ? error || "Something went wrong!" : ""}*/}
+                {errorMsg}
+              </p>
+
 
               {loginPage && (
                 <Link
@@ -259,7 +361,8 @@ function Register() {
 
             <div className="flex flex-col justify-center mt-6">
               <div className="flex flex-col sm:flex-row gap-x-2">
-                <Button style={styles}>
+                <Button style={styles} onClick={handleGoogleButton}>
+
                   <img
                     src={googleLogo}
                     className="w-6 mr-1.5"
@@ -300,6 +403,12 @@ function Register() {
         </div>
       </div>
 
+      {showRoleSelectionModal && location.pathname === "/signup" && (
+        <SignInModel
+          handleClose={() => setShowRoleSelectionModal(false)}
+          handleContinue={() => handleRoleSelection(selectedOption)}
+        />
+      )}
       <div
         style={{ backgroundImage: `url(${pattern_img})` }}
         className="bg-cover hidden sm:hidden lg:flex justify-center items-center md:w-1/2"

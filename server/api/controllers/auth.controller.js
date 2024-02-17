@@ -63,7 +63,6 @@ export const signin = async (req, res, next) => {
     );
     const { password: hashedPassword, ...user } = validUser._doc;
     const expiryDate = new Date(Date.now() + 3600000); // 1 hour
-
     // send the token and user details as a response
     res
       .cookie("access_token", token, {
@@ -89,7 +88,6 @@ export const google = async (req, res, next) => {
     });
 
     if (validUser) {
-      
       const token = jwt.sign(
         { id: validUser._id },
         process.env.JWT_SECRET // secret key
@@ -111,18 +109,19 @@ export const google = async (req, res, next) => {
           message: "User logged in successfully",
           user,
         });
-
     } else {
       const generatedPassword = Math.random().toString(36).slice(-8);
 
       const hashedPassword = bcrypt.hashSync(generatedPassword, 10);
 
-      const { name, email, photo } = req.body;
+      const { name, email, photo, role } = req.body;
+      console.log(req.body);
       const newUser = new User({
         name:
-          name.split(" ").join("").toLowerCase() + (Math.floor(Math.random() * 1000).toString()),
+          name.split(" ").join("").toLowerCase() +
+          Math.floor(Math.random() * 1000).toString(),
         email,
-        role: "individual",
+        role,
         password: hashedPassword,
         profilePicture: photo,
       });
@@ -138,7 +137,7 @@ export const google = async (req, res, next) => {
         process.env.JWT_SECRET // secret key
       );
 
-      const expiryDate = new Date(Date.now() + 3600000); // 1 day
+      const expiryDate = new Date(Date.now() + 3600000); // 1 hour
 
       const { password: hashPassword, ...user } = validUser._doc;
 
@@ -161,5 +160,8 @@ export const google = async (req, res, next) => {
 };
 
 export const signout = (req, res) => {
-  res.clearCookie("access_token").status(200).send("User logged out successfully");
+  res
+    .clearCookie("access_token")
+    .status(200)
+    .send("User logged out successfully");
 };
