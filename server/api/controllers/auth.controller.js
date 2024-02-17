@@ -138,7 +138,7 @@ export const google = async (req, res, next) => {
         process.env.JWT_SECRET // secret key
       );
 
-      const expiryDate = new Date(Date.now() + 3600000); // 1 hour
+      const expiryDate = new Date(Date.now() + 3600000); // 1 day
 
       const { password: hashPassword, ...user } = validUser._doc;
 

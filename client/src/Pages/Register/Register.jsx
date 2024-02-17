@@ -16,14 +16,6 @@ import signUpPersonImage from "../../assets/signup_person.png";
 import googleLogo from "../../assets/google_logo.jpg";
 import logo from "../../assets/Logo.png";
 import Select from "react-select";
-import {
-  signInStart,
-  signInFailure,
-  signInSuccess,
-} from "../../redux/user/userSlice";
-import { useDispatch, useSelector } from "react-redux";
-import { GoogleAuthProvider, getAuth, signInWithPopup } from "firebase/auth";
-import { app } from "../../firebase";
 
 const options = [
   { value: "individual", label: "Individual" },
@@ -47,7 +39,6 @@ const customStyles = {
 function Register() {
   const navigate = useNavigate();
   const location = useLocation();
-  const dispatch = useDispatch();
 
   const [loginPage, setLoginPage] = useState(location.pathname === "/login");
   const [username, setUsername] = useState("");
@@ -59,8 +50,6 @@ function Register() {
   const [errorMsg, setErrorMessage] = useState(false);
   const [formData, setFormData] = useState({});
   const [message, setMessage] = useState("");
-
-  const { error, loading } = useSelector((state) => state.user);
 
   const styles = {
     border: "1px solid #d9d9d9",
@@ -96,63 +85,27 @@ function Register() {
     } else {
       setErrorMessage(false);
 
-      try {
-        dispatch(signInStart());
-        const res = await fetch(
-          loginPage
-            ? "http://localhost:3000/api/auth/signin"
-            : "http://localhost:3000/api/auth/signup",
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify(formData),
-          }
-        );
-        const data = await res.json();
-
-        if (res.ok === false) {
-          dispatch(signInFailure(data.message));
-          return;
-        }
-        dispatch(signInSuccess(data));
-        setMessage(data.message);
-
-        if (res.ok) {
-          navigate("/workspace");
-        }
-      } catch (error) {
-        dispatch(signInFailure(error));
-      }
-    }
-  };
-
-  const handleGoogleButton = async () => {
-    try {
-      const provider = new GoogleAuthProvider();
-      const auth = getAuth(app);
-
-      const result = await signInWithPopup(auth, provider);
-      const res = await fetch (
-        "http://localhost:3000/api/auth/google", {
+      const res = await fetch(
+        loginPage
+          ? "http://localhost:3000/api/auth/signin"
+          : "http://localhost:3000/api/auth/signup",
+        {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({
-            name: result.user.displayName,
-            email: result.user.email,
-            photo: result.user.photoURL,
-          }),
-        });
-      const data = await res.json();
-      dispatch(signInSuccess(data));
-      console.log(data)
-    } catch (error) {
-      console.log("Could not login with google: "+error)
+          body: JSON.stringify(formData),
+        }
+      );
+      var data = await res.json();
+      setMessage(data.message);
+
+      if (res.ok) {
+        navigate("/workspace");
+      }
+      console.log(data);
     }
-  }
+  };
 
   const switchScreen = (e) => {
     setUsername("");
@@ -163,6 +116,8 @@ function Register() {
     setLoginPage(!loginPage);
     navigate(loginPage ? "/signup" : "/login");
   };
+
+  console.log(loginPage);
 
   return (
     <div className="md:flex">
@@ -262,9 +217,11 @@ function Register() {
                 </IconButton>
               </div>
 
-              <p className="text-red-700 font-semibold text-center">
-                {error ? error || "Something went wrong!" : ""}
-              </p>
+              {errorMsg && (
+                <p className="text-red-700 font-semibold text-center">
+                  {message}
+                </p>
+              )}
 
               {loginPage && (
                 <Link
@@ -302,7 +259,7 @@ function Register() {
 
             <div className="flex flex-col justify-center mt-6">
               <div className="flex flex-col sm:flex-row gap-x-2">
-                <Button style={styles} onClick={handleGoogleButton}>
+                <Button style={styles}>
                   <img
                     src={googleLogo}
                     className="w-6 mr-1.5"
