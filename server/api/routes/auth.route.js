@@ -1,5 +1,5 @@
 import express from 'express';
-import { signup, signin } from '../controllers/auth.controller.js';
+import { signup, signin, google, signout } from '../controllers/auth.controller.js';
 
 // Create a new router
 const router = express.Router();
@@ -9,5 +9,12 @@ router.post("/signup", signup)
 
 // add a route to handle user login
 router.post("/signin", signin)
+
+// add a route to handle user google authentication
+router.post("/google", google)
+
+// add a route to handle user signout
+router.get("/signout", signout)
+
 
 export default router;

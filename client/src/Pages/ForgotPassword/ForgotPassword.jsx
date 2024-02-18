@@ -1,17 +1,21 @@
 import React, { useState } from "react";
-
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@mui/material";
 
 function ForgotPassword() {
   const [nextSlide, setNextSlide] = useState(false);
   const [otpValues, setOtpValues] = useState(["", "", "", ""]);
   const [otpPass, setOtpPass] = useState(false);
+  const [enteredEmail, setEnteredEmail] = useState("");
+  const [otpVerified, setOtpVerified] = useState(false);
+  const [generatedOtp, setGeneratedOtp] = useState("");
 
-  const [newPassword, setNewPassword] = useState("");
 
-  const OTP = "2468"; // Use string to compare easily
+  const navigate = useNavigate();
+
+
+  // const OTP = "2468"; // Use string to compare easily
 
   const styles = {
     margin: "20px",
@@ -26,23 +30,53 @@ function ForgotPassword() {
     width: "40%",
   };
 
-  const formSubmit = (e) => {
+  const formSubmit = async (e) => {
     e.preventDefault();
+    console.log('Entered Email:', enteredEmail);
 
-    // if (newPassword.includes("@gmail.com")) {
-    setNextSlide(true);
-    // }
+
+    // Call your backend API to send OTP email
+    const response = await fetch("http://localhost:3000/forgotpassword/submit", {
+      // Replace "http://localhost:3000" with the actual URL where your backend is running
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ email: enteredEmail }),
+      
+    });
+    const result = await response.json();
+    console.log('API Response:', result);
+
+    if (result.success) {
+      // OTP email sent successfully, update UI or navigate to OTP verification page
+      setOtpVerified(true);
+      setNextSlide(true);
+      const generatedOtp = result.generatedOtp;
+      setGeneratedOtp(generatedOtp);
+    } else {
+      // Handle error case
+      console.error("Error:", result.message);
+    }
   };
+  
 
   const otpSubmit = (e) => {
     e.preventDefault();
-
+  
     const enteredOtp = otpValues.join("");
-
-    if (OTP === enteredOtp) {
+  
+    if (generatedOtp === enteredOtp) {
       setOtpPass(true);
+  
+      // Navigate to the reset password page
+      navigate('/resetpassword', { state: { email: enteredEmail } });
+    } else {
+      // Show an error message
+      console.error("The entered OTP is not correct.");
     }
   };
+  
 
   return (
     <div className="flex flex-col items-center justify-center mx-auto h-screen -z-10">
@@ -70,10 +104,12 @@ function ForgotPassword() {
               <input
                 type="email"
                 placeholder="Email"
+                value={enteredEmail}
+                onChange={(e) => setEnteredEmail(e.target.value)}
                 className="link w-[60%]"
               />
 
-              <Button style={styles} onClick={formSubmit}>
+              <Button style={styles} onClick={formSubmit} type="submit">
                 Next
               </Button>
             </form>
@@ -81,7 +117,7 @@ function ForgotPassword() {
         </>
       ) : (
         <>
-          {!otpPass ? (
+         {otpVerified ? (
             <>
               <div className="bg-white w-[50vw] z-10 p-5 shadow-2xl rounded-xl">
                 <Link to="/login" className="flex mb-5 ">
@@ -144,21 +180,6 @@ function ForgotPassword() {
                   className="flex flex-col items-center w-[90%] mx-auto text-center"
                   onSubmit={formSubmit}
                 >
-                  <h1 className="text-3xl font-bold mb-5">
-                    Enter Your New Password
-                  </h1>
-
-                  <input
-                    type="password"
-                    placeholder="Password"
-                    className="link"
-                    value={newPassword}
-                    onChange={(e) => setNewPassword(e.target.value)}
-                  />
-
-                  <Button style={styles} onClick={formSubmit}>
-                    Change
-                  </Button>
                 </form>
               </div>
             </>
