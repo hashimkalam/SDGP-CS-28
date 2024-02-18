@@ -2,6 +2,7 @@ import User from "../models/user.model.js";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 
+
 export const signup = async (req, res, next) => {
   // Get the name, email, role and password from the request body
   const { username, email, role, password } = req.body;
@@ -165,3 +166,4 @@ export const signout = (req, res) => {
     .status(200)
     .send("User logged out successfully");
 };
+
