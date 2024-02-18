@@ -2,12 +2,10 @@ import React from "react";
 import "./navbar.css";
 import { Logo } from "../Logo/logo";
 import { useNavigate } from "react-router-dom";
-<<<<<<< HEAD
-import { Link } from 'react-scroll';
-=======
+// import { Link } from 'react-scroll';
 import { useSelector, useDispatch } from "react-redux";
 import { signOut } from "../../redux/user/userSlice";
->>>>>>> loshan
+
 
 const Navbar = () => {
   const { currentUser } = useSelector((state) => state.user);
@@ -27,8 +25,6 @@ const Navbar = () => {
 
   const navigateToSignup = () => {
     navigate("/signup");
-<<<<<<< HEAD
-=======
   };
 
 
@@ -39,7 +35,6 @@ const Navbar = () => {
     } catch (error) {
       console.log(error);
     }
->>>>>>> loshan
   };
 
   return (
@@ -49,51 +44,6 @@ const Navbar = () => {
       </div>
       <ul className="nav-links">
         <li>
-<<<<<<< HEAD
-        <Link
-            activeClass="active"
-            to="hero-section"
-            spy={true}
-            smooth={true}
-            offset={-100}
-            duration={200}
-          >
-            Home
-          </Link>
-        </li>
-        <li>
-          <Link
-            activeClass="active"
-            to="how-it-works-section"
-            spy={true}
-            smooth={true}
-            offset={-90}
-            duration={200}
-          >
-            How It Works
-          </Link>
-        </li>
-        <li>
-        <Link
-            activeClass="active"
-            to="pricing-section"
-            spy={true}
-            smooth={true}
-            offset={-90}
-            duration={200}
-          >
-            Pricing
-          </Link>
-        </li>
-      </ul>
-      <div className="login-signup">
-        <button className="login" onClick={navigateToLogin}>
-          Login
-        </button>
-        <button className="signup" onClick={navigateToSignup}>
-          Sign Up
-        </button>
-=======
           <a>
             <span>Home</span>
           </a>
@@ -132,7 +82,6 @@ const Navbar = () => {
             </button>
           </>
         )}
->>>>>>> loshan
       </div>
     </header>
   );

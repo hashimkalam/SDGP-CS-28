@@ -32,11 +32,7 @@ const HowItWorks = () => {
   };
 
   return (
-<<<<<<< HEAD
     <div className="how-it-works-section" id="how-it-works-section" >
-=======
-    <div className="how-it-works-section" id="how_it_works">
->>>>>>> loshan
       <div className="label">
         <p className="heading-simple-and">
           Master the Magic: Your Guide to Generating Perfect Floor Plans

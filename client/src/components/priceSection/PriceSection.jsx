@@ -31,43 +31,6 @@ function PriceSection() {
     }
   };
 
-<<<<<<< HEAD
-    return (
-        <>
-            <div className='PriceSection' id='pricing-section'>
-                <div className='title'>
-                    <h1>Simple And Affordable Pricing</h1>
-                    <p>Skip the subscriptions, say goodbye to recurring fees. Build your forever home with one-time access to unlimited floor plan generation.</p>
-                    <div>
-                        Indivdual
-                        <label className="switch" htmlFor="lifetimeCheckbox">
-                            <input
-                                type="checkbox"
-                                id="lifetimeCheckbox"
-                                onChange={handleOnChange}
-                            />
-                            <span class="slider round"></span>
-                        </label>
-                        Architect
-                    </div>
-                </div>
-                <div className='priceBox'>
-                    {priceList.map((data, index) => (
-                        <PriceBox
-                            key={index}
-                            price={data.price}
-                            f1={data.f1}
-                            f2={data.f2}
-                            f3={data.f3}
-                        />
-                    ))}
-                </div>
-            </div>
-
-
-        </>
-    );
-=======
   return (
     <div className="PriceSection" id="pricing">
       <div className="title">
@@ -102,7 +65,6 @@ function PriceSection() {
       </div>
     </div>
   );
->>>>>>> loshan
 }
 
 export default PriceSection;

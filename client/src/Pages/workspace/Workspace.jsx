@@ -1,5 +1,5 @@
 import React from 'react';
-import { Logo } from '../Logo/logo';
+import  Logo  from '../../components/Logo/logo'; // Import the logo component
 import { FaUserCircle } from 'react-icons/fa'; // Import the user icon
 import './workspace.css'; // Import the CSS file
 
