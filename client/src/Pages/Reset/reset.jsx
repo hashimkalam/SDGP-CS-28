@@ -7,7 +7,7 @@ import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import pattern_img from "../../assets/pattern.png";
 import resetImage from "../../assets/reset-password.png";
 import logo from "../../assets/Logo.png";
-import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import Alert from '@mui/material/Alert';
 
 // Import other necessary assets, styles, and components
 
@@ -44,6 +44,7 @@ const ResetPassword = () => {
   const [passwordError, setPasswordError] = useState("");
   const [confirmPasswordError, setConfirmPasswordError] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
 
   const handlePasswordVisibility = () => {
     setPassPlaceholder(!passPlaceholder);
@@ -111,6 +112,7 @@ const ResetPassword = () => {
     } catch (error) {
       // Handle error
       console.error(error);
+      setErrorMessage(error.message);
     }
   };
 
@@ -126,18 +128,15 @@ const ResetPassword = () => {
         </Link>
 
         <div className="grid place-items-center h-[85vh] lg:h-[83vh]">
+          {errorMessage && (
+            <Alert severity="error" onClose={() => setErrorMessage("")}>
+              {errorMessage}
+            </Alert>
+          )}
           {successMessage && (
-            <div
-              style={{
-                color: "green",
-                border: "1px solid green",
-                padding: "10px",
-                borderRadius: "5px",
-                marginBottom: "10px",
-              }}
-            >
-              <CheckCircleIcon /> {successMessage}
-            </div>
+            <Alert severity="success">
+              {successMessage}
+            </Alert>
           )}
           <div className="displayFlex flex-col w-full -mt-[4vh]">
             <h2 className="uppercase font-bold text-2xl text-center pt-5 pb-10">
