@@ -16,28 +16,13 @@
   cursor: pointer;
 }
 
-.caption, .address, .number {
+.caption {
   margin: 0;
-  padding: 20px 10px;
+  padding: 10px 10px;
   font-family: "Inter-BoldItalic", Helvetica;
   
 }
 
-
-.socials {
-  display:inline-block;
-  flex-direction: column;
-  align-items: center;
-  line-height: 2;
-  padding-top: 05px;
-  
-  
-}
-.socials h1{
-    font-weight: 600;
-    font-size: 22px;
-
-}
 
 
 
