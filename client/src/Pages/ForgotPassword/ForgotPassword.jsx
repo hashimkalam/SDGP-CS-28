@@ -140,7 +140,7 @@ function ForgotPassword() {
                 className="link w-[60%]"
               />
 
-              <Button style={styles} onClick={formSubmit} type="submit">
+              <Button style={styles} onClick={formSubmit}>
                 Next
               </Button>
             </form>
