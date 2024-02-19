@@ -1,11 +1,13 @@
-import nodemailer from 'nodemailer';
+import nodemailer from "nodemailer";
+import dotenv from "dotenv";
+dotenv.config();
 
 // Create a nodemailer transporter using your email service credentials
 const transporter = nodemailer.createTransport({
-  service: 'gmail',
+  service: "gmail",
   auth: {
-    user: 'elitebluprint.architect@gmail.com',
-    pass: 'EliteBluPrint@sdgp',
+    user: process.env.EMAIL_ADDRESS,
+    pass: process.env.EMAIL_PASSWORD,
   },
 });
 
@@ -17,21 +19,25 @@ const generateOTP = () => {
 // Send OTP email function
 const sendOTPEmail = async (email, otp) => {
   try {
-    
     const mailOptions = {
-      from: 'elitebluprint.architect@gmail.com',
+      from: "elitebluprint.architect@gmail.com",
       to: email,
-      subject: 'OTP Verification',
-      text: `Your OTP code is: ${otp}`,
+      subject: "OTP Verification",
+      html: `
+  <h1>Password Reset Request</h1>
+  <p>We received a request to reset your password for your EliteBluPrint account.</p>
+  <p>Your OTP code is: <strong>${otp}</strong></p>
+  <p>Please enter this code to proceed with resetting your password.</p>
+  <hr>
+  <p>If you did not request a password reset, please ignore this email or contact support if you have any questions.</p>
+`,
     };
-
-    
 
     // Send email
     await transporter.sendMail(mailOptions);
-    console.log('Email sent successfully!');
+    console.log("Email sent successfully!");
   } catch (error) {
-    console.error('Error sending email:', error);
+    console.error("Error sending email:", error);
   }
 };
 
@@ -47,15 +53,19 @@ const sendOtpEmail = async (req, res) => {
     // Send the OTP email
     await sendOTPEmail(email, otpCode);
 
-    // Log the email and OTP (you can remove this in production)
-    console.log('Entered Email:', email);
-    console.log('Generated OTP:', otpCode);
+    // Log the email and OTP
+    console.log("Entered Email:", email);
+    console.log("Generated OTP:", otpCode);
 
     // Respond to the client (you can customize the response as needed)
-    res.json({ success: true, message: 'OTP email sent successfully', generatedOtp: otpCode });
-} catch (error) {
-    console.error('Error handling forgot password request:', error);
-    res.status(500).json({ success: false, message: 'Internal Server Error' });
+    res.json({
+      success: true,
+      message: "OTP email sent successfully",
+      generatedOtp: otpCode,
+    });
+  } catch (error) {
+    console.error("Error handling forgot password request:", error);
+    res.status(500).json({ success: false, message: "Internal Server Error" });
   }
 };
 
