@@ -1,6 +1,9 @@
 import User from "../models/user.model.js";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
+const Token =require("../models/token.js")
+const sendEmail =require("../utils/sendConEmail.js")
+const crypto = require("crypto")
 
 export const signup = async (req, res, next) => {
   // Get the name, email, role and password from the request body
@@ -10,7 +13,7 @@ export const signup = async (req, res, next) => {
   const hashedPassword = bcrypt.hashSync(password, 10);
 
   // create a new user with the details
-  const newUser = new User({
+  let newUser = new User({
     name: username,
     email,
     role,
@@ -19,11 +22,20 @@ export const signup = async (req, res, next) => {
 
   try {
     // save the user to the database
-    await newUser.save();
+    user = await newUser.save();
+     
+    const token = await new Token({
+      userld: user._id,
+      token: crypto.randomBytes(32).toString("hex")
+      }).save();
+
+    const url = `${process.env. BASE_URL}users/${user._id}/verify/${token.token}`
+    
+    await sendEmail(user.email, "Verify Email", url);
 
     // send a success response
     res.status(201).send({
-      message: "User created successfully",
+      message: "User created successfully(email send to verify)",
     });
   } catch (error) {
     // send an error response if there is an error
