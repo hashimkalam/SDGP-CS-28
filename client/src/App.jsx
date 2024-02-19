@@ -2,7 +2,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Home from "./Pages/Home/Home";
 import ForgotPassword from "./Pages//ForgotPassword/ForgotPassword";
 import Register from "./Pages/Register/Register";
-
+import "./index.css";
 import Download from "./Pages/Download/Download";
 import Workspace from "./Pages/workspace/Workspace";
 import ResetPassword from "./Pages/Reset/reset";
