@@ -1,9 +1,8 @@
-import React from "react";
-import "./navbar.css";
-import { Logo } from "../Logo/logo";
+import React, { useState } from "react"
 import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { signOut } from "firebase/auth";
+import Logo from "../../assets/Logo.png";
 
 const Navbar = () => {
   const { currentUser } = useSelector((state) => state.user);
@@ -34,53 +33,56 @@ const Navbar = () => {
     navigate("/login");
   };
 
+  let Links = [
+
+    {name:"HOME", link:"/"},
+    {name:"HOW IT WORKS", link:"/"},
+    {name:"PRICING", link:"/"},
+  ];
+
+  let [open,setOpen]=useState(false);
+
   return (
-    <header className="navbar">
-      <div className="logo-container">
-        <Logo />
+    <div className='w-full fixed top-0 left-0 z-50'>
+
+      <div className='md:flex shadow-md bg-white items-center justify-between py-4 md:px-10 px-7'>
+        <a className='cursor-pointer' href=''><img src={Logo} className="h-14" alt="Logo"/></a>
+
+        <div onClick={()=>setOpen(!open)} className='text-3xl absolute right-8 top-8 cursor-pointer md:hidden'>
+        <ion-icon name={open ? 'close':'menu'} className='text-white'></ion-icon>
+        </div>
+
+        <ul className={`md:flex md:bg-none bg-white md:items-center md:pb-0 pb-3 absolute md:static  md:z-auto z-[-1] 
+        left-0 w-full md:w-auto md:pl-0 pl-9 transition-all duration-500 ease-in ${open ? 'top-20 ':'top-[-490px]'}`}>
+          
+            {
+              Links.map((link)=>(
+
+                <li key={link.name} className='md:ml-10 mr-8 md:text-xl text-lg font-semibold font-Inter-Regular md:my-0 my-6'>
+                  <a href={link.link} className='text-[#1d2144] hover:text-[#004EC3] duration-500'>{link.name}</a>
+                </li>
+              ))
+            }
+
+          <div className='login md:ml-[120px] flex md:flex-row flex-col md:my-0 my-7'>
+
+            <button className='bg-[#002865] text-white md:text-xl text-lg font-semibold py-2 px-6 rounded-full md:ml-8 md:mr-1 mr-2 w-[140px] hover:bg-[#004EC3] duration-500'
+            onClick={navigateToLogin}>
+              LOGIN
+            </button>
+
+            <button className='signup bg-[#002865] text-white md:text-xl text-lg font-semibold py-2 px-6 rounded-full md:ml-8 md:mr-1 mr-2 w-[140px] hover:bg-[#004EC3] duration-500 md:my-0 my-7'
+            onClick={navigateToSignup}>
+              REGISTER
+            </button>
+
+          </div>
+          
+        </ul>
       </div>
-      <ul className="nav-links">
-        <li>
-          <a>
-            <span>Home</span>
-          </a>
-        </li>
-        <li>
-          <a href="#how_it_works">
-            <span>How it works</span>
-          </a>
-        </li>
-        <li>
-          <a href="#pricing">
-            <span>Pricing</span>
-          </a>
-        </li>
-      </ul>
-      <div className="login-signup">
-        {currentUser ? (
-          <>
-            <button className="logout" onClick={navigateToLogout}>
-              Logout
-            </button>
-            <img
-              src={currentUser?.user?.profilePicture}
-              alt="profilePicture"
-              className="h-9 w-9 rounded-full object-cover"
-              onClick={navigateToProfileOrDashboard}
-            />
-          </>
-        ) : (
-          <>
-            <button className="login" onClick={navigateToLogin}>
-              Login
-            </button>
-            <button className="signup" onClick={navigateToSignup}>
-              Sign Up
-            </button>
-          </>
-        )}
-      </div>
-    </header>
+
+
+    </div>
   );
 };
 
