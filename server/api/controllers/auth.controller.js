@@ -1,9 +1,6 @@
 import User from "../models/user.model.js";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
-const Token =require("../models/token.js")
-const sendEmail =require("../utils/sendConEmail.js")
-const crypto = require("crypto")
 
 export const signup = async (req, res, next) => {
   // Get the name, email, role and password from the request body
@@ -23,7 +20,7 @@ export const signup = async (req, res, next) => {
   try {
     // save the user to the database
     await newUser.save();
-     
+
     // send a success response
     res.status(201).send({
       message: "User created successfully",
@@ -81,6 +78,16 @@ export const signin = async (req, res, next) => {
       });
   } catch (error) {
     next(error); // send an error response if there is an error
+  }
+};
+
+export const userDelete = async (req, res, next) => {
+  try {
+    const deleteUser = await User.findOneAndDelete({
+      email: req.body.email,
+    });
+  } catch (error) {
+    next(error);
   }
 };
 
