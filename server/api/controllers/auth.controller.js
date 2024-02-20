@@ -40,7 +40,7 @@ export const signup = async (req, res, next) => {
         text: "Your account has been created successfully.",
         html: `
     <div style="background-color: #f0f0f0; padding: 20px; text-align: center; border-radius: 10px;">
-      <img src="" alt="Platform Logo" style="max-width: 100px; margin-bottom: 15px;">
+      <img src="https://lh3.googleusercontent.com/a/ACg8ocIej1cxNFTtSL7g1VqWX8jVB_xiS4ih10pmNnPxrZyHAA=s288-c-no" alt="Platform Logo" style="max-width: 100px; margin-bottom: 15px;">
       <h2 style="color: #333;">Welcome to our platform, <strong>${username}</strong>!</h2>
       <p style="color: #555; font-size: 16px;">Your account has been created successfully. We're glad to have you on board.</p>
       <p style="font-size: 24px;">🚀 Let the journey begin! 🌟</p>
