@@ -24,13 +24,17 @@ const sendOTPEmail = async (email, otp) => {
       to: email,
       subject: "OTP Verification",
       html: `
-  <h1>Password Reset Request</h1>
-  <p>We received a request to reset your password for your EliteBluPrint account.</p>
-  <p>Your OTP code is: <strong>${otp}</strong></p>
-  <p>Please enter this code to proceed with resetting your password.</p>
-  <hr>
-  <p>If you did not request a password reset, please ignore this email or contact support if you have any questions.</p>
-`,
+        <div style="font-family: Arial, sans-serif; padding: 20px; color: #333;">
+          <h1 style="color: #4a7eb1;">Password Reset Request</h1>
+          <p style="font-size: 16px;">We received a request to reset your password for your EliteBluPrint account.</p>
+          <div style="background-color: #f8f9fa; padding: 10px; margin: 20px 0; border-radius: 5px;">
+            <p style="font-size: 18px;">Your OTP code is: <strong style="font-size: 20px; color: #4a7eb1;">${otp}</strong></p>
+          </div>
+          <p style="font-size: 16px;">Please enter this code to proceed with resetting your password.</p>
+          <hr>
+          <p style="font-size: 14px;">If you did not request a password reset, please ignore this email or contact support if you have any questions.</p>
+        </div>
+      `,
     };
 
     // Send email
