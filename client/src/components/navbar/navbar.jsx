@@ -3,7 +3,7 @@ import "./navbar.css";
 import { Logo } from "../Logo/logo";
 import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import { signOut } from "firebase/auth";
+import { signOut } from "../../redux/user/userSlice";
 
 const Navbar = () => {
   const { currentUser } = useSelector((state) => state.user);
@@ -30,8 +30,9 @@ const Navbar = () => {
     try {
       await fetch("http://localhost:3000/api/auth/signout");
       dispatch(signOut());
-    } catch (error) {}
-    navigate("/login");
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
