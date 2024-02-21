@@ -5,7 +5,7 @@ import Register from "./Pages/Register/Register";
 import Download from "./Pages/Download/Download";
 import Workspace from "./Pages/workspace/Workspace";
 import ResetPassword from "./Pages/Reset/reset";
-
+import ArchitectPanel from "./Pages/ArchitectPanel/ArchitectPanel";
 
 function App() {
   return (
@@ -47,13 +47,13 @@ function App() {
             }
           />
           <Route
-          path="/workspace"
-          element={
-            <div className="bg-[#5E5ABA] h-screen">
-              <Workspace />
-            </div>
-          }
-        />
+            path="/workspace"
+            element={
+              <div className="bg-[#5E5ABA] h-screen">
+                <Workspace />
+              </div>
+            }
+          />
           <Route
             path="/download"
             element={
@@ -67,6 +67,14 @@ function App() {
             element={
               <div className="bg-[#5E5ABA] h-screen">
                 <Home />
+              </div>
+            }
+          />
+          <Route
+            path="/architectpanel"
+            element={
+              <div className="bg-[#5E5ABA]">
+                <ArchitectPanel />
               </div>
             }
           />

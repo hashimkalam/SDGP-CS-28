@@ -82,6 +82,16 @@ export const signin = async (req, res, next) => {
   }
 };
 
+export const userDelete = async (req, res, next) => {
+  try {
+    const deleteUser = await User.findOneAndDelete({
+      email: req.body.email,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
 export const google = async (req, res, next) => {
   try {
     const validUser = await User.findOne({
