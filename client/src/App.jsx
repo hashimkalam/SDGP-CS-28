@@ -4,6 +4,7 @@ import ForgotPassword from "./Pages//ForgotPassword/ForgotPassword";
 import Register from "./Pages/Register/Register";
 import Download from "./Pages/Download/Download";
 import Workspace from "./Pages/workspace/Workspace";
+import ResetPassword from "./Pages/Reset/reset";
 import ArchitectPanel from "./Pages/ArchitectPanel/ArchitectPanel";
 
 function App() {
@@ -11,7 +12,7 @@ function App() {
     <div>
       <Router>
         <Routes>
-          <Route
+        <Route
             path="/login"
             element={
               <div className="bg-[#5E5ABA] h-screen">
@@ -33,6 +34,15 @@ function App() {
             element={
               <div className="bg-[#5E5ABA] h-screen">
                 <ForgotPassword />
+              </div>
+
+            }
+          />
+          <Route
+            path="/resetpassword"
+            element={
+              <div className="bg-[#5E5ABA] h-screen">
+                <ResetPassword />
               </div>
             }
           />

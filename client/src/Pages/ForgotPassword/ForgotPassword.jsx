@@ -1,17 +1,53 @@
-import React, { useState } from "react";
-
+import React, { createRef, useEffect, useRef, useState } from "react";
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@mui/material";
 
 function ForgotPassword() {
   const [nextSlide, setNextSlide] = useState(false);
   const [otpValues, setOtpValues] = useState(["", "", "", ""]);
   const [otpPass, setOtpPass] = useState(false);
+  const [enteredEmail, setEnteredEmail] = useState("");
+  const [otpVerified, setOtpVerified] = useState(false);
+  const [generatedOtp, setGeneratedOtp] = useState("");
 
-  const [newPassword, setNewPassword] = useState("");
+  const navigate = useNavigate();
+  const inputRefs = useRef([]);
 
-  const OTP = "2468"; // Use string to compare easily
+  useEffect(() => {
+    inputRefs.current[0]?.current?.focus();
+  }, []);
+
+  for (let i = 0; i < 4; i++) {
+    inputRefs.current[i] = createRef();
+  }
+
+  const handleInputChange = (e, index) => {
+    const newValue = e.target.value;
+
+    if (newValue === "") {
+      // removing the values if backspace clicked
+      const newOtpValues = [...otpValues];
+      newOtpValues[index] = "";
+      setOtpValues(newOtpValues);
+
+      if (index > 0) {
+        inputRefs.current[index - 1].current.focus();
+      }
+      return;
+    }
+
+    if (/^\d+$/.test(newValue) && newValue.length <= 1) {
+      const newOtpValues = [...otpValues];
+      newOtpValues[index] = newValue;
+      setOtpValues(newOtpValues);
+
+      // move to the next input holder
+      if (index < otpValues.length - 1) {
+        inputRefs.current[index + 1].current.focus();
+      }
+    }
+  };
 
   const styles = {
     margin: "20px",
@@ -26,12 +62,35 @@ function ForgotPassword() {
     width: "40%",
   };
 
-  const formSubmit = (e) => {
+  const formSubmit = async (e) => {
     e.preventDefault();
+    console.log("Entered Email:", enteredEmail);
 
-    // if (newPassword.includes("@gmail.com")) {
-    setNextSlide(true);
-    // }
+    // Call your backend API to send OTP email
+    const response = await fetch(
+      "http://localhost:3000/forgotpassword/submit",
+      {
+        // Replace "http://localhost:3000" with the actual URL where your backend is running
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email: enteredEmail }),
+      }
+    );
+    const result = await response.json();
+    console.log("API Response:", result);
+
+    if (result.success) {
+      // OTP email sent successfully, update UI or navigate to OTP verification page
+      setOtpVerified(true);
+      setNextSlide(true);
+      const generatedOtp = result.generatedOtp;
+      setGeneratedOtp(generatedOtp);
+    } else {
+      // Handle error case
+      console.error("Error:", result.message);
+    }
   };
 
   const otpSubmit = (e) => {
@@ -39,8 +98,14 @@ function ForgotPassword() {
 
     const enteredOtp = otpValues.join("");
 
-    if (OTP === enteredOtp) {
+    if (generatedOtp === enteredOtp) {
       setOtpPass(true);
+
+      // Navigate to the reset password page
+      navigate("/resetpassword", { state: { email: enteredEmail } });
+    } else {
+      // Show an error message
+      console.error("The entered OTP is not correct.");
     }
   };
 
@@ -70,6 +135,8 @@ function ForgotPassword() {
               <input
                 type="email"
                 placeholder="Email"
+                value={enteredEmail}
+                onChange={(e) => setEnteredEmail(e.target.value)}
                 className="link w-[60%]"
               />
 
@@ -81,7 +148,7 @@ function ForgotPassword() {
         </>
       ) : (
         <>
-          {!otpPass ? (
+          {otpVerified ? (
             <>
               <div className="bg-white w-[50vw] z-10 p-5 shadow-2xl rounded-xl">
                 <Link to="/login" className="flex mb-5 ">
@@ -112,14 +179,8 @@ function ForgotPassword() {
                         className="link w-12 h-12 text-center mx-1"
                         required
                         value={value}
-                        onChange={(e) => {
-                          const newValue = e.target.value;
-                          if (/^\d+$/.test(newValue) && newValue.length <= 1) {
-                            const newOtpValues = [...otpValues];
-                            newOtpValues[index] = newValue;
-                            setOtpValues(newOtpValues);
-                          }
-                        }}
+                        onChange={(e) => handleInputChange(e, index)}
+                        ref={inputRefs.current[index]}
                       />
                     ))}
                   </div>
@@ -143,23 +204,7 @@ function ForgotPassword() {
                 <form
                   className="flex flex-col items-center w-[90%] mx-auto text-center"
                   onSubmit={formSubmit}
-                >
-                  <h1 className="text-3xl font-bold mb-5">
-                    Enter Your New Password
-                  </h1>
-
-                  <input
-                    type="password"
-                    placeholder="Password"
-                    className="link"
-                    value={newPassword}
-                    onChange={(e) => setNewPassword(e.target.value)}
-                  />
-
-                  <Button style={styles} onClick={formSubmit}>
-                    Change
-                  </Button>
-                </form>
+                ></form>
               </div>
             </>
           )}
