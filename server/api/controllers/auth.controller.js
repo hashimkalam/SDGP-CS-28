@@ -200,6 +200,43 @@ export const google = async (req, res, next) => {
           message: "User created and logged in successfully",
           user,
         });
+
+      // create a transporter object using the default SMTP transport
+      const transporter = nodemailer.createTransport({
+        service: "gmail",
+        auth: {
+          user: process.env.EMAIL_ADDRESS,
+          pass: process.env.EMAIL_PASSWORD,
+        },
+      });
+
+      // send mail with defined transport object
+      transporter.sendMail(
+        {
+          from: process.env.EMAIL_ADDRESS,
+          to: email,
+          subject: "Welcome to Our Platform",
+          text: "Your account has been created successfully.",
+          html: `
+    <div style="background-color: #f0f0f0; padding: 20px; text-align: center; border-radius: 10px;">
+      <img src="https://lh3.googleusercontent.com/a/ACg8ocIej1cxNFTtSL7g1VqWX8jVB_xiS4ih10pmNnPxrZyHAA=s288-c-no" alt="Platform Logo" style="max-width: 100px; margin-bottom: 15px;">
+      <h2 style="color: #333;">Welcome to our platform, <strong>${username}</strong>!</h2>
+      <p style="color: #555; font-size: 16px;">Your account has been created successfully. We're glad to have you on board.</p>
+      <p style="font-size: 24px;">🚀 Let the journey begin! 🌟</p>
+      <div style="margin-top: 20px;">
+        <img src="#" alt="Welcome Banner" style="max-width: 100%; border-radius: 10px;">
+      </div>
+    </div>
+  `,
+        },
+        (error, info) => {
+          if (error) {
+            console.log("Error sending email", error);
+          } else {
+            console.log("Email sent: " + info.response);
+          }
+        }
+      );
     }
   } catch (error) {
     next(error); // send an error response if there is an error
