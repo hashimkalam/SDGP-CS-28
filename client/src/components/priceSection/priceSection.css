@@ -2,8 +2,8 @@
   background: linear-gradient(180deg, #00265f 0%, rgba(0, 47, 215, 0.84) 100%);
   color: #ffffff;
   text-align: center;
-  height: 100vh;
-
+  height: 100%;
+  
 }
 
 
@@ -71,6 +71,9 @@ input:checked + .slider:before {
 .slider.round:before {
   border-radius: 50%;
 }
+.title{
+  padding: 15px;
+}
 
 
 
@@ -92,19 +95,14 @@ input:checked + .slider:before {
 
 .priceBox {
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
+  padding: 20px 0;
+  
 
 }
-@media screen and (max-width: 600px) {
-  .priceBox {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-direction: column;
-  
-  }
-}
+
 
 
 

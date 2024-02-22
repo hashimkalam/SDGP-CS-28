@@ -52,16 +52,19 @@ function PriceSection() {
           Architect
         </div>
       </div>
+      <div></div>
       <div className="priceBox">
-        {priceList.map((data, index) => (
-          <PriceBox
-            key={index}
-            price={data.price}
-            f1={data.f1}
-            f2={data.f2}
-            f3={data.f3}
-          />
-        ))}
+        <div className="flex flex-col md:flex-row">
+          {priceList.map((data, index) => (
+            <PriceBox
+              key={index}
+              price={data.price}
+              f1={data.f1}
+              f2={data.f2}
+              f3={data.f3}
+            />
+          ))}
+        </div>
       </div>
     </div>
   );

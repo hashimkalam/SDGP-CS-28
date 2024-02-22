@@ -28,9 +28,6 @@ import { GoogleAuthProvider, getAuth, signInWithPopup } from "firebase/auth";
 import { app } from "../../firebase";
 import SignInModel from "../../components/model/SignInModel";
 
-import { useSnackbar } from "notistack";
-import RegisterImage from "../../components/RegisterImage/RegisterImage";
-
 const options = [
   { value: "individual", label: "Individual" },
   { value: "architect", label: "Architect" },
@@ -54,7 +51,6 @@ function Register() {
   const navigate = useNavigate();
   const location = useLocation();
   const dispatch = useDispatch();
-  const { enqueueSnackbar } = useSnackbar();
 
   const [loginPage, setLoginPage] = useState(location.pathname === "/login");
   const [username, setUsername] = useState("");
@@ -103,7 +99,6 @@ function Register() {
   const submitHandler = async (e) => {
     e.preventDefault();
 
-    // validation
     const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     const passwordPattern = /^(?=.*\d)/;
 
@@ -129,6 +124,7 @@ function Register() {
     }
 
     try {
+      
       dispatch(signInStart());
 
       const res = await fetch(
@@ -155,17 +151,8 @@ function Register() {
       setMessage(data.message);
 
       if (res.ok) {
-        {
-          location.pathname === "/login"
-            ? enqueueSnackbar("Logged In Successfully", {
-                variant: "success",
-              })
-            : enqueueSnackbar("Signed In Successfully", {
-                variant: "success",
-              });
-        }
-
         navigate("/workspace");
+        
       }
     } catch (error) {
       dispatch(signInFailure(error));
@@ -205,16 +192,6 @@ function Register() {
             dispatch(signInSuccess(data));
             console.log(data);
             if (res.ok) {
-              {
-                location.pathname === "/login"
-                  ? enqueueSnackbar("Logged In Successfully", {
-                      variant: "success",
-                    })
-                  : enqueueSnackbar("Signed In Successfully", {
-                      variant: "success",
-                    });
-              }
-
               navigate("/workspace");
             }
           } catch (error) {
@@ -432,20 +409,31 @@ function Register() {
           handleContinue={() => handleRoleSelection(selectedOption)}
         />
       )}
+      <div
+        style={{ backgroundImage: `url(${pattern_img})` }}
+        className="bg-cover hidden sm:hidden lg:flex justify-center items-center md:w-1/2"
+      >
+        <div className="relative md:w-[40vw] lg:w-[30vw] lg:h-[65vh] xl:h-[55vh] border border-[white] -z-1 p-5 rounded-2xl lg:text-center xl:text-left backdrop-blur-lg">
+          <p className="text-white text-sm md:text-md lg:text-lg xl:text-xl font-extrabold xl:w-1/2">
+            No more complex CAD operations. Describe your ideal space, and we'll
+            bring it to life
+          </p>
 
-      {loginPage ? (
-        <RegisterImage
-          logInPersonImage={logInPersonImage}
-          signUpPersonImage={signUpPersonImage}
-          loginPage={loginPage}
-        />
-      ) : (
-        <RegisterImage
-          logInPersonImage={logInPersonImage}
-          signUpPersonImage={signUpPersonImage}
-          loginPage={loginPage}
-        />
-      )}
+          {loginPage ? (
+            <img
+              src={logInPersonImage}
+              className="registerImg lg:right-[-20px] xl:right-[-80px] scale-90 lg:scale-100"
+              alt="Person"
+            />
+          ) : (
+            <img
+              src={signUpPersonImage}
+              className="registerImg lg:right-[0px] xl:right-[-50px] scale-100"
+              alt="Person"
+            />
+          )}
+        </div>
+      </div>
     </div>
   );
 }
