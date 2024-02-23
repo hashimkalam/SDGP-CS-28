@@ -1,5 +1,6 @@
 import User from "../models/user.model.js";
 import bcrypt from "bcryptjs";
+import jwt from "jsonwebtoken";
 
 import nodemailer from "nodemailer";
 
@@ -58,8 +59,6 @@ export const signup = async (req, res, next) => {
         }
       }
     );
-
-
 
     // send a success response
     res.status(201).send({
@@ -178,7 +177,6 @@ export const google = async (req, res, next) => {
 
       await newUser.save();
 
-
       // create a transporter object using the default SMTP transport
       const transporter = nodemailer.createTransport({
         service: "gmail",
@@ -215,8 +213,6 @@ export const google = async (req, res, next) => {
           }
         }
       );
-
-
 
       const validUser = await User.findOne({
         email: req.body.email,
