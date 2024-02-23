@@ -11,6 +11,8 @@ function ForgotPassword() {
   const [otpVerified, setOtpVerified] = useState(false);
   const [generatedOtp, setGeneratedOtp] = useState("");
 
+  const [errorMsg, setErrorMsg] = useState("");
+
   const navigate = useNavigate();
   const inputRefs = useRef([]);
 
@@ -62,8 +64,28 @@ function ForgotPassword() {
     width: "40%",
   };
 
+  const setErrorWithTimeout = (e_message) => {
+    setErrorMsg(e_message);
+    setTimeout(() => {
+      setErrorMsg(false);
+    }, 3000);
+  };
+
   const formSubmit = async (e) => {
     e.preventDefault();
+
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    if (enteredEmail === "") {
+      setErrorWithTimeout("Fill in the container!");
+      return;
+    }
+
+    if (!emailPattern.test(enteredEmail)) {
+      setErrorWithTimeout("Please enter a valid email address.");
+      return;
+    }
+
     console.log("Entered Email:", enteredEmail);
 
     // Call your backend API to send OTP email
@@ -87,6 +109,8 @@ function ForgotPassword() {
       setNextSlide(true);
       const generatedOtp = result.generatedOtp;
       setGeneratedOtp(generatedOtp);
+
+      setErrorMsg("");
     } else {
       // Handle error case
       console.error("Error:", result.message);
@@ -106,6 +130,7 @@ function ForgotPassword() {
     } else {
       // Show an error message
       console.error("The entered OTP is not correct.");
+      setErrorWithTimeout("The entered OTP is not correct.");
     }
   };
 
@@ -140,7 +165,11 @@ function ForgotPassword() {
                 className="link w-[60%]"
               />
 
-              <Button style={styles} onClick={formSubmit}>
+              <p className="text-red-700 font-semibold text-center">
+                {errorMsg}
+              </p>
+
+              <Button type="submit" style={styles} onClick={formSubmit}>
                 Next
               </Button>
             </form>
@@ -185,7 +214,11 @@ function ForgotPassword() {
                     ))}
                   </div>
 
-                  <Button style={styles} onClick={otpSubmit}>
+                  <p className="text-red-700 font-semibold text-center">
+                    {errorMsg}
+                  </p>
+
+                  <Button type="submit" style={styles} onClick={otpSubmit}>
                     Next
                   </Button>
                 </form>
