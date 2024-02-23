@@ -45,7 +45,7 @@ const Navbar = () => {
   return (
     <div className='w-full fixed top-0 left-0 z-50'>
 
-      <div className='md:flex shadow-md bg-white items-center justify-between py-4 md:px-10 px-7'>
+      <div className='md:flex shadow-md bg-white items-center justify-between py-4 md:px-8 px-7'>
         <a className='cursor-pointer' href=''><img src={Logo} className="h-14" alt="Logo"/></a>
 
         <div onClick={()=>setOpen(!open)} className='text-3xl absolute right-8 top-8 cursor-pointer md:hidden'>
