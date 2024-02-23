@@ -11,14 +11,12 @@ import Panel from "../../components/Dashboard/Panel";
 function Home() {
   return (
     <div>
-      {/*
+      
        
       <Hero />
       <HowItWorks />
       <PriceSection />
-      <Footer /> */}
-
-      <Panel/>
+      <Footer />
 
       
     
