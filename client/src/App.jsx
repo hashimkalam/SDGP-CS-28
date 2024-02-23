@@ -5,6 +5,7 @@ import Register from "./Pages/Register/Register";
 import Download from "./Pages/Download/Download";
 import Workspace from "./Pages/workspace/Workspace";
 import ArchitectPanel from "./Pages/ArchitectPanel/ArchitectPanel";
+import WorkspaceHistory from "./Pages/workspace/WorkspaceHistory";
 
 function App() {
   return (
@@ -44,6 +45,15 @@ function App() {
               </div>
             }
           />
+<Route
+            path="/workspaceHistory"
+            element={
+              <div className="bg-[#5E5ABA] h-screen">
+                <WorkspaceHistory />
+              </div>
+            }
+          />
+
           <Route
             path="/download"
             element={
