@@ -27,12 +27,12 @@ function userProfile() {
     try {
       const res = await fetch("http://localhost:3000/api/auth/delete", {
         method: "DELETE",
-        /*headers: {
+        headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          email: result.user.email,
-        }),*/
+          email: currentUser.user.email,
+        }),
       });
       if (res.ok) {
         enqueueSnackbar("Account Deleted Successfully", { variant: "success" });
