@@ -28,6 +28,8 @@ import { GoogleAuthProvider, getAuth, signInWithPopup } from "firebase/auth";
 import { app } from "../../firebase";
 import SignInModel from "../../components/model/SignInModel";
 
+import { useSnackbar } from "notistack";
+
 const options = [
   { value: "individual", label: "Individual" },
   { value: "architect", label: "Architect" },
@@ -51,6 +53,7 @@ function Register() {
   const navigate = useNavigate();
   const location = useLocation();
   const dispatch = useDispatch();
+  const { enqueueSnackbar } = useSnackbar();
 
   const [loginPage, setLoginPage] = useState(location.pathname === "/login");
   const [username, setUsername] = useState("");
@@ -151,6 +154,16 @@ function Register() {
       setMessage(data.message);
 
       if (res.ok) {
+        // success message
+        {
+          location.pathname === "/login"
+            ? enqueueSnackbar("Logged In Successfully", {
+                variant: "success",
+              })
+            : enqueueSnackbar("Signed In Successfully", {
+                variant: "success",
+              });
+        }
         navigate("/workspace");
       }
     } catch (error) {
@@ -191,7 +204,18 @@ function Register() {
             const data = await res.json();
             dispatch(signInSuccess(data));
             console.log(data);
+
             if (res.ok) {
+              // success message
+              {
+                location.pathname === "/login"
+                  ? enqueueSnackbar("Logged In Successfully", {
+                      variant: "success",
+                    })
+                  : enqueueSnackbar("Signed In Successfully", {
+                      variant: "success",
+                    });
+              }
               navigate("/workspace");
             }
           } catch (error) {

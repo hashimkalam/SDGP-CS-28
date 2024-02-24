@@ -21,8 +21,8 @@ function Download() {
   };
 
   return (
-    <div className="max-w-[1560px] mx-auto pt-28 min-h-screen overflow-hidden lg:overflow-auto flex flex-col lg:flex-row text-white p-10">
-      <div className="lg:flex-[.5] flex flex-col justify-center -mt-14 relative">
+    <div className="max-w-[1560px] mx-auto pt-16 min-h-screen overflow-hidden lg:overflow-auto flex flex-col lg:flex-row text-white p-10">
+      <div className="lg:flex-[.5] flex flex-col justify-center relative">
         <h1 className="text-center lg:text-left text-[40px] font-semibold">
           Your Dream Home Awaits! Download Your Floor Plan Now.
         </h1>
@@ -30,10 +30,6 @@ function Download() {
           Celebrate your freshly minted masterpiece! Take the first step from
           dream to reality by downloading your personalized floor plan.
         </p>
-
-        <div className="flex justify-center lg:justify-start">
-          <Button sx={buttonStyles}>Download Now</Button>
-        </div>
 
         <div className="space-y-5 mt-10 sm:ml-12 lg:ml-0 flex flex-col justify-center">
           {options.map((option, index) => (
@@ -51,7 +47,7 @@ function Download() {
           <img
             src={person_image}
             alt="Person_Image"
-            className="absolute -bottom-32 lg:-bottom-10 right-0 lg:right-10 xl:right-20 w-[250px] lg:w-[275px] xl:w-[300px] hidden sm:block"
+            className="absolute -bottom-32 lg:-bottom-10 right-0 lg:right-10 xl:right-20 w-[250px] lg:w-[245px] xl:w-[270px] hidden sm:block"
           />
         </div>
       </div>
