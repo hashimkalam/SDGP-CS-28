@@ -3,9 +3,7 @@ import Home from "./Pages/Home/Home";
 import ForgotPassword from "./Pages//ForgotPassword/ForgotPassword";
 import Register from "./Pages/Register/Register";
 import Download from "./Pages/Download/Download";
-import Workspace from "./Pages/workspace/Workspace";
 import ArchitectPanel from "./Pages/ArchitectPanel/ArchitectPanel";
-import WorkspaceHistory from "./Pages/workspace/WorkspaceHistory";
 import Workspaces from "./Pages/workspace/Workspaces";
 import Navbar from "./components/navbar/navbar";
 
@@ -46,24 +44,6 @@ function App() {
               <div className="bg-[#090E34] h-screen">
                 <Navbar />
                 <Workspaces />
-              </div>
-            }
-          />
-
-          <Route
-            path="/workspaceHistory"
-            element={
-              <div className="bg-[#5E5ABA] h-screen">
-                <WorkspaceHistory />
-              </div>
-            }
-          />
-
-          <Route
-            path="/workspace"
-            element={
-              <div className="bg-[#5E5ABA] h-screen">
-                <Workspace />
               </div>
             }
           />

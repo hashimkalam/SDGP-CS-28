@@ -37,15 +37,21 @@ const Workspaces = () => {
             const floorPlan = floorPlansData[floorPlanId];
             console.log("Fetching floor plan:", floorPlanId, floorPlan);
             try {
-              const downloadURL = await getDownloadURL(
-                storageRef(storage, floorPlan.floorPlanPath)
+              const downloadURLPng = await getDownloadURL(
+                storageRef(storage, floorPlan.floorPlanPathPng)
               );
-              console.log("Download URL:", floorPlan.formData, downloadURL);
+              console.log("Download URL:", floorPlan.formData, downloadURLPng);
+              const downloadURLDxf = await getDownloadURL(
+                storageRef(storage, floorPlan.floorPlanPathDxf)
+              );
+              console.log("Download URL:", floorPlan.formData, floorPlan.floorPlanPathDxf);
               floorPlansList.push({
                 id: floorPlanId,
-                floorPlanPath: downloadURL,
+                floorPlanPathPng: downloadURLPng,
+                floorPlanPathDxf: downloadURLDxf,
                 formData: floorPlan.formData,
               });
+              console.log(floorPlansList)
             } catch (error) {
               console.error("Error fetching download URL:", error);
             }
@@ -92,13 +98,14 @@ const Workspaces = () => {
               click={() => handleOnClick(floorPlan.id)}
             />
           </div>
+
         ))}
 
         <div
-          className="bg-[rgb(255,255,255)] hover:bg-slate-500 delay-300 cursor-pointer w-auto h-[6.5%] align-middle mx-5 rounded-3xl"
+          className="bg-[rgb(255,255,255)] hover:bg-slate-500 delay-300  mt-5 cursor-pointer w-auto py-3 mx-5 rounded-3xl"
           onClick={() => handleOnClickNewChat("")}
         >
-          <h5 className="text-black text-1xl font-bold text-center mt-5 items-center flex justify-center">
+          <h5 className="text-black text-1xl font-bold text-center items-center flex justify-center">
             Add New Description
           </h5>
         </div>
@@ -109,7 +116,7 @@ const Workspaces = () => {
            (
             <RightChat
               key={`right-${floorPlansData.id}`}
-              floorPlanPath={floorPlansData.floorPlanPath}
+              floorPlanPath={floorPlansData.floorPlanPathPng}
             />
           ) : (
               <div className="input-field flex flex-row mx-[10%]">
