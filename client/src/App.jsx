@@ -6,6 +6,7 @@ import Download from "./Pages/Download/Download";
 import Workspace from "./Pages/workspace/Workspace";
 import ResetPassword from "./Pages/Reset/reset";
 import ArchitectPanel from "./Pages/ArchitectPanel/ArchitectPanel";
+import UserProfile from "./Pages/UserProfile/userProfile";
 
 function App() {
   return (
@@ -78,6 +79,14 @@ function App() {
               </div>
             }
           />
+          <Route
+          path="/userprofile"
+          element={
+            <div className="bg-[#090E34] h-screen">
+              <UserProfile/>
+            </div>
+          }
+        />
         </Routes>
       </Router>
     </div>
