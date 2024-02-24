@@ -224,6 +224,7 @@ function Register() {
                 enqueueSnackbar("Error. Create an Account First!", {
                   variant: "error",
                 });
+                dispatch(setSelectedOption(""));
 
                 // redirect to signup page
                 setTimeout(() => {

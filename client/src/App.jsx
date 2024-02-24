@@ -9,16 +9,17 @@ import ArchitectPanel from "./Pages/ArchitectPanel/ArchitectPanel";
 import WorkspaceHistory from "./Pages/workspace/WorkspaceHistory";
 
 import UserProfile from "./Pages/UserProfile/userProfile";
+import Navbar from "./components/navbar/navbar";
 
 function App() {
   return (
-    <div>
+    <div className="bg-[#5E5ABA] min-h-screen">
       <Router>
         <Routes>
           <Route
             path="/login"
             element={
-              <div className="bg-[#5E5ABA] h-screen">
+              <div>
                 <Register />
               </div>
             }
@@ -26,7 +27,7 @@ function App() {
           <Route
             path="/signup"
             element={
-              <div className="bg-[#5E5ABA] h-screen">
+              <div>
                 <Register />
               </div>
             }
@@ -35,7 +36,7 @@ function App() {
           <Route
             path="/forgotpassword"
             element={
-              <div className="bg-[#5E5ABA] h-screen">
+              <div>
                 <ForgotPassword />
               </div>
             }
@@ -43,7 +44,7 @@ function App() {
           <Route
             path="/resetpassword"
             element={
-              <div className="bg-[#5E5ABA] h-screen">
+              <div>
                 <ResetPassword />
               </div>
             }
@@ -51,7 +52,8 @@ function App() {
           <Route
             path="/workspace"
             element={
-              <div className="bg-[#5E5ABA] h-screen">
+              <div>
+                <Navbar />
                 <Workspace />
               </div>
             }
@@ -59,7 +61,8 @@ function App() {
           <Route
             path="/workspaceHistory"
             element={
-              <div className="bg-[#5E5ABA] h-screen">
+              <div>
+                <Navbar />
                 <WorkspaceHistory />
               </div>
             }
@@ -67,7 +70,8 @@ function App() {
           <Route
             path="/userprofile"
             element={
-              <div className="bg-[#5E5ABA] h-screen">
+              <div className="bg-[#090E34]">
+                <Navbar />
                 <UserProfile />
               </div>
             }
@@ -76,15 +80,8 @@ function App() {
             path="/download"
             element={
               <div className="bg-[#090E34]">
+                <Navbar />
                 <Download />
-              </div>
-            }
-          />
-          <Route
-            path="/"
-            element={
-              <div className="bg-[#5E5ABA] h-screen">
-                <Home />
               </div>
             }
           />
@@ -92,7 +89,17 @@ function App() {
             path="/architectpanel"
             element={
               <div className="bg-[#5E5ABA]">
+                <Navbar />
                 <ArchitectPanel />
+              </div>
+            }
+          />
+          <Route
+            path="/"
+            element={
+              <div className="bg-[#5E5ABA] h-screen">
+                <Navbar />
+                <Home />
               </div>
             }
           />

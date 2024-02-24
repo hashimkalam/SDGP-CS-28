@@ -88,7 +88,7 @@ function userProfile() {
 
   console.log(editMode);
   return (
-    <div className="displayFlex flex-col text-white">
+    <div className="displayFlex flex-col text-white pb-[10%]">
       <h1>Account</h1>
 
       <div className="flex items-center justify-center flex-col mb-10">
