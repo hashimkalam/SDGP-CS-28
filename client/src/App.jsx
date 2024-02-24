@@ -8,12 +8,14 @@ import ResetPassword from "./Pages/Reset/reset";
 import ArchitectPanel from "./Pages/ArchitectPanel/ArchitectPanel";
 import WorkspaceHistory from "./Pages/workspace/WorkspaceHistory";
 
+import UserProfile from "./Pages/UserProfile/userProfile";
+
 function App() {
   return (
     <div>
       <Router>
         <Routes>
-        <Route
+          <Route
             path="/login"
             element={
               <div className="bg-[#5E5ABA] h-screen">
@@ -36,7 +38,6 @@ function App() {
               <div className="bg-[#5E5ABA] h-screen">
                 <ForgotPassword />
               </div>
-
             }
           />
           <Route
@@ -55,7 +56,7 @@ function App() {
               </div>
             }
           />
-<Route
+          <Route
             path="/workspaceHistory"
             element={
               <div className="bg-[#5E5ABA] h-screen">
@@ -63,7 +64,14 @@ function App() {
               </div>
             }
           />
-
+          <Route
+            path="/userprofile"
+            element={
+              <div className="bg-[#5E5ABA] h-screen">
+                <UserProfile />
+              </div>
+            }
+          />
           <Route
             path="/download"
             element={

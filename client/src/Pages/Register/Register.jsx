@@ -189,34 +189,44 @@ function Register() {
 
             const result = await signInWithPopup(auth, provider);
 
-            const res = await fetch("http://localhost:3000/api/auth/google", {
-              method: "POST",
-              headers: {
-                "Content-Type": "application/json",
-              },
-              body: JSON.stringify({
-                name: result.user.displayName,
-                email: result.user.email,
-                photo: result?.user?.photoURL,
-                role: option,
-              }),
-            });
-            const data = await res.json();
-            dispatch(signInSuccess(data));
-            console.log(data);
+            if (result && result.user) {
+              // User exists, proceed with login
+              const res = await fetch("http://localhost:3000/api/auth/google", {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                  name: result.user.displayName,
+                  email: result.user.email,
+                  photo: result?.user?.photoURL,
+                  role: option,
+                }),
+              });
 
-            if (res.ok) {
-              // success message
-              {
-                location.pathname === "/login"
-                  ? enqueueSnackbar("Logged In Successfully", {
-                      variant: "success",
-                    })
-                  : enqueueSnackbar("Signed In Successfully", {
-                      variant: "success",
-                    });
+              if (res.ok) {
+                const data = await res.json();
+                dispatch(signInSuccess(data));
+                console.log(data);
+
+                // success message
+                {
+                  location.pathname === "/login"
+                    ? enqueueSnackbar("Logged In Successfully", {
+                        variant: "success",
+                      })
+                    : enqueueSnackbar("Signed In Successfully", {
+                        variant: "success",
+                      });
+                }
+
+                navigate("/workspace");
+              } else {
+                enqueueSnackbar("Failed to sign in", { variant: "error" });
               }
-              navigate("/workspace");
+            } else {
+              // User does not exist, handle this scenario
+              console.log("User does not have an account or sign-in failed");
             }
           } catch (error) {
             console.log("Could not login with google: " + error);

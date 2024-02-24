@@ -1,62 +1,93 @@
-import React from 'react'
-import "./userProfile.css"
-import image from "../../assets/google_logo.jpg"
+import React from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useSnackbar } from "notistack";
+import { useNavigate } from "react-router-dom";
+import { signOut } from "../../redux/user/userSlice";
 
 function userProfile() {
-    return (
-        <div className='user_Profile'>
-            <h1>Account</h1>
+  const currentUser = useSelector((state) => state.user.currentUser);
+  const name = currentUser ? currentUser.user.name : "user";
+  const profile = currentUser ? currentUser.user.profilePicture : "empty";
 
-            <div className='title_one'>
-                <img src={image} alt="" />
-                <h4>NAME</h4>
-            </div>
+  const { enqueueSnackbar } = useSnackbar();
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
 
-            <div className='details'>
-                <div className='account_Details'>
+  const navigateToLogout = async () => {
+    try {
+      await fetch("http://localhost:3000/api/auth/signout");
+      dispatch(signOut());
+      navigate("/");
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
-                    <p>Account Datails</p>
-                    <div className='row_one'>
-                        mail.com
-                    </div>
-                    <div className='row_two'>
-                        password
-                    </div>
-                    <div className='row_final log_out'>
-                    <button>log out</button>
-                    </div>
+  const deleteUser = async () => {
+    try {
+      const res = await fetch("http://localhost:3000/api/auth/delete", {
+        method: "DELETE",
+        /*headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email: result.user.email,
+        }),*/
+      });
+      if (res.ok) {
+        enqueueSnackbar("Account Deleted Successfully", { variant: "success" });
+        navigateToLogout();
+        navigate("/");
+      } else {
+        enqueueSnackbar("Failed to delete account", { variant: "error" });
+      }
+    } catch (error) {
+      console.log("Error deleting account: ", error);
+    }
+  };
 
-                </div>
-                <div className='account_Details'>
+  return (
+    <div className="displayFlex flex-col text-white">
+      <h1>Account</h1>
 
-                    <p>Subscription</p>
-                    <div className='row_final'>
-                        Premium (Annual)
-                    </div>
+      <div className="flex items-center justify-center flex-col mb-10">
+        <img className="w-[80px] rounded-full m-[10px]" src={profile} alt="" />
+        <h4>{name}</h4>
+      </div>
 
-
-                </div>
-                <div className='account_Details'>
-
-                    <p>SETTINGS</p>
-                    <div className='row_one'>
-                        To manage parental controls for profiles on your account, visit Edit Profiles and select a Profile.
-                    </div>
-                    <div className='row_final'>
-                        <button>Delete Account</button>
-                    </div>
-
-
-                </div>
-
-
-
-
-
-
-            </div>
+      <div className="items-center justify-center flex-col flex gap-[30px]">
+        <div className="bg-gray-500 w-[300px] md:w-[400px] lg:w-[500px] font-semibold border-[1px] border-gray-300 rounded-xl">
+          <p className="py-[5px] px-[8px]">Account Datails</p>
+          <div className="profileDetails">{name}</div>
+          <div className="profileDetails">password</div>
+          <div className="profileDetails  p-[0px] text-center text-blue-500 hover:text-white hover:bg-sky-700 rounded-b-xl  duration-300 ease-in-out pointer">
+            <button
+              onClick={navigateToLogout}
+              className="w-full p-2 rounded-b-xl"
+            >
+              log out
+            </button>
+          </div>
         </div>
-    )
+        <div className="bg-gray-500 w-[300px] md:w-[400px] lg:w-[500px]  font-semibold border-[1px] border-gray-300 rounded-xl">
+          <p className="py-[5px] px-[8px]">Subscription</p>
+          <div className="profileDetails rounded-b-xl">Premium (Annual)</div>
+        </div>
+        <div className="bg-gray-500 w-[300px] md:w-[400px] lg:w-[500px]  font-semibold border-[1px] border-gray-300 rounded-xl">
+          <p className="py-[5px] px-[8px]">SETTINGS</p>
+          <div className="profileDetails">
+            To manage parental controls for profiles on your account, visit Edit
+            Profiles and select a Profile.
+          </div>
+          <div className="profileDetails p-[0px] text-center text-red-500 rounded-b-xl hover:bg-red-700 hover:text-white duration-300 ease-in-out pointer">
+            <button onClick={deleteUser} className="w-full p-2 rounded-b-xl">
+              Delete Account
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
 }
 
-export default userProfile
+export default userProfile;

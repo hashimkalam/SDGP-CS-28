@@ -3,7 +3,6 @@
 @tailwind base;
 @tailwind components;
 
-
 @tailwind utilities;
 
 * {
@@ -34,5 +33,8 @@
   }
   .hoverEffect {
     @apply duration-150 ease-in-out cursor-pointer flex-1;
+  }
+  .profileDetails {
+    @apply bg-[#090e34] m-[1px] p-[10px] text-sm font-normal;
   }
 }
