@@ -1,5 +1,4 @@
 import React from "react";
-
 import image from "../../assets/google_logo.jpg";
 
 function userProfile() {
@@ -26,13 +25,13 @@ function userProfile() {
           </div>
         </div>
         <div className="bg-gray-500 w-[300px] md:w-[400px] lg:w-[500px]  font-semibold border-[1px] border-gray-300 rounded-xl">
-          <p>Subscription</p>
+          <p className="py-[5px] px-[8px]">Subscription</p>
           <div className="bg-[#090e34] m-[1px] p-[10px] text-sm font-normal rounded-b-xl">
             Premium (Annual)
           </div>
         </div>
         <div className="bg-gray-500 w-[300px] md:w-[400px] lg:w-[500px]  font-semibold border-[1px] border-gray-300 rounded-xl">
-          <p>SETTINGS</p>
+          <p className="py-[5px] px-[8px]">SETTINGS</p>
           <div className="bg-[#090e34] m-[1px] p-[10px] text-sm font-normal">
             To manage parental controls for profiles on your account, visit Edit
             Profiles and select a Profile.
