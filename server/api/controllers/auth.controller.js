@@ -131,6 +131,20 @@ export const userDelete = async (req, res, next) => {
   }
 };
 
+export const updateDetails = async (req, res, next) => {
+  const { email, name, password } = req.body;
+
+  try {
+    const updateUser = await User.findOneAndUpdate(
+      { email },
+      { name, password }
+    );
+    res.status(200).json({ message: "User details updated successfully" });
+  } catch (error) {
+    next(error);
+  }
+};
+
 export const google = async (req, res, next) => {
   try {
     const validUser = await User.findOne({

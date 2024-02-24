@@ -1,13 +1,23 @@
-import React from "react";
+import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useSnackbar } from "notistack";
 import { useNavigate } from "react-router-dom";
 import { signOut } from "../../redux/user/userSlice";
 
+import EditIcon from "@mui/icons-material/Edit";
+import DoneIcon from "@mui/icons-material/Done";
+import { IconButton } from "@mui/material";
+
 function userProfile() {
   const currentUser = useSelector((state) => state.user.currentUser);
-  const name = currentUser ? currentUser.user.name : "user";
-  const profile = currentUser ? currentUser.user.profilePicture : "empty";
+  const name = currentUser.user.name;
+  const profile = currentUser.user.profilePicture;
+  const email = currentUser.user.email;
+  //const password = currentUser.user.password;
+
+  const [editMode, setEditMode] = useState(false);
+  const [edittedName, setEdittedName] = useState("");
+  const [edittedPassword, setEdittedPassword] = useState("");
 
   const { enqueueSnackbar } = useSnackbar();
   const navigate = useNavigate();
@@ -42,10 +52,41 @@ function userProfile() {
         enqueueSnackbar("Failed to delete account", { variant: "error" });
       }
     } catch (error) {
-      console.log("Error deleting account: ", error);
+      console.log("Error in deleting account: ", error);
     }
   };
 
+  const updateDetails = async () => {
+    try {
+      const res = await fetch("http://localhost:3000/api/auth/update", {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email: email,
+          name: edittedName,
+          password: edittedPassword,
+        }),
+      });
+
+      if (res.ok) {
+        currentUser.user.name = edittedName;
+
+        enqueueSnackbar("Account details updated successfully", {
+          variant: "success",
+        });
+
+        setEditMode(false);
+      } else {
+        enqueueSnackbar("Failed to update details", { variant: "error" });
+      }
+    } catch (error) {
+      console.log("Error in updating details: ", error);
+    }
+  };
+
+  console.log(editMode);
   return (
     <div className="displayFlex flex-col text-white">
       <h1>Account</h1>
@@ -58,14 +99,60 @@ function userProfile() {
       <div className="items-center justify-center flex-col flex gap-[30px]">
         <div className="bg-gray-500 w-[300px] md:w-[400px] lg:w-[500px] font-semibold border-[1px] border-gray-300 rounded-xl">
           <p className="py-[5px] px-[8px]">Account Datails</p>
-          <div className="profileDetails">{name}</div>
-          <div className="profileDetails">password</div>
-          <div className="profileDetails  p-[0px] text-center text-blue-500 hover:text-white hover:bg-sky-700 rounded-b-xl  duration-300 ease-in-out pointer">
+          <div className="profileDetails">{email}</div>
+          <div className="profileDetails">
+            {editMode ? (
+              <input
+                type="text"
+                value={edittedName}
+                className="bg-[#121a56] outline-none p-1 w-full"
+                onChange={(e) => {
+                  console.log(e.target.value);
+                  setEdittedName(e.target.value);
+                }}
+              />
+            ) : (
+              name
+            )}
+
+            {editMode ? (
+              <IconButton
+                className="pointer"
+                onClick={() => setEditMode(!editMode)}
+              >
+                <DoneIcon className="text-white" />
+              </IconButton>
+            ) : (
+              <IconButton
+                className="pointer"
+                onClick={() => setEditMode(!editMode)}
+              >
+                <EditIcon className="text-white" />
+              </IconButton>
+            )}
+          </div>
+
+          <div className="profileDetails">
+            *******
+            <IconButton
+              className="pointer"
+              onClick={() => setEditMode(!editMode)}
+            >
+              <EditIcon className="text-white" />
+            </IconButton>
+          </div>
+          <div className="profileDetails p-[0px] text-center hover:text-white rounded-b-xl pointer">
             <button
               onClick={navigateToLogout}
-              className="w-full p-2 rounded-b-xl"
+              className="w-full p-2 rounded-bl-xl hover:bg-sky-700 duration-300 ease-in-out"
             >
               log out
+            </button>
+            <button
+              onClick={updateDetails}
+              className="w-full p-2 rounded-br-xl hover:bg-green-700 duration-300 ease-in-out"
+            >
+              save
             </button>
           </div>
         </div>

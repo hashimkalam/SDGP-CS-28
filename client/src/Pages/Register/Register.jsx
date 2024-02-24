@@ -219,10 +219,16 @@ function Register() {
                         variant: "success",
                       });
                 }
-
                 navigate("/workspace");
               } else {
-                enqueueSnackbar("Failed to sign in", { variant: "error" });
+                enqueueSnackbar("Error. Create an Account First!", {
+                  variant: "error",
+                });
+
+                // redirect to signup page
+                setTimeout(() => {
+                  setLoginPage(false);
+                }, 1000);
               }
             } else {
               // User does not exist, handle this scenario

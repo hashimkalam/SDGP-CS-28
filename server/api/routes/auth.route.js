@@ -5,6 +5,7 @@ import {
   google,
   signout,
   userDelete,
+  updateDetails,
 } from "../controllers/auth.controller.js";
 
 // Create a new router
@@ -24,5 +25,8 @@ router.get("/signout", signout);
 
 // delete user
 router.delete("/delete", userDelete);
+
+// updating user details
+router.put("/update", updateDetails);
 
 export default router;
