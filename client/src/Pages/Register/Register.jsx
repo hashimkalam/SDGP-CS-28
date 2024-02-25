@@ -229,6 +229,7 @@ function Register() {
                 // redirect to signup page
                 setTimeout(() => {
                   setLoginPage(false);
+                  navigate("/signup");
                 }, 1000);
               }
             } else {
