@@ -7,17 +7,18 @@ import { signOut } from "../../redux/user/userSlice";
 import EditIcon from "@mui/icons-material/Edit";
 import DoneIcon from "@mui/icons-material/Done";
 import { IconButton } from "@mui/material";
+import UserDelete from "../../components/model/UserDelete";
 
 function userProfile() {
   const currentUser = useSelector((state) => state.user.currentUser);
   const name = currentUser.user.name;
   const profile = currentUser.user.profilePicture;
   const email = currentUser.user.email;
-  //const password = currentUser.user.password;
+  const password = currentUser.user.password;
 
   const [editMode, setEditMode] = useState(false);
-  const [edittedName, setEdittedName] = useState("");
-  const [edittedPassword, setEdittedPassword] = useState("");
+  const [edittedName, setEdittedName] = useState(name);
+  const [edittedPassword, setEdittedPassword] = useState(password);
 
   const { enqueueSnackbar } = useSnackbar();
   const navigate = useNavigate();
