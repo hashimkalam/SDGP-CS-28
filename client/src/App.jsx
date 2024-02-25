@@ -3,10 +3,14 @@ import Home from "./Pages/Home/Home";
 import ForgotPassword from "./Pages//ForgotPassword/ForgotPassword";
 import Register from "./Pages/Register/Register";
 import Download from "./Pages/Download/Download";
+<<<<<<< HEAD
 import Workspace from "./Pages/workspace/Workspace";
 import ResetPassword from "./Pages/Reset/reset";
+=======
+>>>>>>> 8790d30c24d9d55cfccd1b7591139c19a7d544fc
 import ArchitectPanel from "./Pages/ArchitectPanel/ArchitectPanel";
-import WorkspaceHistory from "./Pages/workspace/WorkspaceHistory";
+import Workspaces from "./Pages/workspace/Workspaces";
+import Navbar from "./components/navbar/navbar";
 
 import UserProfile from "./Pages/UserProfile/userProfile";
 import Navbar from "./components/navbar/navbar";
@@ -41,7 +45,9 @@ function App() {
               </div>
             }
           />
+
           <Route
+<<<<<<< HEAD
             path="/resetpassword"
             element={
               <div>
@@ -64,6 +70,13 @@ function App() {
               <div>
                 <Navbar />
                 <WorkspaceHistory />
+=======
+            path="/workspaces"
+            element={
+              <div className="bg-[#090E34] h-screen">
+                <Navbar />
+                <Workspaces />
+>>>>>>> 8790d30c24d9d55cfccd1b7591139c19a7d544fc
               </div>
             }
           />
