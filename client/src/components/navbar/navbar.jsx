@@ -34,14 +34,14 @@ const Navbar = () => {
     }
   };
 
-  let Links = [
+  // let Links = [
 
-    {name:"HOME", link:"/"},
-    {name:"HOW IT WORKS", link:"/"},
-    {name:"PRICING", link:"/"},
-  ];
+  //   {name:"HOME", link:"/"},
+  //   {name:"HOW IT WORKS", link:"/"},
+  //   {name:"PRICING", link:"/"},
+  // ];
 
-  let [open,setOpen]=useState(false);
+  // let [open,setOpen]=useState(false);
 
   return (
     <header
