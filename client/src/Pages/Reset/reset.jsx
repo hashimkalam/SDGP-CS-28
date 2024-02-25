@@ -1,13 +1,13 @@
 import React, { useState } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Button, IconButton } from "@mui/material";
 import LockIcon from "@mui/icons-material/Lock";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import pattern_img from "../../assets/pattern.png";
-import resetImage from "../../assets/reset-password.png";
+import resetImage from "../../assets/login_person.png";
 import logo from "../../assets/Logo.png";
-import Alert from '@mui/material/Alert';
+import Alert from "@mui/material/Alert";
 
 // Import other necessary assets, styles, and components
 
@@ -23,18 +23,9 @@ const buttonStyles = {
   boxShadow: "0px 8px 21px 0px rgba(0, 0, 0, .16)",
 };
 
-const styles = {
-  border: "1px solid #d9d9d9",
-  padding: "8px 10px",
-  color: "black",
-  textTransform: "capitalize",
-  fontFamily: "poppins",
-  borderRadius: "10px",
-  margin: "5px 10px",
-};
-
 const ResetPassword = () => {
   const location = useLocation();
+  const navigate = useNavigate();
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [passPlaceholder, setPassPlaceholder] = useState(true);
@@ -61,6 +52,13 @@ const ResetPassword = () => {
     return regex.test(password);
   };
 
+  const setErrorWithTimeout = (e_message) => {
+    setPasswordError(e_message);
+    setTimeout(() => {
+      setPasswordError(false);
+    }, 3000);
+  };
+
   const handleResetPassword = async () => {
     if (!location.state) {
       console.error("No email provided.");
@@ -70,12 +68,12 @@ const ResetPassword = () => {
     setConfirmPasswordError("");
 
     if (!password) {
-      setPasswordError("Password is required");
+      setErrorWithTimeout("Password is required");
       return;
     }
 
     if (!validatePassword(password)) {
-      setPasswordError(
+      setErrorWithTimeout(
         "Password must be at least 8 characters and contain at least one digit"
       );
       return;
@@ -83,36 +81,61 @@ const ResetPassword = () => {
 
     if (password && !confirmPassword) {
       setConfirmPasswordError("Confirm password is required");
+      setTimeout(() => {
+        setConfirmPasswordError(false);
+      }, 3000);
       return;
     }
 
-    try {
-      const response = await fetch(
-        "http://localhost:3000/api/password/resetpassword",
-        {
-          // Updated URL
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            email: location.state.email, // Use the email from the location state
-            newPassword: password,
-          }),
+    if (password == confirmPassword) {
+      setSuccessMessage("");
+      try {
+        const response = await fetch(
+          "http://localhost:3000/api/password/resetpassword",
+          {
+            // Updated URL
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              email: location.state.email, // Use the email from the location state
+              newPassword: password,
+            }),
+          }
+        );
+
+        setSuccessMessage("");
+
+        const data = await response.json();
+
+        if (!response.ok) {
+          throw new Error(data.message || "Could not reset password");
         }
-      );
 
-      const data = await response.json();
+        setSuccessMessage("Password reset successful!");
+        setTimeout(() => {
+          setSuccessMessage(false);
+          navigate("/login");
+        }, 3000);
 
-      if (!response.ok) {
-        throw new Error(data.message || "Could not reset password");
+        setPassword("");
+        setConfirmPassword("");
+      } catch (error) {
+        // Handle error
+        console.error(error);
+        setErrorMessage(error.message);
       }
+    } else {
+      setErrorMessage(
+        "Password reset unseccessful. Not the same password entered"
+      );
+      setTimeout(() => {
+        setErrorMessage(false);
+      }, 3000);
 
-      setSuccessMessage("Password reset successful!");
-    } catch (error) {
-      // Handle error
-      console.error(error);
-      setErrorMessage(error.message);
+      setPassword("");
+      setConfirmPassword("");
     }
   };
 
@@ -133,11 +156,7 @@ const ResetPassword = () => {
               {errorMessage}
             </Alert>
           )}
-          {successMessage && (
-            <Alert severity="success">
-              {successMessage}
-            </Alert>
-          )}
+          {successMessage && <Alert severity="success">{successMessage}</Alert>}
           <div className="displayFlex flex-col w-full -mt-[4vh]">
             <h2 className="uppercase font-bold text-2xl text-center pt-5 pb-10">
               Reset Password

@@ -12,7 +12,7 @@ function App() {
     <div>
       <Router>
         <Routes>
-          <Route
+        <Route
             path="/login"
             element={
               <div className="bg-[#5E5ABA] h-screen">

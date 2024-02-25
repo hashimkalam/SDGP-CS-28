@@ -93,8 +93,8 @@ function Register() {
     boxShadow: "0px 8px 21px 0px rgba(0, 0, 0, .16)",
   };
 
-  const setErrorWithTimeout = (message) => {
-    setErrorMessage(message);
+  const setErrorWithTimeout = (e_message) => {
+    setErrorMessage(e_message);
     setTimeout(() => {
       setErrorMessage(false);
     }, 3000);
@@ -148,6 +148,7 @@ function Register() {
 
       if (res.ok === false) {
         dispatch(signInFailure(data.message));
+        setErrorWithTimeout(data.message);
         return;
       }
       dispatch(signInSuccess(data));
@@ -169,6 +170,7 @@ function Register() {
       }
     } catch (error) {
       dispatch(signInFailure(error));
+      setErrorWithTimeout(error);
     }
   };
 
@@ -238,9 +240,9 @@ function Register() {
     setEmail("");
     dispatch(setSelectedOption(""));
     setPassword("");
+    setErrorMessage("");
 
     setLoginPage(!loginPage);
-    navigate(loginPage ? "/signup" : "/login");
   };
 
   console.log(selectedOption);

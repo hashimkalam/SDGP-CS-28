@@ -34,11 +34,6 @@ app.use('/forgotpassword', forgotPasswordRoute);
 
 app.use('/api/password', passwordRoutes);
 
-
-
-
-
-
 // connect to the database
 mongoose
   .connect(process.env.MONGODB_URL)
