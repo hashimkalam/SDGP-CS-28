@@ -7,6 +7,7 @@ import Workspace from "./Pages/workspace/Workspace";
 import ResetPassword from "./Pages/Reset/reset";
 import ArchitectPanel from "./Pages/ArchitectPanel/ArchitectPanel";
 import UserProfile from "./Pages/UserProfile/userProfile";
+import Panel from "./Pages/dashboard/Panel";
 
 function App() {
   return (
@@ -87,6 +88,14 @@ function App() {
             </div>
           }
         />
+        <Route
+            path="/dashboard"
+            element={
+              <div className="bg-[#5E5ABA] h-screen">
+                <Panel />
+              </div>
+            }
+          />
         </Routes>
       </Router>
     </div>
