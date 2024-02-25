@@ -1,13 +1,42 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { useSelector } from "react-redux";
 import UserProfile from "../UserProfile/userProfile";
 import { useNavigate } from "react-router-dom";
 import Dropbox from '../../components/dropbox/dropbox';
 
+import { storage } from "../../firebase"
+import { getDownloadURL, listAll, ref } from "firebase/storage";
+
 const Panel = () => {
 
-  const [slide, setSlide] = useState("projects")
+  const currentUser = useSelector((state) => state.user.currentUser);
+  const id = currentUser.user._id;
+
+  const [slide, setSlide] = useState("projects");
+  const [imgUrl, setImgUrl] = useState([]);
   const navigate = useNavigate();
 
+
+  useEffect(() => {
+    const fetchImages = async () => {
+      try {
+        const imgs = await listAll(ref(storage, `arch_files/${id}`));
+        console.log(imgs);
+        const urls = await Promise.all(imgs.items.map(async (val) => {
+          const url = await getDownloadURL(val);
+          return url;
+        }));
+        setImgUrl(urls);
+      } catch (error) {
+        console.error("Error fetching images:", error);
+      }
+    };
+
+    fetchImages();
+  }, []);
+
+
+  console.log(imgUrl, "imgurl")
 
 
 
@@ -65,13 +94,17 @@ const Panel = () => {
       </section>
 
       {slide === "projects" ? (
-        <section className="grid md:grid-cols-2 xl:grid-cols-4 gap-6 mt-10">
-          <div className="flex items-center bg-white shadow rounded-lg h-[10rem] w-[20rem] xl:h-[200px] cursor-pointer transform transition-transform hover:scale-105 duration-500">
-            <img src={""} alt='floor paln' />
 
-          </div>
-          <div class="flex items-center bg-white shadow rounded-lg h-[10rem] w-[20rem] xl:h-[200px] cursor-pointer transform transition-transform hover:scale-105 duration-500">
-            <Dropbox/>
+        <section className="grid md:grid-cols-2 xl:grid-cols-4 gap-6 mt-10">
+
+          {imgUrl.map((dataVal, index) => (
+            <div key={index} className="flex items-center bg-white shadow rounded-lg h-[10rem] w-[20rem] xl:h-[200px] cursor-pointer transform transition-transform hover:scale-105 duration-500">
+              <img src={dataVal} className='h-full w-full' alt={`Image ${index}`} />
+            </div>
+          ))}
+
+          <div className="flex items-center bg-white shadow rounded-lg h-[10rem] w-[20rem] xl:h-[200px] cursor-pointer transform transition-transform hover:scale-105 duration-500">
+            <Dropbox />
           </div>
 
         </section>
