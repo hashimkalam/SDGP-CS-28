@@ -3,6 +3,7 @@ import { Logo } from "../../components/Logo/logo";
 import { FaUserCircle } from "react-icons/fa"; // Import the user icon
 import "./workspace.css"; // Import the CSS file
 import { useSelector } from "react-redux";
+import Form from "../../components/form/form";
 
 function workspace() {
   const { currentUser } = useSelector((state) => state.user); // Get the current user from the state
@@ -24,8 +25,7 @@ function workspace() {
       </div>
       <div className="workspace-container">
         <div className="input-field">
-          <input type="text" />
-          <button>Generate</button>
+            <Form />
         </div>
       </div>
     </div>

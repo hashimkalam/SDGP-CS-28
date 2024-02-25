@@ -1,7 +1,7 @@
 import React from "react";
 import "./navbar.css";
 import { Logo } from "../Logo/logo";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { signOut } from "../../redux/user/userSlice";
 
@@ -9,13 +9,13 @@ const Navbar = () => {
   const { currentUser } = useSelector((state) => state.user);
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const location = useLocation();
 
   const navigateToProfileOrDashboard = () => {
     currentUser.user.role === "architect"
       ? navigate("/dashboard")
       : navigate("/Workspace");
   };
-
 
   const navigateToLogin = () => {
     navigate("/login");
@@ -24,7 +24,6 @@ const Navbar = () => {
   const navigateToSignup = () => {
     navigate("/signup");
   };
-
 
   const navigateToLogout = async () => {
     try {
@@ -36,33 +35,45 @@ const Navbar = () => {
   };
 
   return (
-    <header className="navbar">
+    <header
+      className={`navbar ${
+        location.pathname === "/"
+          ? "bg-gradient-to-r from-[#002865] to-[#004ec3] relative"
+          : location.pathname === "/userprofile" || "/download"
+          ? "bg-[#090E34]"
+          : "bg-white"
+      }`}
+    >
       <div className="logo-container">
         <Logo />
       </div>
-      <ul className="nav-links">
-        <li>
-          <a>
-            <span>Home</span>
-          </a>
-        </li>
-        <li>
-          <a href="#how_it_works">
-            <span>How it works</span>
-          </a>
-        </li>
-        <li>
-          <a href="#pricing">
-            <span>Pricing</span>
-          </a>
-        </li>
-      </ul>
+      {location.pathname == "/" && (
+        <ul className="nav-links">
+          <li>
+            <a>
+              <span>Home</span>
+            </a>
+          </li>
+          <li>
+            <a href="#how_it_works">
+              <span>How it works</span>
+            </a>
+          </li>
+          <li>
+            <a href="#pricing">
+              <span>Pricing</span>
+            </a>
+          </li>
+        </ul>
+      )}
       <div className="login-signup">
         {currentUser ? (
           <>
-            <button className="logout" onClick={navigateToLogout}>
-              Logout
-            </button>
+            {location.pathname == "/" && (
+              <button className="logout" onClick={navigateToLogout}>
+                Logout
+              </button>
+            )}
             <img
               src={currentUser?.user?.profilePicture}
               alt="profilePicture"
@@ -72,12 +83,16 @@ const Navbar = () => {
           </>
         ) : (
           <>
-            <button className="login" onClick={navigateToLogin}>
-              Login
-            </button>
-            <button className="signup" onClick={navigateToSignup}>
-              Sign Up
-            </button>
+            {location.pathname == "/" && (
+              <>
+                <button className="login" onClick={navigateToLogin}>
+                  Login
+                </button>
+                <button className="signup" onClick={navigateToSignup}>
+                  Sign Up
+                </button>
+              </>
+            )}
           </>
         )}
       </div>

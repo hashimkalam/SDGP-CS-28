@@ -28,6 +28,8 @@ import { GoogleAuthProvider, getAuth, signInWithPopup } from "firebase/auth";
 import { app } from "../../firebase";
 import SignInModel from "../../components/model/SignInModel";
 
+import { useSnackbar } from "notistack";
+
 const options = [
   { value: "individual", label: "Individual" },
   { value: "architect", label: "Architect" },
@@ -51,6 +53,7 @@ function Register() {
   const navigate = useNavigate();
   const location = useLocation();
   const dispatch = useDispatch();
+  const { enqueueSnackbar } = useSnackbar();
 
   const [loginPage, setLoginPage] = useState(location.pathname === "/login");
   const [username, setUsername] = useState("");
@@ -89,8 +92,8 @@ function Register() {
     boxShadow: "0px 8px 21px 0px rgba(0, 0, 0, .16)",
   };
 
-  const setErrorWithTimeout = (message) => {
-    setErrorMessage(message);
+  const setErrorWithTimeout = (e_message) => {
+    setErrorMessage(e_message);
     setTimeout(() => {
       setErrorMessage(false);
     }, 3000);
@@ -124,7 +127,6 @@ function Register() {
     }
 
     try {
-      
       dispatch(signInStart());
 
       const res = await fetch(
@@ -144,6 +146,7 @@ function Register() {
 
       if (res.ok === false) {
         dispatch(signInFailure(data.message));
+        setErrorWithTimeout(data.message);
         return;
       }
       dispatch(signInSuccess(data));
@@ -151,11 +154,21 @@ function Register() {
       setMessage(data.message);
 
       if (res.ok) {
+        // success message
+        {
+          location.pathname === "/login"
+            ? enqueueSnackbar("Logged In Successfully", {
+                variant: "success",
+              })
+            : enqueueSnackbar("Signed In Successfully", {
+                variant: "success",
+              });
+        }
         navigate("/workspace");
-        
       }
     } catch (error) {
       dispatch(signInFailure(error));
+      setErrorWithTimeout(error);
     }
   };
 
@@ -176,23 +189,51 @@ function Register() {
 
             const result = await signInWithPopup(auth, provider);
 
-            const res = await fetch("http://localhost:3000/api/auth/google", {
-              method: "POST",
-              headers: {
-                "Content-Type": "application/json",
-              },
-              body: JSON.stringify({
-                name: result.user.displayName,
-                email: result.user.email,
-                photo: result?.user?.photoURL,
-                role: option,
-              }),
-            });
-            const data = await res.json();
-            dispatch(signInSuccess(data));
-            console.log(data);
-            if (res.ok) {
-              navigate("/workspace");
+            if (result && result.user) {
+              // User exists, proceed with login
+              const res = await fetch("http://localhost:3000/api/auth/google", {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                  name: result.user.displayName,
+                  email: result.user.email,
+                  photo: result?.user?.photoURL,
+                  role: option,
+                }),
+              });
+
+              if (res.ok) {
+                const data = await res.json();
+                dispatch(signInSuccess(data));
+                console.log(data);
+
+                // success message
+                {
+                  location.pathname === "/login"
+                    ? enqueueSnackbar("Logged In Successfully", {
+                        variant: "success",
+                      })
+                    : enqueueSnackbar("Signed In Successfully", {
+                        variant: "success",
+                      });
+                }
+                navigate("/workspace");
+              } else {
+                enqueueSnackbar("Error. Create an Account First!", {
+                  variant: "error",
+                });
+                dispatch(setSelectedOption(""));
+
+                // redirect to signup page
+                setTimeout(() => {
+                  setLoginPage(false);
+                }, 1000);
+              }
+            } else {
+              // User does not exist, handle this scenario
+              console.log("User does not have an account or sign-in failed");
             }
           } catch (error) {
             console.log("Could not login with google: " + error);
@@ -215,9 +256,9 @@ function Register() {
     setEmail("");
     dispatch(setSelectedOption(""));
     setPassword("");
+    setErrorMessage("");
 
     setLoginPage(!loginPage);
-    navigate(loginPage ? "/signup" : "/login");
   };
 
   console.log(selectedOption);
