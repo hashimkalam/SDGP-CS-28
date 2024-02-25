@@ -5,6 +5,9 @@ import dotenv from "dotenv";
 import cors from "cors";
 import userRoutes from "./routes/user.route.js";
 import authRoutes from "./routes/auth.route.js";
+import forgotPasswordRoute from './routes/forgotPassword.js';
+import passwordRoutes from './routes/reset.route.js';
+
 
 // Load environment variables
 dotenv.config();
@@ -26,6 +29,10 @@ app.use('/api/user', userRoutes);
 
 // Add the auth routes to the express application
 app.use('/api/auth', authRoutes);
+
+app.use('/forgotpassword', forgotPasswordRoute);
+
+app.use('/api/password', passwordRoutes);
 
 // connect to the database
 mongoose

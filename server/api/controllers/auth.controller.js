@@ -2,6 +2,8 @@ import User from "../models/user.model.js";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 
+import nodemailer from "nodemailer";
+
 export const signup = async (req, res, next) => {
   // Get the name, email, role and password from the request body
   const { username, email, role, password } = req.body;
@@ -20,6 +22,43 @@ export const signup = async (req, res, next) => {
   try {
     // save the user to the database
     await newUser.save();
+
+    // create a transporter object using the default SMTP transport
+    const transporter = nodemailer.createTransport({
+      service: "gmail",
+      auth: {
+        user: process.env.EMAIL_ADDRESS,
+        pass: process.env.EMAIL_PASSWORD,
+      },
+    });
+
+    // send mail with defined transport object
+    transporter.sendMail(
+      {
+        from: process.env.EMAIL_ADDRESS,
+        to: email,
+        subject: "Welcome to Our Platform",
+        text: "Your account has been created successfully.",
+        html: `
+    <div style="background-color: #f0f0f0; padding: 20px; text-align: center; border-radius: 10px;">
+      <img src="https://lh3.googleusercontent.com/a/ACg8ocIej1cxNFTtSL7g1VqWX8jVB_xiS4ih10pmNnPxrZyHAA=s288-c-no" alt="Platform Logo" style="max-width: 100px; margin-bottom: 15px;">
+      <h2 style="color: #333;">Welcome to our platform, <strong>${username}</strong>!</h2>
+      <p style="color: #555; font-size: 16px;">Your account has been created successfully. We're glad to have you on board.</p>
+      <p style="font-size: 24px;">🚀 Let the journey begin! 🌟</p>
+      <div style="margin-top: 20px;">
+        <img src="#" alt="Welcome Banner" style="max-width: 100%; border-radius: 10px;">
+      </div>
+    </div>
+  `,
+      },
+      (error, info) => {
+        if (error) {
+          console.log("Error sending email", error);
+        } else {
+          console.log("Email sent: " + info.response);
+        }
+      }
+    );
 
     // send a success response
     res.status(201).send({
@@ -82,10 +121,25 @@ export const signin = async (req, res, next) => {
 };
 
 export const userDelete = async (req, res, next) => {
+  const { email } = req.body;
+
   try {
-    const deleteUser = await User.findOneAndDelete({
-      email: req.body.email,
-    });
+    const deleteUser = await User.findOneAndDelete({ email });
+    res.status(200).json({ message: "User deleted successfully" });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const updateDetails = async (req, res, next) => {
+  const { email, name, password } = req.body;
+
+  try {
+    const updateUser = await User.findOneAndUpdate(
+      { email },
+      { name, password }
+    );
+    res.status(200).json({ message: "User details updated successfully" });
   } catch (error) {
     next(error);
   }
@@ -138,6 +192,43 @@ export const google = async (req, res, next) => {
 
       await newUser.save();
 
+      // create a transporter object using the default SMTP transport
+      const transporter = nodemailer.createTransport({
+        service: "gmail",
+        auth: {
+          user: process.env.EMAIL_ADDRESS,
+          pass: process.env.EMAIL_PASSWORD,
+        },
+      });
+
+      // send mail with defined transport object
+      transporter.sendMail(
+        {
+          from: process.env.EMAIL_ADDRESS,
+          to: email,
+          subject: "Welcome to Our Platform",
+          text: "Your account has been created successfully.",
+          html: `
+    <div style="background-color: #f0f0f0; padding: 20px; text-align: center; border-radius: 10px;">
+      <img src="https://lh3.googleusercontent.com/a/ACg8ocIej1cxNFTtSL7g1VqWX8jVB_xiS4ih10pmNnPxrZyHAA=s288-c-no" alt="Platform Logo" style="max-width: 100px; margin-bottom: 15px;">
+      <h2 style="color: #333;">Welcome to our platform, <strong>${name}</strong>!</h2>
+      <p style="color: #555; font-size: 16px;">Your account has been created successfully. We're glad to have you on board.</p>
+      <p style="font-size: 24px;">🚀 Let the journey begin! 🌟</p>
+      <div style="margin-top: 20px;">
+        <img src="#" alt="Welcome Banner" style="max-width: 100%; border-radius: 10px;">
+      </div>
+    </div>
+  `,
+        },
+        (error, info) => {
+          if (error) {
+            console.log("Error sending email", error);
+          } else {
+            console.log("Email sent: " + info.response);
+          }
+        }
+      );
+
       const validUser = await User.findOne({
         email: req.body.email,
       });
@@ -159,6 +250,7 @@ export const google = async (req, res, next) => {
           sameSite: "None",
         })
         .status(200)
+
         .send({
           message: "User created and logged in successfully",
           user,

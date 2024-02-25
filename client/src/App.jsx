@@ -1,20 +1,26 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Home from "./Pages/Home/Home";
-import ForgotPassword from "./Pages//ForgotPassword/ForgotPassword";
+import ForgotPassword from "./Pages/ForgotPassword/ForgotPassword";
 import Register from "./Pages/Register/Register";
 import Download from "./Pages/Download/Download";
 import Workspace from "./Pages/workspace/Workspace";
 import Panel from "./Pages/dashboard/Panel"; 
+import ResetPassword from "./Pages/Reset/reset";
+import ArchitectPanel from "./Pages/ArchitectPanel/ArchitectPanel";
+import Workspaces from "./Pages/workspace/Workspaces";
+import Navbar from "./components/navbar/navbar";
+
+import UserProfile from "./Pages/UserProfile/userProfile";
 
 function App() {
   return (
-    <div>
+    <div className="bg-[#5E5ABA] min-h-screen">
       <Router>
         <Routes>
           <Route
             path="/login"
             element={
-              <div className="bg-[#5E5ABA] h-screen">
+              <div>
                 <Register />
               </div>
             }
@@ -22,7 +28,7 @@ function App() {
           <Route
             path="/signup"
             element={
-              <div className="bg-[#5E5ABA] h-screen">
+              <div>
                 <Register />
               </div>
             }
@@ -31,24 +37,71 @@ function App() {
           <Route
             path="/forgotpassword"
             element={
-              <div className="bg-[#5E5ABA] h-screen">
+              <div>
                 <ForgotPassword />
               </div>
             }
           />
+
           <Route
-          path="/workspace"
-          element={
-            <div className="bg-[#5E5ABA] h-screen">
-              <Workspace />
-            </div>
-          }
-        />
+            path="/resetpassword"
+            element={
+              <div>
+                <ResetPassword />
+              </div>
+            }
+          />
+          <Route
+            path="/workspace"
+            element={
+              <div>
+                <Navbar />
+                <Workspace />
+              </div>
+            }
+          />
+          {/*<Route
+            path="/workspaceHistory"
+            element={
+              <div>
+                <Navbar />
+                <WorkspaceHistory />
+              </div>
+            }
+          />*/}
+          <Route
+            path="/workspaces"
+            element={
+              <div className="bg-[#090E34] h-screen">
+                <Navbar />
+                <Workspaces />
+              </div>
+            }
+          />
+          <Route
+            path="/userprofile"
+            element={
+              <div className="bg-[#090E34]">
+                <Navbar />
+                <UserProfile />
+              </div>
+            }
+          />
           <Route
             path="/download"
             element={
               <div className="bg-[#090E34]">
+                <Navbar />
                 <Download />
+              </div>
+            }
+          />
+          <Route
+            path="/architectpanel"
+            element={
+              <div className="bg-[#5E5ABA]">
+                <Navbar />
+                <ArchitectPanel />
               </div>
             }
           />
@@ -56,6 +109,7 @@ function App() {
             path="/"
             element={
               <div className="bg-[#5E5ABA] h-screen">
+                <Navbar />
                 <Home />
               </div>
             }

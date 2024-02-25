@@ -29,7 +29,6 @@ import { app } from "../../firebase";
 import SignInModel from "../../components/model/SignInModel";
 
 import { useSnackbar } from "notistack";
-import RegisterImage from "../../components/RegisterImage/RegisterImage";
 
 const options = [
   { value: "individual", label: "Individual" },
@@ -93,8 +92,8 @@ function Register() {
     boxShadow: "0px 8px 21px 0px rgba(0, 0, 0, .16)",
   };
 
-  const setErrorWithTimeout = (message) => {
-    setErrorMessage(message);
+  const setErrorWithTimeout = (e_message) => {
+    setErrorMessage(e_message);
     setTimeout(() => {
       setErrorMessage(false);
     }, 3000);
@@ -103,7 +102,6 @@ function Register() {
   const submitHandler = async (e) => {
     e.preventDefault();
 
-    // validation
     const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     const passwordPattern = /^(?=.*\d)/;
 
@@ -148,6 +146,7 @@ function Register() {
 
       if (res.ok === false) {
         dispatch(signInFailure(data.message));
+        setErrorWithTimeout(data.message);
         return;
       }
       dispatch(signInSuccess(data));
@@ -155,6 +154,7 @@ function Register() {
       setMessage(data.message);
 
       if (res.ok) {
+        // success message
         {
           location.pathname === "/login"
             ? enqueueSnackbar("Logged In Successfully", {
@@ -164,11 +164,11 @@ function Register() {
                 variant: "success",
               });
         }
-
         navigate("/workspace");
       }
     } catch (error) {
       dispatch(signInFailure(error));
+      setErrorWithTimeout(error);
     }
   };
 
@@ -189,33 +189,51 @@ function Register() {
 
             const result = await signInWithPopup(auth, provider);
 
-            const res = await fetch("http://localhost:3000/api/auth/google", {
-              method: "POST",
-              headers: {
-                "Content-Type": "application/json",
-              },
-              body: JSON.stringify({
-                name: result.user.displayName,
-                email: result.user.email,
-                photo: result?.user?.photoURL,
-                role: option,
-              }),
-            });
-            const data = await res.json();
-            dispatch(signInSuccess(data));
-            console.log(data);
-            if (res.ok) {
-              {
-                location.pathname === "/login"
-                  ? enqueueSnackbar("Logged In Successfully", {
-                      variant: "success",
-                    })
-                  : enqueueSnackbar("Signed In Successfully", {
-                      variant: "success",
-                    });
-              }
+            if (result && result.user) {
+              // User exists, proceed with login
+              const res = await fetch("http://localhost:3000/api/auth/google", {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                  name: result.user.displayName,
+                  email: result.user.email,
+                  photo: result?.user?.photoURL,
+                  role: option,
+                }),
+              });
 
-              navigate("/workspace");
+              if (res.ok) {
+                const data = await res.json();
+                dispatch(signInSuccess(data));
+                console.log(data);
+
+                // success message
+                {
+                  location.pathname === "/login"
+                    ? enqueueSnackbar("Logged In Successfully", {
+                        variant: "success",
+                      })
+                    : enqueueSnackbar("Signed In Successfully", {
+                        variant: "success",
+                      });
+                }
+                navigate("/workspace");
+              } else {
+                enqueueSnackbar("Error. Create an Account First!", {
+                  variant: "error",
+                });
+                dispatch(setSelectedOption(""));
+
+                // redirect to signup page
+                setTimeout(() => {
+                  setLoginPage(false);
+                }, 1000);
+              }
+            } else {
+              // User does not exist, handle this scenario
+              console.log("User does not have an account or sign-in failed");
             }
           } catch (error) {
             console.log("Could not login with google: " + error);
@@ -238,9 +256,9 @@ function Register() {
     setEmail("");
     dispatch(setSelectedOption(""));
     setPassword("");
+    setErrorMessage("");
 
     setLoginPage(!loginPage);
-    navigate(loginPage ? "/signup" : "/login");
   };
 
   console.log(selectedOption);
@@ -432,20 +450,31 @@ function Register() {
           handleContinue={() => handleRoleSelection(selectedOption)}
         />
       )}
+      <div
+        style={{ backgroundImage: `url(${pattern_img})` }}
+        className="bg-cover hidden sm:hidden lg:flex justify-center items-center md:w-1/2"
+      >
+        <div className="relative md:w-[40vw] lg:w-[30vw] lg:h-[65vh] xl:h-[55vh] border border-[white] -z-1 p-5 rounded-2xl lg:text-center xl:text-left backdrop-blur-lg">
+          <p className="text-white text-sm md:text-md lg:text-lg xl:text-xl font-extrabold xl:w-1/2">
+            No more complex CAD operations. Describe your ideal space, and we'll
+            bring it to life
+          </p>
 
-      {loginPage ? (
-        <RegisterImage
-          logInPersonImage={logInPersonImage}
-          signUpPersonImage={signUpPersonImage}
-          loginPage={loginPage}
-        />
-      ) : (
-        <RegisterImage
-          logInPersonImage={logInPersonImage}
-          signUpPersonImage={signUpPersonImage}
-          loginPage={loginPage}
-        />
-      )}
+          {loginPage ? (
+            <img
+              src={logInPersonImage}
+              className="registerImg lg:right-[-20px] xl:right-[-80px] scale-90 lg:scale-100"
+              alt="Person"
+            />
+          ) : (
+            <img
+              src={signUpPersonImage}
+              className="registerImg lg:right-[0px] xl:right-[-50px] scale-100"
+              alt="Person"
+            />
+          )}
+        </div>
+      </div>
     </div>
   );
 }
