@@ -10,6 +10,8 @@ import Workspaces from "./Pages/workspace/Workspaces";
 import Navbar from "./components/navbar/navbar";
 
 import UserProfile from "./Pages/UserProfile/userProfile";
+import Panel from "./Pages/dashboard/Panel";
+
 
 function App() {
   return (
@@ -103,6 +105,21 @@ function App() {
                 <ArchitectPanel />
               </div>
             }
+          />
+          <Route
+            path="/userprofile"
+            element={
+              <div className="bg-[#090E34] h-screen">
+                <UserProfile />
+              </div>
+            }
+          />
+          <Route
+            path="/dashboard"
+            element={
+              <div className="bg-[#5E5ABA] h-screen">
+                <Panel />
+              </div>}
           />
           <Route
             path="/"
