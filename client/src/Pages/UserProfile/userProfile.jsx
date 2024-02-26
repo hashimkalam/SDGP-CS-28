@@ -18,10 +18,10 @@ import UserDelete from "../../components/model/UserDelete";
 
 function userProfile() {
   const currentUser = useSelector((state) => state.user.currentUser);
-  const name = currentUser.user.name;
-  const profile = currentUser.user.profilePicture;
-  const email = currentUser.user.email;
-  const password = currentUser.user.password;
+  const name = currentUser?.user?.name;
+  const profile = currentUser?.user?.profilePicture;
+  const email = currentUser?.user?.email;
+  const password = currentUser?.user?.password;
 
   const [editMode, setEditMode] = useState(false);
   const [edittedName, setEdittedName] = useState(name);
@@ -41,12 +41,14 @@ function userProfile() {
     }
   };
 
-  console.log(currentUser.user._id);
+  console.log(currentUser?.user?._id);
+  console.log()
 
   useEffect(() => {
     const auth = getAuth();
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
-      if (!user) {}
+      if (!user) {
+      }
     });
 
     return () => unsubscribe();
@@ -55,7 +57,7 @@ function userProfile() {
   const deleteUser = async () => {
     try {
       const auth = getAuth();
-      const firebaseUser = auth.currentUser;
+      const firebaseUser = auth?.currentUser;
       if (!firebaseUser) {
         throw new Error("User not authenticated");
       }
@@ -70,7 +72,7 @@ function userProfile() {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          _id: currentUser.user._id,
+          _id: currentUser?.user?._id,
         }),
       });
 
