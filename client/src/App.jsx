@@ -11,7 +11,7 @@ import Navbar from "./components/navbar/navbar";
 
 import UserProfile from "./Pages/UserProfile/userProfile";
 import Panel from "./Pages/dashboard/Panel";
-import Navbar from "./components/navbar/navbar";
+
 
 function App() {
   return (
