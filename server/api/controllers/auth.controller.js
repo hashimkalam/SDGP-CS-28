@@ -120,12 +120,49 @@ export const signin = async (req, res, next) => {
   }
 };
 
+const transporter = nodemailer.createTransport({
+  service: "gmail",
+  auth: {
+    user: process.env.EMAIL_ADDRESS,
+    pass: process.env.EMAIL_PASSWORD,
+  },
+});
+
 export const userDelete = async (req, res, next) => {
   const { _id } = req.body;
 
   try {
+    // Find the user first
+    const user = await User.findOne({ _id });
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    // Save the user's email
+    const { email } = user;
+
+    // Then delete the user
     const deleteUser = await User.findOneAndDelete({ _id });
+
     res.status(200).json({ message: "User deleted successfully" });
+
+    // Send an email to the user
+    transporter.sendMail(
+      {
+        from: process.env.EMAIL_ADDRESS,
+        to: email,
+        subject: "We're sorry to see you go...",
+        text: "Your account has been deleted successfully.",
+      },
+      (error, info) => {
+        if (error) {
+          console.log("Error sending email", error);
+        } else {
+          console.log("Email sent: " + info.response);
+        }
+      }
+    );
   } catch (error) {
     next(error);
   }
