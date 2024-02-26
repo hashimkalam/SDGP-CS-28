@@ -91,22 +91,17 @@ const Workspaces = () => {
     if (floorPlansData) {
       const { floorPlanPathDxf } = floorPlansData;
 
-      // Create a link element
       const downloadLink = document.createElement("a");
-
-      // Set the href attribute to the download URL of the DXF file
+      // Store the download URL of the DXF file
       downloadLink.href = floorPlanPathDxf;
 
       // Specify the download attribute and file name
       downloadLink.download = `floor_plan_${floorPlansData.id}.dxf`;
 
-      // Append the link to the document
+      // temporarily hold download link
       document.body.appendChild(downloadLink);
-
-      // Trigger the click event to start the download
+      
       downloadLink.click();
-
-      // Remove the link from the document
       document.body.removeChild(downloadLink);
     }
   };
