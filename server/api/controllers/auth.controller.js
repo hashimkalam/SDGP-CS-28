@@ -120,12 +120,69 @@ export const signin = async (req, res, next) => {
   }
 };
 
+
 export const userDelete = async (req, res, next) => {
   const { _id } = req.body;
 
   try {
+    // Find the user first
+    const user = await User.findOne({ _id });
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    const { email } = user;
+
+    // Then delete the user
     const deleteUser = await User.findOneAndDelete({ _id });
+
     res.status(200).json({ message: "User deleted successfully" });
+
+    // Send an email to the user
+    const transporter = nodemailer.createTransport({
+      service: "gmail",
+      auth: {
+        user: process.env.EMAIL_ADDRESS,
+        pass: process.env.EMAIL_PASSWORD,
+      },
+    });
+
+    transporter.sendMail(
+      {
+        from: process.env.EMAIL_ADDRESS,
+        to: email,
+        subject: "Sorry to see you go...",
+        html: `
+          <div style="text-align: center;">
+            <h1 style="color: #444;">Goodbye from EliteBluPrint</h1>
+            <p style="color: #666;">
+              We're sorry to see you go. Your account has been deleted successfully.
+            </p>
+            <p style="color: #666;">
+              If you have any feedback or questions, feel free to reply to this email. We're always here to help.
+            </p>
+            <p style="color: #666;">
+              If you change your mind, you're always welcome back.
+            </p>
+            <br/>
+            <p style="color: #666;">
+              Best regards,
+            </p>
+            <p style="color: #666;">
+              The EliteBluPrint Team
+            </p>
+          </div>
+        `
+      },
+      (error, info) => {
+        if (error) {
+          console.log("Error sending email", error);
+        } else {
+          console.log("Email sent: " + info.response);
+        }
+      }
+    );
   } catch (error) {
     next(error);
   }
