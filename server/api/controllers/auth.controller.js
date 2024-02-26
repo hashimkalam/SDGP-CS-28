@@ -1,9 +1,8 @@
 import User from "../models/user.model.js";
 import bcrypt from "bcryptjs";
-
-import nodemailer from "nodemailer";
 import jwt from "jsonwebtoken";
 
+import nodemailer from "nodemailer";
 
 export const signup = async (req, res, next) => {
   // Get the name, email, role and password from the request body
@@ -60,8 +59,6 @@ export const signup = async (req, res, next) => {
         }
       }
     );
-
-
 
     // send a success response
     res.status(201).send({
@@ -123,11 +120,83 @@ export const signin = async (req, res, next) => {
   }
 };
 
+
 export const userDelete = async (req, res, next) => {
+  const { _id } = req.body;
+
   try {
-    const deleteUser = await User.findOneAndDelete({
-      email: req.body.email,
+    // Find the user first
+    const user = await User.findOne({ _id });
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    const { email } = user;
+
+    // Then delete the user
+    const deleteUser = await User.findOneAndDelete({ _id });
+
+    res.status(200).json({ message: "User deleted successfully" });
+
+    // Send an email to the user
+    const transporter = nodemailer.createTransport({
+      service: "gmail",
+      auth: {
+        user: process.env.EMAIL_ADDRESS,
+        pass: process.env.EMAIL_PASSWORD,
+      },
     });
+
+    transporter.sendMail(
+      {
+        from: process.env.EMAIL_ADDRESS,
+        to: email,
+        subject: "Sorry to see you go...",
+        html: `
+          <div style="text-align: center;">
+            <h1 style="color: #444;">Goodbye from EliteBluPrint</h1>
+            <p style="color: #666;">
+              We're sorry to see you go. Your account has been deleted successfully.
+            </p>
+            <p style="color: #666;">
+              If you have any feedback or questions, feel free to reply to this email. We're always here to help.
+            </p>
+            <p style="color: #666;">
+              If you change your mind, you're always welcome back.
+            </p>
+            <br/>
+            <p style="color: #666;">
+              Best regards,
+            </p>
+            <p style="color: #666;">
+              The EliteBluPrint Team
+            </p>
+          </div>
+        `
+      },
+      (error, info) => {
+        if (error) {
+          console.log("Error sending email", error);
+        } else {
+          console.log("Email sent: " + info.response);
+        }
+      }
+    );
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const updateDetails = async (req, res, next) => {
+  const { email, name, password } = req.body;
+
+  try {
+    const updateUser = await User.findOneAndUpdate(
+      { email },
+      { name, password }
+    );
+    res.status(200).json({ message: "User details updated successfully" });
   } catch (error) {
     next(error);
   }
@@ -180,7 +249,6 @@ export const google = async (req, res, next) => {
 
       await newUser.save();
 
-
       // create a transporter object using the default SMTP transport
       const transporter = nodemailer.createTransport({
         service: "gmail",
@@ -217,8 +285,6 @@ export const google = async (req, res, next) => {
           }
         }
       );
-
-
 
       const validUser = await User.findOne({
         email: req.body.email,
@@ -258,4 +324,3 @@ export const signout = (req, res) => {
     .status(200)
     .send("User logged out successfully");
 };
-
