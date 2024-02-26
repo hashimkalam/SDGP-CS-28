@@ -1,23 +1,31 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useSnackbar } from "notistack";
 import { useNavigate } from "react-router-dom";
-import { signOut } from "../../redux/user/userSlice";
+import { signOut, updateUserDetails } from "../../redux/user/userSlice";
 
 import EditIcon from "@mui/icons-material/Edit";
 import DoneIcon from "@mui/icons-material/Done";
 import { IconButton } from "@mui/material";
+import {
+  getAuth,
+  deleteUser as deleteFirebaseUser,
+  onAuthStateChanged,
+  GoogleAuthProvider,
+  signInWithPopup,
+} from "firebase/auth";
+import UserDelete from "../../components/model/UserDelete";
 
 function userProfile() {
   const currentUser = useSelector((state) => state.user.currentUser);
   const name = currentUser.user.name;
   const profile = currentUser.user.profilePicture;
   const email = currentUser.user.email;
-  //const password = currentUser.user.password;
+  const password = currentUser.user.password;
 
   const [editMode, setEditMode] = useState(false);
-  const [edittedName, setEdittedName] = useState("");
-  const [edittedPassword, setEdittedPassword] = useState("");
+  const [edittedName, setEdittedName] = useState(name);
+  const [edittedPassword, setEdittedPassword] = useState(password);
 
   const { enqueueSnackbar } = useSnackbar();
   const navigate = useNavigate();
@@ -33,17 +41,39 @@ function userProfile() {
     }
   };
 
+  console.log(currentUser.user._id);
+
+  useEffect(() => {
+    const auth = getAuth();
+    const unsubscribe = onAuthStateChanged(auth, async (user) => {
+      if (!user) {}
+    });
+
+    return () => unsubscribe();
+  }, []);
+
   const deleteUser = async () => {
     try {
+      const auth = getAuth();
+      const firebaseUser = auth.currentUser;
+      if (!firebaseUser) {
+        throw new Error("User not authenticated");
+      }
+
+      // Delete user from Firebase Authentication
+      await deleteFirebaseUser(firebaseUser);
+
+      // Delete user from MongoDB
       const res = await fetch("http://localhost:3000/api/auth/delete", {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          email: currentUser.user.email,
+          _id: currentUser.user._id,
         }),
       });
+
       if (res.ok) {
         enqueueSnackbar("Account Deleted Successfully", { variant: "success" });
         navigateToLogout();
@@ -53,6 +83,9 @@ function userProfile() {
       }
     } catch (error) {
       console.log("Error in deleting account: ", error);
+      enqueueSnackbar("Error in deleting account. Please try again.", {
+        variant: "error",
+      });
     }
   };
 
@@ -71,7 +104,7 @@ function userProfile() {
       });
 
       if (res.ok) {
-        currentUser.user.name = edittedName;
+        dispatch(updateUserDetails({ name: edittedName }));
 
         enqueueSnackbar("Account details updated successfully", {
           variant: "success",
@@ -167,9 +200,7 @@ function userProfile() {
             Profiles and select a Profile.
           </div>
           <div className="profileDetails p-[0px] text-center text-red-500 rounded-b-xl hover:bg-red-700 hover:text-white duration-300 ease-in-out pointer">
-            <button onClick={deleteUser} className="w-full p-2 rounded-b-xl">
-              Delete Account
-            </button>
+            <UserDelete deleteUser={deleteUser} name="Delete Account" />
           </div>
         </div>
       </div>

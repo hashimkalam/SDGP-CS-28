@@ -21,8 +21,8 @@ function Download() {
   };
 
   return (
-    <div className="max-w-[1560px] mx-auto pt-16 min-h-screen overflow-hidden lg:overflow-auto flex flex-col lg:flex-row text-white p-10">
-      <div className="lg:flex-[.5] flex flex-col justify-center relative">
+    <div className="max-w-[1560px] z-0 mx-auto mt-0 lg:-mt-14 min-h-[96.25vh] overflow-hidden lg:overflow-auto flex flex-col lg:flex-row text-white p-10">
+      <div className="lg:flex-[.5] flex flex-col justify-center relative mt-0 lg:-mt-20">
         <h1 className="text-center lg:text-left text-[40px] font-semibold">
           Your Dream Home Awaits! Download Your Floor Plan Now.
         </h1>
@@ -53,7 +53,7 @@ function Download() {
       </div>
 
       <div className="mt-24 lg:-mt-12 lg:flex-[.5] displayFlex flex-col">
-        <div className="space-y-5 pt-20 p-10 lg:p-10 w-full sm:w-[80%] lg:w-[70%]">
+        <div className="space-y-5 pt-20 p-10 lg:p-10 w-full md:w-[70%] lg:w-[80%] xl:w-[70%]">
           <div className="flex space-x-5 h-[12vh]">
             <div className="bg-[#4A6CF7]/10 hover:bg-[#4A6CF7]/20 hoverEffect" />
             <div className="bg-[#fff]/20 hover:bg-[#fff]/30 hoverEffect" />

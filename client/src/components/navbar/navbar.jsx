@@ -74,10 +74,20 @@ const Navbar = () => {
                 Logout
               </button>
             )}
+            {location.pathname == "/workspace" && (
+              <div className="space-x-5 mr-8">
+                <button className="bg-[#0065FF]/85 hover:bg-[#0065FF] duration-150 ease-out text-white p-3 rounded-lg">
+                  Explore Achitect Consultatiom
+                </button>
+                <button className="bg-[#0065FF]/85 hover:bg-[#0065FF] duration-150 ease-out text-white p-3 rounded-lg">
+                  Download
+                </button>
+              </div>
+            )}
             <img
               src={currentUser?.user?.profilePicture}
               alt="profilePicture"
-              className="h-9 w-9 rounded-full object-cover"
+              className="h-9 w-9 rounded-full object-cover cursor-pointer"
               onClick={navigateToProfileOrDashboard}
             />
           </>

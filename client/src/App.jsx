@@ -1,12 +1,13 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Home from "./Pages/Home/Home";
-import ForgotPassword from "./Pages//ForgotPassword/ForgotPassword";
+import ForgotPassword from "./Pages/ForgotPassword/ForgotPassword";
 import Register from "./Pages/Register/Register";
 import Download from "./Pages/Download/Download";
 import Workspace from "./Pages/workspace/Workspace";
 import ResetPassword from "./Pages/Reset/reset";
 import ArchitectPanel from "./Pages/ArchitectPanel/ArchitectPanel";
-import WorkspaceHistory from "./Pages/workspace/WorkspaceHistory";
+import Workspaces from "./Pages/workspace/Workspaces";
+import Navbar from "./components/navbar/navbar";
 
 import UserProfile from "./Pages/UserProfile/userProfile";
 import Panel from "./Pages/dashboard/Panel";
@@ -42,6 +43,7 @@ function App() {
               </div>
             }
           />
+
           <Route
             path="/resetpassword"
             element={
@@ -59,12 +61,21 @@ function App() {
               </div>
             }
           />
-          <Route
+          {/*<Route
             path="/workspaceHistory"
             element={
               <div>
                 <Navbar />
                 <WorkspaceHistory />
+              </div>
+            }
+          />*/}
+          <Route
+            path="/workspaces"
+            element={
+              <div className="bg-[#090E34] h-screen">
+                <Navbar />
+                <Workspaces />
               </div>
             }
           />
