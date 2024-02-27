@@ -51,6 +51,7 @@ function Form() {
         // Form data submitted successfully
         const result = await response.json();
         console.log(result.message);
+        fetchFloorPlans(currentUser.user._id)
       } else {
         console.log(response);
         // Handle errors
@@ -61,8 +62,6 @@ function Form() {
     }
   };
   
-
-  console.log(roomValues);
   return (
     <div className="flex justify-center items-center h-screen">
       <form className="bg-white/75 w-[80%] mx-auto h-[80%] flex flex-col justify-center items-center">
