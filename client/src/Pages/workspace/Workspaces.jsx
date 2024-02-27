@@ -50,7 +50,7 @@ const Workspaces = () => {
                 floorPlanPathDxf: downloadURLDxf,
                 formData: floorPlan.formData,
               });
-              console.log(floorPlansList)
+              console.log(floorPlansList);
             } catch (error) {
               console.error("Error fetching download URL:", error);
             }
@@ -109,18 +109,16 @@ const Workspaces = () => {
       </div>
       <div className="bg-[#005BE2] w-[75%] h-[32.5rem] rounded-3xl overflow-y-scroll">
         <div className="flex flex-row mx-[10%]">
-          {floorPlansData ?
-           (
+          {floorPlansData ? (
             <RightChat
               key={`right-${floorPlansData.id}`}
               floorPlanPathPng={floorPlansData.floorPlanPathPng}
             />
           ) : (
-              <div className="input-field flex flex-row mx-[10%]">
-                <Form />
-              </div>
-          )
-        }
+            <div className="input-field flex flex-row mx-[10%]">
+              <Form />
+            </div>
+          )}
         </div>
       </div>
     </div>

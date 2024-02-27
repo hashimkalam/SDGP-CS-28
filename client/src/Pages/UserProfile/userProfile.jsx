@@ -14,12 +14,17 @@ import {
 } from "firebase/auth";
 import UserDelete from "../../components/model/UserDelete";
 
+import { ref, onValue, remove } from "firebase/database";
+import { getDownloadURL, ref as storageRef } from "firebase/storage";
+import { database, storage } from "../../firebase";
+
 function userProfile() {
   const currentUser = useSelector((state) => state.user.currentUser);
   const name = currentUser?.user?.name;
   const profile = currentUser?.user?.profilePicture;
   const email = currentUser?.user?.email;
   const password = currentUser?.user?.password;
+  const userID = currentUser?.user?._id;
 
   const [editMode, setEditMode] = useState(false);
   const [edittedName, setEdittedName] = useState(name);
@@ -29,6 +34,7 @@ function userProfile() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
+  // logout
   const navigateToLogout = async () => {
     try {
       await fetch("http://localhost:3000/api/auth/signout");
@@ -39,8 +45,7 @@ function userProfile() {
     }
   };
 
-  console.log(currentUser?.user?._id);
-  console.log();
+  console.log(userID);
 
   useEffect(() => {
     const auth = getAuth();
@@ -49,7 +54,7 @@ function userProfile() {
       }
     });
 
-    return () => unsubscribe();
+    return () => unsubscribe(); // to prevent memory leaks
   }, []);
 
   const deleteUser = async () => {
@@ -60,17 +65,21 @@ function userProfile() {
         throw new Error("User not authenticated");
       }
 
-      // Delete user from Firebase Authentication
+      // removing the plans first
+      const floorPlansRef = ref(database, `users/${userID}/floorPlans`);
+      await remove(floorPlansRef);
+
+      // then deleting user from Firebase
       await deleteFirebaseUser(firebaseUser);
 
-      // Delete user from MongoDB
+      // finally deleting user from MongoDB
       const res = await fetch("http://localhost:3000/api/auth/delete", {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          _id: currentUser?.user?._id,
+          _id: userID,
         }),
       });
 
@@ -89,6 +98,7 @@ function userProfile() {
     }
   };
 
+  // updatig details
   const updateDetails = async () => {
     try {
       const res = await fetch("http://localhost:3000/api/auth/update", {
@@ -119,7 +129,6 @@ function userProfile() {
     }
   };
 
-  console.log(editMode);
   return (
     <div className="displayFlex flex-col text-white pb-[10%]">
       <h1>Account</h1>
