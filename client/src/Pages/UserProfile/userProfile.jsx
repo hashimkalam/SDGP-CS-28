@@ -126,8 +126,8 @@ function userProfile() {
 
   return (
     <div className={`${location.pathname === "/userprofile"
-        ? "displayFlex flex-col text-white pb-[10%]"
-        : "displayFlex flex-col pb-[10%]"
+      ? "displayFlex flex-col text-white pb-[10%]"
+      : "displayFlex flex-col pb-[10%]"
       }`}
     >
       <h1>Account</h1>
@@ -154,7 +154,10 @@ function userProfile() {
               <input
                 type="text"
                 value={edittedName}
-                className="bg-[#121a56] outline-none p-1 w-full"
+              
+                className={
+                  location.pathname === "/userprofile"
+                    ? "bg-[#121a56] outline-none p-1 w-full" : "bg-gray-500 outline-none p-1 w-full"}
                 onChange={(e) => {
                   console.log(e.target.value);
                   setEdittedName(e.target.value);
@@ -169,14 +172,20 @@ function userProfile() {
                 className="pointer"
                 onClick={() => setEditMode(!editMode)}
               >
-                <DoneIcon className="text-white" />
+                <DoneIcon className={
+                  location.pathname === "/userprofile"
+                    ? "text-white" : "text-black"
+                } />
               </IconButton>
             ) : (
               <IconButton
                 className="pointer"
                 onClick={() => setEditMode(!editMode)}
               >
-                <EditIcon className="text-white" />
+                <EditIcon className={
+                  location.pathname === "/userprofile"
+                    ? "text-white" : "text-black"
+                } />
               </IconButton>
             )}
           </div>
@@ -191,7 +200,10 @@ function userProfile() {
               className="pointer"
               onClick={() => setEditMode(!editMode)}
             >
-              <EditIcon className="text-white" />
+              <EditIcon className={
+                location.pathname === "/userprofile"
+                  ? "text-white" : "text-black"
+              } />
             </IconButton>
           </div>
           <div className={
@@ -201,7 +213,7 @@ function userProfile() {
           }>
             <button
               onClick={navigateToLogout}
-              className="w-full p-2 rounded-bl-xl hover:bg-sky-700 duration-300 ease-in-out"
+              className=" w-full p-2 rounded-bl-xl hover:bg-sky-700 duration-300 ease-in-out"
             >
               log out
             </button>
