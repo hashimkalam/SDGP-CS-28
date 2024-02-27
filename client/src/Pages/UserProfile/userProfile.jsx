@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useSnackbar } from "notistack";
-import { useNavigate , useLocation} from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { signOut, updateUserDetails } from "../../redux/user/userSlice";
 
 import EditIcon from "@mui/icons-material/Edit";
@@ -62,16 +62,11 @@ function userProfile() {
     try {
       const auth = getAuth();
       const firebaseUser = auth?.currentUser;
-      if (!firebaseUser) {
-        throw new Error("User not authenticated");
-      }
+      if (firebaseUser) await deleteFirebaseUser(firebaseUser);
 
       // removing the plans first
       const floorPlansRef = ref(database, `users/${userID}/floorPlans`);
       await remove(floorPlansRef);
-
-      // then deleting user from Firebase
-      await deleteFirebaseUser(firebaseUser);
 
       // finally deleting user from MongoDB
       const res = await fetch("http://localhost:3000/api/auth/delete", {
@@ -131,11 +126,12 @@ function userProfile() {
   };
 
   return (
-    <div className={`${
-      location.pathname === "/userprofile"
-      ?"displayFlex flex-col text-white pb-[10%]"
-      :"displayFlex flex-col pb-[10%]"
-    }`}
+    <div
+      className={`${
+        location.pathname === "/userprofile"
+          ? "displayFlex flex-col text-white pb-[10%]"
+          : "displayFlex flex-col pb-[10%]"
+      }`}
     >
       <h1>Account</h1>
 
