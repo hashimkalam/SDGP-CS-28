@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useSnackbar } from "notistack";
-import { useNavigate , useLocation} from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { signOut, updateUserDetails } from "../../redux/user/userSlice";
 
 import EditIcon from "@mui/icons-material/Edit";
@@ -47,7 +47,7 @@ function userProfile() {
   useEffect(() => {
     const auth = getAuth();
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
-      if (!user) {}
+      if (!user) { }
     });
 
     return () => unsubscribe();
@@ -121,12 +121,14 @@ function userProfile() {
   };
 
   console.log(editMode);
+
+
+
   return (
-    <div className={`${
-      location.pathname === "/userprofile"
-      ?"displayFlex flex-col text-white pb-[10%]"
-      :"displayFlex flex-col pb-[10%]"
-    }`}
+    <div className={`${location.pathname === "/userprofile"
+        ? "displayFlex flex-col text-white pb-[10%]"
+        : "displayFlex flex-col pb-[10%]"
+      }`}
     >
       <h1>Account</h1>
 
@@ -138,8 +140,16 @@ function userProfile() {
       <div className="items-center justify-center flex-col flex gap-[30px]">
         <div className="bg-gray-500 w-[300px] md:w-[400px] lg:w-[500px] font-semibold border-[1px] border-gray-300 rounded-xl">
           <p className="py-[5px] px-[8px]">Account Datails</p>
-          <div className="profileDetails">{email}</div>
-          <div className="profileDetails">
+          <div className={
+            location.pathname === "/userprofile"
+              ? "profileDetails" : "bg-white profileDetails"
+          }>
+            {email}
+          </div>
+          <div className={
+            location.pathname === "/userprofile"
+              ? "profileDetails" : "bg-white profileDetails"
+          }>
             {editMode ? (
               <input
                 type="text"
@@ -171,7 +181,11 @@ function userProfile() {
             )}
           </div>
 
-          <div className="profileDetails">
+          <div className={
+            location.pathname === "/userprofile"
+              ? "profileDetails"
+              : "bg-white profileDetails"
+          }>
             *******
             <IconButton
               className="pointer"
@@ -180,7 +194,11 @@ function userProfile() {
               <EditIcon className="text-white" />
             </IconButton>
           </div>
-          <div className="profileDetails p-[0px] text-center hover:text-white rounded-b-xl pointer">
+          <div className={
+            location.pathname === "/userprofile"
+              ? "profileDetails p-[0px] text-center hover:text-white rounded-b-xl pointer"
+              : "bg-white profileDetails p-[0px] text-center hover:text-white rounded-b-xl pointer"
+          }>
             <button
               onClick={navigateToLogout}
               className="w-full p-2 rounded-bl-xl hover:bg-sky-700 duration-300 ease-in-out"
@@ -197,15 +215,26 @@ function userProfile() {
         </div>
         <div className="bg-gray-500 w-[300px] md:w-[400px] lg:w-[500px]  font-semibold border-[1px] border-gray-300 rounded-xl">
           <p className="py-[5px] px-[8px]">Subscription</p>
-          <div className="profileDetails rounded-b-xl">Premium (Annual)</div>
+          <div className={
+            location.pathname === "/userprofile"
+              ? "profileDetails rounded-b-xl"
+              : "bg-white profileDetails rounded-b-xl"
+          }>Premium (Annual)</div>
         </div>
         <div className="bg-gray-500 w-[300px] md:w-[400px] lg:w-[500px]  font-semibold border-[1px] border-gray-300 rounded-xl">
           <p className="py-[5px] px-[8px]">SETTINGS</p>
-          <div className="profileDetails">
+          <div className={
+            location.pathname === "/userprofile"
+              ? "profileDetails" : "bg-white profileDetails"
+          }>
             To manage parental controls for profiles on your account, visit Edit
             Profiles and select a Profile.
           </div>
-          <div className="profileDetails p-[0px] text-center text-red-500 rounded-b-xl hover:bg-red-700 hover:text-white duration-300 ease-in-out pointer">
+          <div className={
+            location.pathname === "/userprofile"
+              ? "profileDetails p-[0px] text-center text-red-500 rounded-b-xl hover:bg-red-700 hover:text-white duration-300 ease-in-out pointer"
+              : "bg-white profileDetails p-[0px] text-center text-red-500 rounded-b-xl hover:bg-red-700 hover:text-white duration-300 ease-in-out pointer"
+          }>
             <UserDelete deleteUser={deleteUser} name="Delete Account" />
           </div>
         </div>
