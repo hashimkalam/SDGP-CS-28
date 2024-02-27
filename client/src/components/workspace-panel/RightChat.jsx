@@ -1,9 +1,9 @@
 import React from "react";
 
-const RightChat = ({ id, floorPlanPath }) => {
+const RightChat = ({ id, floorPlanPathPng }) => {
   return (
     <div className="w-[90%] h-full py-10">
-      <img key={id} src={floorPlanPath} alt={`Floor Plan ${id}`} />
+      <img key={id} src={floorPlanPathPng} alt={`Floor Plan ${id}`} />
     </div>
   );
 };
