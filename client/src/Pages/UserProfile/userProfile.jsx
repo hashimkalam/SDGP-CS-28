@@ -11,8 +11,6 @@ import {
   getAuth,
   deleteUser as deleteFirebaseUser,
   onAuthStateChanged,
-  GoogleAuthProvider,
-  signInWithPopup,
 } from "firebase/auth";
 import UserDelete from "../../components/model/UserDelete";
 
@@ -42,7 +40,7 @@ function userProfile() {
   };
 
   console.log(currentUser?.user?._id);
-  console.log()
+  console.log();
 
   useEffect(() => {
     const auth = getAuth();
