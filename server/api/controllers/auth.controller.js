@@ -59,10 +59,13 @@ export const signup = async (req, res, next) => {
         }
       }
     );
+    const user = newUser._doc;
 
     // send a success response
     res.status(201).send({
       message: "User created successfully",
+      user,
+      
     });
   } catch (error) {
     // send an error response if there is an error
