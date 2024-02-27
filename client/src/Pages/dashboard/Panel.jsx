@@ -12,7 +12,7 @@ const Panel = () => {
   const currentUser = useSelector((state) => state.user.currentUser);
   const id = currentUser.user._id;
 
-  const [slide, setSlide] = useState("projects");
+  const [slide, setSlide] = useState("projescts");
   const [imgUrl, setImgUrl] = useState([]);
   const navigate = useNavigate();
 

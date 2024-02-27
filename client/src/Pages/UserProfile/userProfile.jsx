@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useSnackbar } from "notistack";
-import { useNavigate } from "react-router-dom";
+import { useNavigate , useLocation} from "react-router-dom";
 import { signOut, updateUserDetails } from "../../redux/user/userSlice";
 
 import EditIcon from "@mui/icons-material/Edit";
@@ -33,6 +33,7 @@ function userProfile() {
   const { enqueueSnackbar } = useSnackbar();
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const location = useLocation();
 
   // logout
   const navigateToLogout = async () => {
@@ -130,7 +131,12 @@ function userProfile() {
   };
 
   return (
-    <div className="displayFlex flex-col text-white pb-[10%]">
+    <div className={`${
+      location.pathname === "/userprofile"
+      ?"displayFlex flex-col text-white pb-[10%]"
+      :"displayFlex flex-col pb-[10%]"
+    }`}
+    >
       <h1>Account</h1>
 
       <div className="flex items-center justify-center flex-col mb-10">
