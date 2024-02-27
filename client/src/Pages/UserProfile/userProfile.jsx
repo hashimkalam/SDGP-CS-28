@@ -15,6 +15,7 @@ import {
   signInWithPopup,
 } from "firebase/auth";
 import UserDelete from "../../components/model/UserDelete";
+import EditUserDetails from "../../components/model/editUserDetails";
 
 function userProfile() {
   const currentUser = useSelector((state) => state.user.currentUser);
@@ -23,7 +24,8 @@ function userProfile() {
   const email = currentUser.user.email;
   const password = currentUser.user.password;
 
-  const [editMode, setEditMode] = useState(false);
+  const [nameEditMode, setNameEditMode] = useState(false);
+  const [passEditMode, setPassEditMode] = useState(false)
   const [edittedName, setEdittedName] = useState(name);
   const [edittedPassword, setEdittedPassword] = useState(password);
 
@@ -90,7 +92,7 @@ function userProfile() {
     }
   };
 
-  const updateDetails = async () => {
+  const updateUserName= async () => {
     try {
       const res = await fetch("http://localhost:3000/api/auth/update", {
         method: "PUT",
@@ -100,7 +102,6 @@ function userProfile() {
         body: JSON.stringify({
           email: email,
           name: edittedName,
-          password: edittedPassword,
         }),
       });
 
@@ -111,7 +112,7 @@ function userProfile() {
           variant: "success",
         });
 
-        setEditMode(false);
+        setNameEditMode(false);
       } else {
         enqueueSnackbar("Failed to update details", { variant: "error" });
       }
@@ -120,7 +121,39 @@ function userProfile() {
     }
   };
 
-  console.log(editMode);
+  
+  const updateUserPassword= async () => {
+    try {
+      const res = await fetch("http://localhost:3000/api/password/resetpassword", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email: email,
+          newPassword :edittedPassword,
+        }),
+      });
+
+      if (res.ok) {
+        dispatch(updateUserDetails({ password: edittedPassword, name:edittedName }));
+
+        enqueueSnackbar("Account details updated successfully", {
+          variant: "success",
+        });
+
+        setPassEditMode(false);
+      } else {
+        enqueueSnackbar("Failed to update details", { variant: "error" });
+      }
+    } catch (error) {
+      console.log("Error in updating details: ", error);
+    }
+  };
+
+  
+
+  console.log(nameEditMode);
 
 
 
@@ -150,11 +183,11 @@ function userProfile() {
             location.pathname === "/userprofile"
               ? "profileDetails" : "bg-white profileDetails"
           }>
-            {editMode ? (
+            {nameEditMode ? (
               <input
                 type="text"
                 value={edittedName}
-              
+
                 className={
                   location.pathname === "/userprofile"
                     ? "bg-[#121a56] outline-none p-1 w-full" : "bg-gray-500 outline-none p-1 w-full"}
@@ -167,20 +200,24 @@ function userProfile() {
               name
             )}
 
-            {editMode ? (
+            {nameEditMode ? (
               <IconButton
                 className="pointer"
-                onClick={() => setEditMode(!editMode)}
+                onClick={() => setNameEditMode(!nameEditMode)}
               >
                 <DoneIcon className={
                   location.pathname === "/userprofile"
                     ? "text-white" : "text-black"
-                } />
+                }
+                onClick={updateUserName}
+                />
               </IconButton>
+              
+             
             ) : (
               <IconButton
                 className="pointer"
-                onClick={() => setEditMode(!editMode)}
+                onClick={() => setNameEditMode(!nameEditMode)}
               >
                 <EditIcon className={
                   location.pathname === "/userprofile"
@@ -195,17 +232,48 @@ function userProfile() {
               ? "profileDetails"
               : "bg-white profileDetails"
           }>
-            *******
-            <IconButton
-              className="pointer"
-              onClick={() => setEditMode(!editMode)}
-            >
-              <EditIcon className={
-                location.pathname === "/userprofile"
-                  ? "text-white" : "text-black"
-              } />
-            </IconButton>
+            {passEditMode ? (
+              <input
+                type="text"
+                
+
+                className={
+                  location.pathname === "/userprofile"
+                    ? "bg-[#121a56] outline-none p-1 w-full" : "bg-gray-500 outline-none p-1 w-full"}
+                onChange={(e) => {
+                  console.log(e.target.value);
+                  setEdittedPassword(e.target.value);
+                }}
+              />
+            ) : (
+              "********"
+            )}
+            {passEditMode ? (
+              <IconButton
+                className="pointer"
+                onClick={() => setPassEditMode(!passEditMode)}
+              >
+                <DoneIcon className={
+                  location.pathname === "/userprofile"
+                    ? "text-white" : "text-black"
+                } onClick={updateUserPassword}/>
+                
+              </IconButton>
+            ) : (
+              <IconButton
+                className="pointer"
+                onClick={() => setPassEditMode(!passEditMode)}
+              >
+                <EditIcon className={
+                  location.pathname === "/userprofile"
+                    ? "text-white" : "text-black"
+                } />
+              </IconButton>
+            )}
           </div>
+
+
+          
           <div className={
             location.pathname === "/userprofile"
               ? "profileDetails p-[0px] text-center hover:text-white rounded-b-xl pointer"
@@ -217,12 +285,7 @@ function userProfile() {
             >
               log out
             </button>
-            <button
-              onClick={updateDetails}
-              className="w-full p-2 rounded-br-xl hover:bg-green-700 duration-300 ease-in-out"
-            >
-              save
-            </button>
+            
           </div>
         </div>
         <div className="bg-gray-500 w-[300px] md:w-[400px] lg:w-[500px]  font-semibold border-[1px] border-gray-300 rounded-xl">
