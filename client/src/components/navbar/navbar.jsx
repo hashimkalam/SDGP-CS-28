@@ -14,7 +14,7 @@ const Navbar = () => {
   const navigateToProfileOrDashboard = () => {
     currentUser.user.role === "architect"
       ? navigate("/dashboard")
-      : navigate("/Workspace");
+      : navigate("/workspace");
   };
 
   const navigateToLogin = () => {

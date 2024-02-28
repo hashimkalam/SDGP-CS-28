@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 
-function LoadingState() {
+function LoadingState({ planLoading }) {
   const [currentAnimation, setCurrentAnimation] = useState(0);
 
   useEffect(() => {
@@ -12,11 +12,15 @@ function LoadingState() {
   }, []);
 
   return (
-    <div className="h-screen flex flex-col items-center justify-center bg-sky-200">
+    <div
+      className={`h-screen flex flex-col items-center justify-center ${
+        planLoading ? "bg-sky-200" : "bg-transparent h-[90.5vh]"
+      } `}
+    >
       <div className="flex items-center justify-center space-x-3">
         <div className="space-y-3 h-[35vh]">
           <div
-            className={`bg-sky-600 h-[70%]  w-[150px] ${
+            className={`bg-sky-600 h-[70%] w-[150px] ${
               currentAnimation === 0 ? "animate-pulse-fast" : ""
             }`}
           />
@@ -41,10 +45,16 @@ function LoadingState() {
         </div>
       </div>
 
-      <h1 className="text-center w-[50vw]">
-        Have a small coffee break while we prepare your desired house plans for
-        you!☕
-      </h1>
+      {planLoading ? (
+        <h1 className="text-center w-[50vw] font-semibold">
+          Have a small coffee break while we prepare your desired house plans
+          for you!☕
+        </h1>
+      ) : (
+        <h1 className="text-center w-[50vw] text-white font-semibold">
+          Your account is being deleted. Please wait.
+        </h1>
+      )}
     </div>
   );
 }

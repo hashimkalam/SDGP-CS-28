@@ -11,12 +11,14 @@ import {
   getAuth,
   deleteUser as deleteFirebaseUser,
   onAuthStateChanged,
+  EmailAuthProvider,
+  reauthenticateWithCredential,
 } from "firebase/auth";
 import UserDelete from "../../components/model/UserDelete";
 
-import { ref, onValue, remove } from "firebase/database";
-import { getDownloadURL, ref as storageRef } from "firebase/storage";
+import { ref, remove } from "firebase/database";
 import { database, storage } from "../../firebase";
+import LoadingState from "../../components/loadingState/LoadingState";
 
 function userProfile() {
   const currentUser = useSelector((state) => state.user.currentUser);
@@ -29,6 +31,7 @@ function userProfile() {
   const [editMode, setEditMode] = useState(false);
   const [edittedName, setEdittedName] = useState(name);
   const [edittedPassword, setEdittedPassword] = useState(password);
+  const [loadingState, setLoadingState] = useState(false);
 
   const { enqueueSnackbar } = useSnackbar();
   const navigate = useNavigate();
@@ -46,7 +49,7 @@ function userProfile() {
     }
   };
 
-  console.log(userID);
+  console.log(email);
 
   useEffect(() => {
     const auth = getAuth();
@@ -60,13 +63,22 @@ function userProfile() {
 
   const deleteUser = async () => {
     try {
-      const auth = getAuth();
-      const firebaseUser = auth?.currentUser;
-      if (firebaseUser) await deleteFirebaseUser(firebaseUser);
+      // const reauthPassword = prompt("Re enter your password");
+      setLoadingState(true);
 
       // removing the plans first
       const floorPlansRef = ref(database, `users/${userID}/floorPlans`);
       await remove(floorPlansRef);
+
+      const auth = getAuth();
+      const firebaseUser = auth?.currentUser;
+
+      // Reauthenticate the user
+      // const credentials = EmailAuthProvider.credential(email, reauthPassword);
+      // await reauthenticateWithCredential(firebaseUser, credentials);
+
+      // deleting user from firebase
+      if (firebaseUser) await deleteFirebaseUser(firebaseUser);
 
       // finally deleting user from MongoDB
       const res = await fetch("http://localhost:3000/api/auth/delete", {
@@ -91,6 +103,8 @@ function userProfile() {
       enqueueSnackbar("Error in deleting account. Please try again.", {
         variant: "error",
       });
+    } finally {
+      setLoadingState(false);
     }
   };
 
@@ -126,95 +140,107 @@ function userProfile() {
   };
 
   return (
-    <div
-      className={`${
-        location.pathname === "/userprofile"
-          ? "displayFlex flex-col text-white pb-[10%]"
-          : "displayFlex flex-col pb-[10%]"
-      }`}
-    >
-      <h1>Account</h1>
+    <div>
+      {loadingState ? (
+        <LoadingState planLoading={false} />
+      ) : (
+        <div
+          className={`${
+            location.pathname === "/userprofile"
+              ? "displayFlex flex-col text-white pb-[10%]"
+              : "displayFlex flex-col pb-[10%]"
+          }`}
+        >
+          <h1>Account</h1>
 
-      <div className="flex items-center justify-center flex-col mb-10">
-        <img className="w-[80px] rounded-full m-[10px]" src={profile} alt="" />
-        <h4>{name}</h4>
-      </div>
-
-      <div className="items-center justify-center flex-col flex gap-[30px]">
-        <div className="bg-gray-500 w-[300px] md:w-[400px] lg:w-[500px] font-semibold border-[1px] border-gray-300 rounded-xl">
-          <p className="py-[5px] px-[8px]">Account Datails</p>
-          <div className="profileDetails">{email}</div>
-          <div className="profileDetails">
-            {editMode ? (
-              <input
-                type="text"
-                value={edittedName}
-                className="bg-[#121a56] outline-none p-1 w-full"
-                onChange={(e) => {
-                  console.log(e.target.value);
-                  setEdittedName(e.target.value);
-                }}
-              />
-            ) : (
-              name
-            )}
-
-            {editMode ? (
-              <IconButton
-                className="pointer"
-                onClick={() => setEditMode(!editMode)}
-              >
-                <DoneIcon className="text-white" />
-              </IconButton>
-            ) : (
-              <IconButton
-                className="pointer"
-                onClick={() => setEditMode(!editMode)}
-              >
-                <EditIcon className="text-white" />
-              </IconButton>
-            )}
+          <div className="flex items-center justify-center flex-col mb-10">
+            <img
+              className="w-[80px] rounded-full m-[10px]"
+              src={profile}
+              alt=""
+            />
+            <h4>{name}</h4>
           </div>
 
-          <div className="profileDetails">
-            *******
-            <IconButton
-              className="pointer"
-              onClick={() => setEditMode(!editMode)}
-            >
-              <EditIcon className="text-white" />
-            </IconButton>
-          </div>
-          <div className="profileDetails p-[0px] text-center hover:text-white rounded-b-xl pointer">
-            <button
-              onClick={navigateToLogout}
-              className="w-full p-2 rounded-bl-xl hover:bg-sky-700 duration-300 ease-in-out"
-            >
-              log out
-            </button>
-            <button
-              onClick={updateDetails}
-              className="w-full p-2 rounded-br-xl hover:bg-green-700 duration-300 ease-in-out"
-            >
-              save
-            </button>
+          <div className="items-center justify-center flex-col flex gap-[30px]">
+            <div className="bg-gray-500 w-[300px] md:w-[400px] lg:w-[500px] font-semibold border-[1px] border-gray-300 rounded-xl">
+              <p className="py-[5px] px-[8px]">Account Datails</p>
+              <div className="profileDetails">{email}</div>
+              <div className="profileDetails">
+                {editMode ? (
+                  <input
+                    type="text"
+                    value={edittedName}
+                    className="bg-[#121a56] outline-none p-1 w-full"
+                    onChange={(e) => {
+                      console.log(e.target.value);
+                      setEdittedName(e.target.value);
+                    }}
+                  />
+                ) : (
+                  name
+                )}
+
+                {editMode ? (
+                  <IconButton
+                    className="pointer"
+                    onClick={() => setEditMode(!editMode)}
+                  >
+                    <DoneIcon className="text-white" />
+                  </IconButton>
+                ) : (
+                  <IconButton
+                    className="pointer"
+                    onClick={() => setEditMode(!editMode)}
+                  >
+                    <EditIcon className="text-white" />
+                  </IconButton>
+                )}
+              </div>
+
+              <div className="profileDetails">
+                *******
+                <IconButton
+                  className="pointer"
+                  onClick={() => setEditMode(!editMode)}
+                >
+                  <EditIcon className="text-white" />
+                </IconButton>
+              </div>
+              <div className="profileDetails p-[0px] text-center hover:text-white rounded-b-xl pointer">
+                <button
+                  onClick={navigateToLogout}
+                  className="w-full p-2 rounded-bl-xl hover:bg-sky-700 duration-300 ease-in-out"
+                >
+                  log out
+                </button>
+                <button
+                  onClick={updateDetails}
+                  className="w-full p-2 rounded-br-xl hover:bg-green-700 duration-300 ease-in-out"
+                >
+                  save
+                </button>
+              </div>
+            </div>
+            <div className="bg-gray-500 w-[300px] md:w-[400px] lg:w-[500px]  font-semibold border-[1px] border-gray-300 rounded-xl">
+              <p className="py-[5px] px-[8px]">Subscription</p>
+              <div className="profileDetails rounded-b-xl">
+                Premium (Annual)
+              </div>
+            </div>
+            <div className="bg-gray-500 w-[300px] md:w-[400px] lg:w-[500px]  font-semibold border-[1px] border-gray-300 rounded-xl">
+              <p className="py-[5px] px-[8px]">SETTINGS</p>
+              <div className="profileDetails">
+                To manage parental controls for profiles on your account, visit
+                Edit Profiles and select a Profile.
+              </div>
+              <div className="profileDetails p-[0px] text-center text-red-500 rounded-b-xl hover:bg-red-700 hover:text-white duration-300 ease-in-out pointer">
+                <UserDelete deleteUser={deleteUser} name="Delete Account" />
+              </div>
+            </div>
           </div>
         </div>
-        <div className="bg-gray-500 w-[300px] md:w-[400px] lg:w-[500px]  font-semibold border-[1px] border-gray-300 rounded-xl">
-          <p className="py-[5px] px-[8px]">Subscription</p>
-          <div className="profileDetails rounded-b-xl">Premium (Annual)</div>
-        </div>
-        <div className="bg-gray-500 w-[300px] md:w-[400px] lg:w-[500px]  font-semibold border-[1px] border-gray-300 rounded-xl">
-          <p className="py-[5px] px-[8px]">SETTINGS</p>
-          <div className="profileDetails">
-            To manage parental controls for profiles on your account, visit Edit
-            Profiles and select a Profile.
-          </div>
-          <div className="profileDetails p-[0px] text-center text-red-500 rounded-b-xl hover:bg-red-700 hover:text-white duration-300 ease-in-out pointer">
-            <UserDelete deleteUser={deleteUser} name="Delete Account" />
-          </div>
-        </div>
-      </div>
+      )}
     </div>
   );
 }
