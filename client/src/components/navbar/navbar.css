@@ -7,7 +7,7 @@
   justify-content: space-between;
   align-items: center;
   padding: 15px;
-  background: linear-gradient(91deg, #002865 0.25%, #004ec3 100%);
+  /* background: linear-gradient(91deg, #002865 0.25%, #004ec3 100%); */
   position: relative;
   top: 0;
   z-index: 999;
@@ -52,7 +52,9 @@
   justify-content: space-between;
   align-items: center;
 }
-.navbar button {
+.login,
+.signup,
+.logout {
   padding: 10px 30px;
   color: #0b113a;
   font-size: 22px;
@@ -65,4 +67,3 @@
   cursor: pointer;
   background: #fff;
 }
-
