@@ -11,29 +11,36 @@ import {
   getAuth,
   deleteUser as deleteFirebaseUser,
   onAuthStateChanged,
-  GoogleAuthProvider,
-  signInWithPopup,
+  EmailAuthProvider,
+  reauthenticateWithCredential,
 } from "firebase/auth";
 import UserDelete from "../../components/model/UserDelete";
 import EditUserDetails from "../../components/model/editUserDetails";
 
+import { ref, remove } from "firebase/database";
+import { database, storage } from "../../firebase";
+import LoadingState from "../../components/loadingState/LoadingState";
+
 function userProfile() {
   const currentUser = useSelector((state) => state.user.currentUser);
-  const name = currentUser.user.name;
-  const profile = currentUser.user.profilePicture;
-  const email = currentUser.user.email;
-  const password = currentUser.user.password;
+  const name = currentUser?.user?.name;
+  const profile = currentUser?.user?.profilePicture;
+  const email = currentUser?.user?.email;
+  const password = currentUser?.user?.password;
+  const userID = currentUser?.user?._id;
 
   const [nameEditMode, setNameEditMode] = useState(false);
   const [passEditMode, setPassEditMode] = useState(false)
   const [edittedName, setEdittedName] = useState(name);
   const [edittedPassword, setEdittedPassword] = useState(password);
+  const [loadingState, setLoadingState] = useState(false);
 
   const { enqueueSnackbar } = useSnackbar();
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const location = useLocation();
 
+  // logout
   const navigateToLogout = async () => {
     try {
       await fetch("http://localhost:3000/api/auth/signout");
@@ -44,7 +51,7 @@ function userProfile() {
     }
   };
 
-  console.log(currentUser.user._id);
+  console.log(email);
 
   useEffect(() => {
     const auth = getAuth();
@@ -52,28 +59,36 @@ function userProfile() {
       if (!user) { }
     });
 
-    return () => unsubscribe();
+    return () => unsubscribe(); // to prevent memory leaks
   }, []);
 
   const deleteUser = async () => {
     try {
+      // const reauthPassword = prompt("Re enter your password");
+      setLoadingState(true);
+
+      // removing the plans first
+      const floorPlansRef = ref(database, `users/${userID}/floorPlans`);
+      await remove(floorPlansRef);
+
       const auth = getAuth();
-      const firebaseUser = auth.currentUser;
-      if (!firebaseUser) {
-        throw new Error("User not authenticated");
-      }
+      const firebaseUser = auth?.currentUser;
 
-      // Delete user from Firebase Authentication
-      await deleteFirebaseUser(firebaseUser);
+      // Reauthenticate the user
+      // const credentials = EmailAuthProvider.credential(email, reauthPassword);
+      // await reauthenticateWithCredential(firebaseUser, credentials);
 
-      // Delete user from MongoDB
+      // deleting user from firebase
+      if (firebaseUser) await deleteFirebaseUser(firebaseUser);
+
+      // finally deleting user from MongoDB
       const res = await fetch("http://localhost:3000/api/auth/delete", {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          _id: currentUser.user._id,
+          _id: userID,
         }),
       });
 
@@ -89,10 +104,17 @@ function userProfile() {
       enqueueSnackbar("Error in deleting account. Please try again.", {
         variant: "error",
       });
+    } finally {
+      setLoadingState(false);
     }
   };
 
+
+  // updatig details
   const updateUserName= async () => {
+
+
+
     try {
       const res = await fetch("http://localhost:3000/api/auth/update", {
         method: "PUT",
@@ -120,6 +142,7 @@ function userProfile() {
       console.log("Error in updating details: ", error);
     }
   };
+
 
   
   const updateUserPassword= async () => {
@@ -311,9 +334,12 @@ function userProfile() {
               : "bg-white profileDetails p-[0px] text-center text-red-500 rounded-b-xl hover:bg-red-700 hover:text-white duration-300 ease-in-out pointer"
           }>
             <UserDelete deleteUser={deleteUser} name="Delete Account" />
+=======
+
+
           </div>
         </div>
-      </div>
+      )}
     </div>
   );
 }

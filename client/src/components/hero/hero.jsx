@@ -1,29 +1,24 @@
 import React from "react";
-import "./hero.css";
-function Hero() {
+import glow from "../../assets/glow-mark.png";
+import hero_bg from "../../assets/hero_bg.png";
+
+function hero() {
   return (
-    <div className="hero-section">
-      <div className="box">
-        <div className="hero-content">
-          <p className="build-a-space-that">
-            BUILD A SPACE THAT REFLECTS YOUR UNIQUE STYLE AND NEEDS,
-            EFFORTLESSLY WITH A DESCRIPTION USING ELITEBLUPRINT
-          </p>
-          <div className="overlap-group">
-            <div className="text-wrapper">Unleash Your Inner Architect</div>
-            <img
-              className="glow-mark"
-              alt="Glow mark"
-              src="images/glow-mark.svg"
-            />
-          </div>
+    <div className="h-[90.5vh] bg-gradient-to-r from-[#002865] to-[#004ec3] text-white relative">
+      <img src={hero_bg} className="absolute bottom-0 w-full" />
+      <div className="text-center w-[75vw] mx-auto space-y-5">
+        <div className="relative pt-36">
+          <img src={glow} className="absolute -left-8 top-28" />
+          <h1 className="text-5xl">Unleash Your Inner Architect</h1>
         </div>
-      </div>
-      <div className="image">
-        <img className="hero-svg" alt="Hero svg" src="images/img_herosvg.png" />
+
+        <p className="font-thin uppercase leading-8 text-lg">
+          Build a space that reflects your unique style and needs, effortlessly
+          with a description using elitebluprint
+        </p>
       </div>
     </div>
   );
 }
 
-export default Hero;
+export default hero;

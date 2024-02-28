@@ -12,7 +12,6 @@ import Navbar from "./components/navbar/navbar";
 import UserProfile from "./Pages/UserProfile/userProfile";
 import Panel from "./Pages/dashboard/Panel";
 
-
 function App() {
   return (
     <div className="bg-[#5E5ABA] min-h-screen">
@@ -57,7 +56,7 @@ function App() {
             element={
               <div>
                 <Navbar />
-                <Workspace />
+                <Workspaces />
               </div>
             }
           />
@@ -70,15 +69,7 @@ function App() {
               </div>
             }
           />*/}
-          <Route
-            path="/workspaces"
-            element={
-              <div className="bg-[#090E34] h-screen">
-                <Navbar />
-                <Workspaces />
-              </div>
-            }
-          />
+
           <Route
             path="/userprofile"
             element={
@@ -119,7 +110,8 @@ function App() {
             element={
               <div className="bg-[#5E5ABA] h-screen">
                 <Panel />
-              </div>}
+              </div>
+            }
           />
           <Route
             path="/"
