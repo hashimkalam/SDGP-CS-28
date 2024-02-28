@@ -143,12 +143,12 @@ function Register() {
       );
 
       const data = await res.json();
-      console.log("data",data)
+      console.log("data", data);
 
       if (res.ok === false) {
         dispatch(signInFailure(data.message));
         setErrorWithTimeout(data.message);
-      
+
         return;
       }
       dispatch(signInSuccess(data));
