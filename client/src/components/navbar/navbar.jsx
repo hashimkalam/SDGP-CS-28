@@ -1,9 +1,9 @@
-import React from "react";
+import React, { useState } from "react"
 import "./navbar.css";
-import { Logo } from "../Logo/logo";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { signOut } from "../../redux/user/userSlice";
+import Logo from "../../assets/Logo.png";
 
 const Navbar = () => {
   const { currentUser } = useSelector((state) => state.user);
@@ -25,6 +25,9 @@ const Navbar = () => {
     navigate("/signup");
   };
 
+  const handleLogoClick = () => {
+    navigate("/")};
+
   const navigateToLogout = async () => {
     try {
       await fetch("http://localhost:3000/api/auth/signout");
@@ -34,56 +37,61 @@ const Navbar = () => {
     }
   };
 
+  let [open,setOpen]=useState(false);
+
   return (
-    <header
-      className={`navbar flex items-center justify-between p-5 ${
-        location.pathname === "/"
-          ? "bg-gradient-to-r from-[#002865] to-[#004ec3] relative"
-          : location.pathname === "/userprofile" || "/download"
+
+    <div className={`navbar flex shadow-md items-center justify-between py-4 md:px-4 px-4 ${
+      location.pathname === "/"
+          ? "bg-white relative"
+          : location.pathname === "/userprofile" || location.pathname === "/download"
           ? "bg-[#090E34]"
           : "bg-white"
       }`}
     >
-      <div>
-        <Logo />
+
+      <a className='cursor-pointer' onClick={handleLogoClick} href=''><img src={Logo}  alt="Logo"/></a>
+
+      <div onClick={()=>setOpen(!open)} className='text-3xl absolute right-8 top-8 cursor-pointer md:hidden'>
+        <ion-icon name={open ? 'close':'menu'}></ion-icon>
       </div>
 
       {location.pathname == "/" && (
-        <ul className="nav-links text-white text-lg lg:text-xl flex items-center justify-evenly w-[100%] font-semibold">
-          <li>
-            <a className="cursor-pointer">
-              <span>Home</span>
+        <ul className={`md:flex  justify-evenly md:items-center font-semibold md:pb-0 pb-3 absolute md:static left-0 w-full md:w-[50%] md:pl-0 pl-0 transition-all duration-500 ease-in ${open ? 'top-20 ':'top-[-490px]'}`}>
+          <li className="">
+            <a className="transition-all duration-500 cursor-pointer text-[#1d2144] md:text-xl font-Inter-Regular text-lg hover:text-[#004EC3]">
+              <span>HOME</span>
             </a>
           </li>
-          <li>
-            <a href="#how_it_works">
-              <span>How it works</span>
+          <li className="">
+            <a href="#how_it_works" className="transition-all duration-500 text-[#1d2144] md:text-xl font-Inter-Regular text-lg hover:text-[#004EC3]">
+              <span>HOW IT WOKRS</span>
             </a>
           </li>
-          <li>
-            <a href="#pricing">
-              <span>Pricing</span>
+          <li className="">
+            <a href="#pricing" className="transition-all duration-500 text-[#1d2144] md:text-xl font-Inter-Regular text-lg hover:text-[#004EC3]">
+              <span>PRICING</span>
             </a>
           </li>
         </ul>
       )}
 
       {currentUser ? (
-        <div className="flex items-center space-x-4">
+        <div className="flex items-center">
           {location.pathname == "/" && (
             <button
-              className="text-[#0b113a] bg-white font-semibold text-xl rounded-xl px-6 py-2"
+              className="bg-[#002865] text-white md:text-xl text-lg font-Inter-Regular font-semibold py-2 px-6 rounded-full md:ml-8 md:mr-4 mr-2 w-[140px] hover:bg-[#004EC3] duration-500"
               onClick={navigateToLogout}
             >
-              Logout
+              LOGOUT
             </button>
           )}
           {location.pathname == "/workspace" && (
             <div className="space-x-4 mr-8">
-              <button className="bg-[#0065FF]/85 hover:bg-[#0065FF] duration-150 ease-out text-white p-3 rounded-lg">
+              <button className="bg-[#0065FF]/85 font-Inter-Regular hover:bg-[#0065FF] duration-150 ease-out text-white p-3 rounded-lg">
                 Explore Achitect Consultatiom
               </button>
-              <button className="bg-[#0065FF]/85 hover:bg-[#0065FF] duration-150 ease-out text-white p-3 rounded-lg">
+              <button className="bg-[#0065FF]/85 font-Inter-Regular hover:bg-[#0065FF] duration-150 ease-out text-white p-3 rounded-lg">
                 Download
               </button>
             </div>
@@ -91,31 +99,35 @@ const Navbar = () => {
           <img
             src={currentUser?.user?.profilePicture}
             alt="profilePicture"
-            className="h-9 w-9 rounded-full object-cover cursor-pointer"
+            className="h-9 w-9 md:mr-2 rounded-full object-cover cursor-pointer"
             onClick={navigateToProfileOrDashboard}
           />
         </div>
       ) : (
-        <div className="flex items-center">
+        <div className="flex md:flex-row flex-col md:my-0 my-7">
           {location.pathname == "/" && (
             <div className="flex items-center space-x-4">
-              <button
-                className="text-[#0b113a] bg-white font-semibold text-xl rounded-xl px-6 py-2"
-                onClick={navigateToLogin}
-              >
-                Login
+
+              <button className='bg-[#002865] text-white md:text-xl text-lg font-Inter-Regular font-semibold py-2 px-6 rounded-full md:mr-1 mr-2 w-[140px] hover:bg-[#004EC3] duration-500'
+                onClick={navigateToLogin}>
+                LOGIN
               </button>
+              
               <button
-                className="text-[#0b113a] bg-white font-semibold text-xl rounded-xl px-6 py-2"
+                className="bg-[#002865] text-white md:text-xl text-lg font-Inter-Regular font-semibold py-2 px-6 rounded-full w-[140px] hover:bg-[#004EC3] duration-500"
                 onClick={navigateToSignup}
               >
-                SignUp
+                SIGNUP
               </button>
+
             </div>
           )}
         </div>
       )}
-    </header>
+      
+    </div>
+
+
   );
 };
 
