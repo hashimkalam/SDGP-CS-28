@@ -38,11 +38,11 @@ const HowItWorks = () => {
 
   return (
     <div className="how-it-works-section" id="how_it_works">
-      <div className="label">
-        <p className="heading-simple-and">
-          Master the Magic: Your Guide to Generating Perfect Floor Plans
-        </p>
-      </div>
+      <div className="h-36 w-144 flex items-center justify-center mx-auto">
+    <p className="text-white font-inter font-bold text-2xl smg:text-3xl lg:text-4xl leading-relaxed text-center align-middle w-full">
+      Master the Magic: Your Guide to Generating Perfect Floor Plans
+    </p>
+  </div>
       <div className="steps-container">
         {steps.map((step, index) => (
           <Stepcard
