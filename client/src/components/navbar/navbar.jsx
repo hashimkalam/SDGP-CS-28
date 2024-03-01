@@ -41,7 +41,7 @@ const Navbar = () => {
 
   return (
 
-    <div className={`navbar flex shadow-md items-center justify-between py-4 md:px-4 px-4 ${
+    <div className={`navbar flex shadow-md items-center justify-between py-4 md:px-4 px-4 overflow-hidden ${
       location.pathname === "/"
           ? "bg-white relative"
           : location.pathname === "/userprofile" || location.pathname === "/download"
@@ -57,7 +57,7 @@ const Navbar = () => {
       </div>
 
       {location.pathname == "/" && (
-        <ul className={`md:flex justify-evenly md:items-center bg-white font-semibold md:pb-0 pb-10 absolute md:static md:z-auto z-[-1] left-0 md:w-[60%] w-[100%] 
+        <ul className={`md:flex justify-evenly md:items-center bg-white font-semibold md:pb-0 pb-10 absolute md:static md:z-auto z-[-1] left-0 md:w-[60%] w-full 
         md:pl-0 pl-7 md:pr-0 pr-9 transition-all duration-500 ease-in  ${open ? 'top-20':'top-[-490px]'}`}>
 
           <li className="md:my-0 my-5">
