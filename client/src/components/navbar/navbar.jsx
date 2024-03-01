@@ -57,22 +57,42 @@ const Navbar = () => {
       </div>
 
       {location.pathname == "/" && (
-        <ul className={`md:flex  justify-evenly md:items-center font-semibold md:pb-0 pb-3 absolute md:static left-0 w-full md:w-[50%] md:pl-0 pl-0 transition-all duration-500 ease-in ${open ? 'top-20 ':'top-[-490px]'}`}>
-          <li className="">
+        <ul className={`md:flex justify-evenly md:items-center bg-white font-semibold md:pb-0 pb-10 absolute md:static md:z-auto z-[-1] left-0 md:w-[60%] w-[100%] 
+        md:pl-0 pl-7 md:pr-0 pr-9 transition-all duration-500 ease-in  ${open ? 'top-20':'top-[-490px]'}`}>
+
+          <li className="md:my-0 my-5">
             <a className="transition-all duration-500 cursor-pointer text-[#1d2144] md:text-xl font-Inter-Regular text-lg hover:text-[#004EC3]">
               <span>HOME</span>
             </a>
           </li>
-          <li className="">
+          <li className="md:my-0 my-5">
             <a href="#how_it_works" className="transition-all duration-500 text-[#1d2144] md:text-xl font-Inter-Regular text-lg hover:text-[#004EC3]">
               <span>HOW IT WOKRS</span>
             </a>
           </li>
-          <li className="">
+          <li className="md:my-0 my-5">
             <a href="#pricing" className="transition-all duration-500 text-[#1d2144] md:text-xl font-Inter-Regular text-lg hover:text-[#004EC3]">
               <span>PRICING</span>
             </a>
           </li>
+
+          {/* Buttons for small devices */}
+
+          <div className="md:hidden flex-col mt-6 space-y-5">
+            <button
+              className="bg-[#002865] text-white md:text-xl text-lg font-Inter-Regular font-semibold py-2 px-6 rounded-full w-full hover:bg-[#004EC3] duration-500"
+              onClick={navigateToLogin}
+            >
+              LOGIN
+            </button>
+            <button
+              className="bg-[#002865] text-white md:text-xl text-lg font-Inter-Regular font-semibold py-2 px-6 rounded-full w-full hover:bg-[#004EC3] duration-500"
+              onClick={navigateToSignup}
+            >
+              SIGNUP
+            </button>
+          </div>
+
         </ul>
       )}
 
@@ -104,25 +124,28 @@ const Navbar = () => {
           />
         </div>
       ) : (
-        <div className="flex md:flex-row flex-col md:my-0 my-7">
-          {location.pathname == "/" && (
-            <div className="flex items-center space-x-4">
 
-              <button className='bg-[#002865] text-white md:text-xl text-lg font-Inter-Regular font-semibold py-2 px-6 rounded-full md:mr-1 mr-2 w-[140px] hover:bg-[#004EC3] duration-500'
-                onClick={navigateToLogin}>
+        <div className="md:flex md:flex-row flex-col md:my-0 my-7 items-center">
+          {location.pathname === "/" && (
+            <div className="md:flex items-center space-x-4 hidden">
+              <button
+                className="bg-[#002865] text-white md:text-xl text-lg font-Inter-Regular font-semibold py-2 px-6 rounded-full md:mr-1 mr-2 w-[140px] hover:bg-[#004EC3] duration-500"
+                onClick={navigateToLogin}
+              >
                 LOGIN
               </button>
-              
               <button
-                className="bg-[#002865] text-white md:text-xl text-lg font-Inter-Regular font-semibold py-2 px-6 rounded-full w-[140px] hover:bg-[#004EC3] duration-500"
+                className="bg-[#002865] text-white md:text-xl text-lg font-Inter-Regular font-semibold py-2 px-6 rounded-full md:mr-1 mr-2 w-[140px] hover:bg-[#004EC3] duration-500"
                 onClick={navigateToSignup}
               >
                 SIGNUP
               </button>
-
             </div>
           )}
         </div>
+
+
+        
       )}
       
     </div>
