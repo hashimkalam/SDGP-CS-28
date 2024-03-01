@@ -11,8 +11,11 @@ import Navbar from "./components/navbar/navbar";
 
 import UserProfile from "./Pages/UserProfile/userProfile";
 import Panel from "./Pages/dashboard/Panel";
+import { useSelector } from "react-redux";
+import PageNotFound from "./components/PageNotFound/PageNotFound";
 
 function App() {
+  const currentUser = useSelector((state) => state.user.currentUser);
   return (
     <div className="bg-[#5E5ABA] min-h-screen">
       <Router>
@@ -55,8 +58,14 @@ function App() {
             path="/workspace"
             element={
               <div>
-                <Navbar />
-                <Workspaces />
+                {currentUser ? (
+                  <>
+                    <Navbar />
+                    <Workspaces />
+                  </>
+                ) : (
+                  <PageNotFound />
+                )}
               </div>
             }
           />
@@ -74,8 +83,14 @@ function App() {
             path="/userprofile"
             element={
               <div className="bg-[#090E34]">
-                <Navbar />
-                <UserProfile />
+                {currentUser ? (
+                  <>
+                    <Navbar />
+                    <UserProfile />
+                  </>
+                ) : (
+                  <PageNotFound />
+                )}
               </div>
             }
           />
