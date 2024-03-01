@@ -12,7 +12,7 @@ const steps = [
       "Ditch the blueprints, grab your keyboard. EliteBluPrint turns your natural language vision into detailed floor plans. No jargon, no fuss, just pure imagination",
   },
   {
-    title: "Generate floor plan",
+    title: "Generate plan",
     steps: "2",
     description:
       "From Wishful Thinking to Stunning Renderings: Watch your dream unfold as EliteBluPrint weaves your words into a visual masterpiece.",
@@ -38,8 +38,8 @@ const HowItWorks = () => {
 
   return (
     <div className="how-it-works-section" id="how_it_works">
-      <div className="h-36 w-144 flex items-center justify-center mx-auto">
-    <p className="text-white font-inter font-bold text-2xl smg:text-3xl lg:text-4xl leading-relaxed text-center align-middle w-full">
+      <div className="m-4 w-144 flex items-center justify-center mx-auto">
+    <p className="text-white font-inter font-bold text-2xl  lg:text-3xl leading-relaxed text-center align-middle w-full">
       Master the Magic: Your Guide to Generating Perfect Floor Plans
     </p>
   </div>

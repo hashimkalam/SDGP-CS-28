@@ -41,7 +41,7 @@ const Navbar = () => {
 
   return (
 
-    <div className={`navbar flex shadow-md items-center justify-between py-4 md:px-4 px-4 overflow-hidden ${
+    <div className={`navbar flex shadow-md items-center justify-between py-4 md:px-4 px-4 ${
       location.pathname === "/"
           ? "bg-white relative"
           : location.pathname === "/userprofile" || location.pathname === "/download"
