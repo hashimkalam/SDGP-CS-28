@@ -24,10 +24,8 @@ function Hero() {
         {/* style={{left: '50%', transform: 'translateX(-50%)' }} */}
         <img className="h-full w-full object-fit" alt="Hero svg" src="images/img_herosvg.png"/>
       </div>
-
     </div>
-
   );
 }
-
 export default Hero;
+

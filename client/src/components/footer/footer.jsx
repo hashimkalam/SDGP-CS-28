@@ -3,8 +3,8 @@ import "./footer.css";
 import { Logo } from "../Logo/logo";
 export const Footer = () => {
   return (
-    <div className="bg-custom-blue text-white px-8 py-12 md:flex md:justify-between md:items-center">
-      <div>
+    <div className="bg-custom-blue text-white text-center md:text-left p-12 pt-16 md:flex md:justify-between md:items-center">
+      <div className="flex flex-col items-center md:items-start">
         <Logo />
         <p className="caption">
           Analyze the available space and develop efficient
@@ -23,10 +23,10 @@ export const Footer = () => {
 
       <div className="mt-6 md:mt-0 space-y-2 mr-4 pr-4">
         <h1 className="text-lg font-semibold">FOLLOW US</h1>
-        <p className="text-sm">Behance</p>
-        <p className="text-sm">Facebook</p>
-        <p className="text-sm">Twitter</p>
-        <p className="text-sm">LinkedIn</p>
+        <p className="text-sm cursor-pointer hover:underline">Behance</p>
+        <p className="text-sm cursor-pointer hover:underline">Facebook</p>
+        <p className="text-sm cursor-pointer hover:underline">Twitter</p>
+        <p className="text-sm cursor-pointer hover:underline">LinkedIn</p>
       </div>
     </div>
   );

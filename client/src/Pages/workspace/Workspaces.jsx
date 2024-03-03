@@ -30,7 +30,6 @@ const Workspaces = () => {
         floorPlansRef,
         async (snapshot) => {
           const floorPlansData = snapshot.val();
-          console.log("Fetched floor plans:", floorPlansData);
           const floorPlansList = [];
 
           for (const floorPlanId in floorPlansData) {
@@ -40,18 +39,18 @@ const Workspaces = () => {
               const downloadURLPng = await getDownloadURL(
                 storageRef(storage, floorPlan.floorPlanPathPng)
               );
-              console.log("Download URL:", floorPlan.formData, downloadURLPng);
+              console.log("Download URL:", downloadURLPng);
               const downloadURLDxf = await getDownloadURL(
                 storageRef(storage, floorPlan.floorPlanPathDxf)
               );
-              console.log("Download URL:", floorPlan.formData, floorPlan.floorPlanPathDxf);
+              console.log("Download URL:", downloadURLDxf);
               floorPlansList.push({
                 id: floorPlanId,
                 floorPlanPathPng: downloadURLPng,
                 floorPlanPathDxf: downloadURLDxf,
                 formData: floorPlan.formData,
               });
-              console.log(floorPlansList)
+              console.log(floorPlansList);
             } catch (error) {
               console.error("Error fetching download URL:", error);
             }
@@ -70,7 +69,6 @@ const Workspaces = () => {
   };
 
   const [floorPlansData, setFloorPlansData] = useState(null);
-  console.log("Floor plans dat:", floorPlansData);
 
   const handleOnClick = (id) => {
     console.log("id:", id);
@@ -117,7 +115,6 @@ const Workspaces = () => {
               click={() => handleOnClick(floorPlan.id)}
             />
           </div>
-
         ))}
 
         <div
@@ -136,18 +133,16 @@ const Workspaces = () => {
           </button>
 
         <div className="flex flex-row mx-[10%]">
-          {floorPlansData ?
-           (
+          {floorPlansData ? (
             <RightChat
               key={`right-${floorPlansData.id}`}
-              floorPlanPath={floorPlansData.floorPlanPathPng}
+              floorPlanPathPng={floorPlansData.floorPlanPathPng}
             />
           ) : (
-              <div className="input-field flex flex-row mx-[10%]">
-                <Form />
-              </div>
-          )
-        }
+            <div className="input-field flex flex-row mx-[10%]">
+              <Form />
+            </div>
+          )}
         </div>
       </div>
     </div>

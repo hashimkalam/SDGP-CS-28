@@ -143,10 +143,12 @@ function Register() {
       );
 
       const data = await res.json();
+      console.log("data", data);
 
       if (res.ok === false) {
         dispatch(signInFailure(data.message));
         setErrorWithTimeout(data.message);
+
         return;
       }
       dispatch(signInSuccess(data));
@@ -229,6 +231,7 @@ function Register() {
                 // redirect to signup page
                 setTimeout(() => {
                   setLoginPage(false);
+                  navigate("/signup");
                 }, 1000);
               }
             } else {

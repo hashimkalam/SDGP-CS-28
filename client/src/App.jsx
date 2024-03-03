@@ -11,8 +11,12 @@ import Workspaces from "./Pages/workspace/Workspaces";
 import Navbar from "./components/navbar/navbar";
 
 import UserProfile from "./Pages/UserProfile/userProfile";
+import Panel from "./Pages/dashboard/Panel";
+import { useSelector } from "react-redux";
+import PageNotFound from "./components/PageNotFound/PageNotFound";
 
 function App() {
+  const currentUser = useSelector((state) => state.user.currentUser);
   return (
     <div className="bg-[#5E5ABA] min-h-screen">
       <Router>
@@ -55,8 +59,14 @@ function App() {
             path="/workspace"
             element={
               <div>
-                <Navbar />
-                <Workspace />
+                {currentUser ? (
+                  <>
+                    <Navbar />
+                    <Workspaces />
+                  </>
+                ) : (
+                  <PageNotFound />
+                )}
               </div>
             }
           />
@@ -69,21 +79,19 @@ function App() {
               </div>
             }
           />*/}
-          <Route
-            path="/workspaces"
-            element={
-              <div className="bg-[#090E34] h-screen">
-                <Navbar />
-                <Workspaces />
-              </div>
-            }
-          />
+
           <Route
             path="/userprofile"
             element={
               <div className="bg-[#090E34]">
-                <Navbar />
-                <UserProfile />
+                {currentUser ? (
+                  <>
+                    <Navbar />
+                    <UserProfile />
+                  </>
+                ) : (
+                  <PageNotFound />
+                )}
               </div>
             }
           />
@@ -106,6 +114,22 @@ function App() {
             }
           />
           <Route
+            path="/userprofile"
+            element={
+              <div className="bg-[#090E34] h-screen">
+                <UserProfile />
+              </div>
+            }
+          />
+          <Route
+            path="/dashboard"
+            element={
+              <div className="bg-[#5E5ABA] h-screen">
+                <Panel />
+              </div>
+            }
+          />
+          <Route
             path="/"
             element={
               <div className="bg-[#5E5ABA] h-screen">
@@ -122,6 +146,7 @@ function App() {
               </div>
             }
           />
+          <Route path="*" element={<PageNotFound />} />
         </Routes>
       </Router>
     </div>

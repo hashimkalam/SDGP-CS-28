@@ -1,5 +1,4 @@
 .PriceBox {
-  width: 360px;
   height: 447px;
   flex-shrink: 0;
   border-radius: 16px;
@@ -11,24 +10,22 @@
   margin: 30px;
 }
 
-h1{
-    margin-top: 30px;
-    font-size:30px;
-    font-weight: 700;
+h1 {
+  margin-top: 30px;
+  font-size: 30px;
+  font-weight: 700;
 }
 
-.feature{
-    display: flex;
-    flex-direction: column;
-    height: 220px;
-    margin: 35px 0px;
-    font-weight: 400;
-    gap:30px;
-
-    
+.feature {
+  display: flex;
+  flex-direction: column;
+  height: 220px;
+  margin: 35px 0px;
+  font-weight: 400;
+  gap: 30px;
 }
 
-.buy_button button{
+.buy_button button {
   background: rgb(11, 43, 150);
   padding: 7px 15px;
   border-radius: 6px;
