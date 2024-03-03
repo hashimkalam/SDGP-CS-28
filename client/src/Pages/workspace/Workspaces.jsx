@@ -85,6 +85,25 @@ const Workspaces = () => {
 
   console.log("floorPlansData:", floorPlans);
 
+  const handleDownload = () => {
+    if (floorPlansData) {
+      const { floorPlanPathDxf } = floorPlansData;
+
+      const downloadLink = document.createElement("a");
+      // Store the download URL of the DXF file
+      downloadLink.href = floorPlanPathDxf;
+
+      // Specify the download attribute and file name
+      downloadLink.download = `floor_plan_${floorPlansData.id}.dxf`;
+
+      // temporarily hold download link
+      document.body.appendChild(downloadLink);
+      
+      downloadLink.click();
+      document.body.removeChild(downloadLink);
+    }
+  };
+
   return (
     <div className="h-[vh] m-10 gap-10 flex">
       <div className="bg-[#005BE2] w-[25%] h-[32.5rem] rounded-3xl overflow-y-scroll overflow-x-hidden">
@@ -108,6 +127,11 @@ const Workspaces = () => {
         </div>
       </div>
       <div className="bg-[#005BE2] w-[75%] h-[32.5rem] rounded-3xl overflow-y-scroll">
+          <button className="absolute right-14 mt-4 mr-3 py-3 px-4 bg-white text-[#0b113a] text-xl font-semibold rounded-full hover:bg-[#0b113a] hover:text-white duration-500 ease-in"
+          onClick={handleDownload}>
+            download
+          </button>
+
         <div className="flex flex-row mx-[10%]">
           {floorPlansData ? (
             <RightChat
