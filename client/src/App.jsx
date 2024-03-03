@@ -11,7 +11,6 @@ import Workspaces from "./Pages/workspace/Workspaces";
 import Navbar from "./components/navbar/navbar";
 
 import UserProfile from "./Pages/UserProfile/userProfile";
-import Panel from "./Pages/dashboard/Panel";
 import { useSelector } from "react-redux";
 import PageNotFound from "./components/PageNotFound/PageNotFound";
 
