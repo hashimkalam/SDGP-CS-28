@@ -62,8 +62,8 @@ const Navbar = () => {
       </div>
 
       {location.pathname == "/" && (
-        <ul className={`md:flex justify-between md:items-center bg-white font-semibold md:pb-0 pb-10 absolute md:static md:z-auto z-[-1] left-0 md:w-[38%] w-[100%] 
-        md:pl-0 pl-7 md:pr-0 pr-9 transition-all duration-500 ease-in  ${open ? 'top-20':'top-[-490px]'}`}>
+        <ul className={`md:flex justify-between md:items-center md:text-white text-[#090E34] font-semibold md:pb-0 pb-10 absolute md:static md:z-auto z-[-1] left-0 md:w-[38%] w-[100%] 
+        md:pl-0 pl-7 md:pr-0 pr-9 transition-all duration-500 ease-in  ${open ? 'top-20 bg-white':'top-[-490px]'}`}>
 
           <li className="md:my-0 my-5">
             <a className="transition-all duration-500 cursor-pointer md:text-xl font-Inter-Regular text-lg">
