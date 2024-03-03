@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import LeftChat from "../../components/workspace-panel/LeftChat.jsx";
 import RightChat from "../../components/workspace-panel/RightChat.jsx";
 import Form from "../../components/form/form.jsx";
+import SendIcon from "@mui/icons-material/Send";
 
 import { useSelector } from "react-redux";
 
@@ -13,6 +14,8 @@ import { database, storage } from "../../firebase";
 const Workspaces = () => {
   const { currentUser } = useSelector((state) => state.user);
   const [floorPlans, setFloorPlans] = useState([]);
+
+  const [inputDesc, setInputDesc] = useState("");
 
   useEffect(() => {
     if (currentUser) {
@@ -85,9 +88,15 @@ const Workspaces = () => {
 
   console.log("floorPlansData:", floorPlans);
 
+  const handleGenerate = (e) => {
+    e.preventDefault();
+
+    setInputDesc("");
+  };
+
   return (
-    <div className="h-[vh] m-10 gap-10 flex">
-      <div className="bg-[#005BE2] w-[25%] h-[32.5rem] rounded-3xl overflow-y-scroll overflow-x-hidden">
+    <div className="m-10 gap-5 flex h-[80vh]">
+      <div className="bg-[#005BE2] w-[25%] rounded-3xl overflow-y-scroll overflow-x-hidden">
         {floorPlans.map((floorPlan) => (
           <div className="flex flex-row">
             <LeftChat
@@ -99,24 +108,46 @@ const Workspaces = () => {
         ))}
 
         <div
-          className="bg-[rgb(255,255,255)] hover:bg-slate-500 delay-300  mt-5 cursor-pointer w-auto py-3 mx-5 rounded-3xl"
+          className="bg-white hover:bg-slate-200 ease-out duration-150 mt-5 cursor-pointer w-auto py-3 mx-5 rounded-3xl"
           onClick={() => handleOnClickNewChat("")}
         >
-          <h5 className="text-black text-1xl font-bold text-center items-center flex justify-center">
-            Add New Description
+          <h5 className="text-[#767171] hover:text-black ease-out duration-150 text-1xl font-semibold text-center items-center flex justify-center">
+            +Add New Description
           </h5>
         </div>
       </div>
-      <div className="bg-[#005BE2] w-[75%] h-[32.5rem] rounded-3xl overflow-y-scroll">
-        <div className="flex flex-row mx-[10%]">
+      <div className="bg-[#fff] w-[75%] rounded-3xl overflow-y-scroll">
+        <div className="flex flex-row mx-4">
           {floorPlansData ? (
             <RightChat
               key={`right-${floorPlansData.id}`}
               floorPlanPathPng={floorPlansData.floorPlanPathPng}
             />
           ) : (
-            <div className="input-field flex flex-row mx-[10%]">
-              <Form />
+            <div className="input-field flex flex-row mx-[10%] relative h-[77.75vh] ">
+              <form
+                onSubmit={handleGenerate}
+                className="absolute bottom-0 w-full flex items-center"
+              >
+                <input
+                  type="text"
+                  className="rounded-full w-full p-2 px-4 outline-none"
+                  value={inputDesc}
+                  onChange={(e) => setInputDesc(e.target.value)}
+                />
+                <div
+                  className="bg-[#0065FF] rounded-full text-sm flex items-center"
+                  onClick={handleGenerate}
+                >
+                  <button type="submit" className="hidden md:block">
+                    Generate
+                  </button>
+                  <SendIcon
+                    className="text-white md:-ml-3 md:mr-4 m-2 md:m-0"
+                    fontSize="small"
+                  />
+                </div>
+              </form>
             </div>
           )}
         </div>

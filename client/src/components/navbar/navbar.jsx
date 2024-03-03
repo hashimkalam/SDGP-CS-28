@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useState } from "react";
 import "./navbar.css";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
@@ -26,7 +26,8 @@ const Navbar = () => {
   };
 
   const handleLogoClick = () => {
-    navigate("/")};
+    navigate("/");
+  };
 
   const navigateToLogout = async () => {
     try {
@@ -37,41 +38,54 @@ const Navbar = () => {
     }
   };
 
-  let [open,setOpen]=useState(false);
+  let [open, setOpen] = useState(false);
 
   return (
-
-    <div className={`navbar flex shadow-md items-center justify-between py-4 md:px-4 px-4 ${
-      location.pathname === "/"
-          ? "bg-white relative"
-          : location.pathname === "/userprofile" || location.pathname === "/download"
-          ? "bg-[#090E34]"
-          : "bg-white"
+    <div
+      className={`navbar text-white flex items-center justify-between py-4 md:px-4 px-4 ${
+        location.pathname === "/"
+          ? "relative bg-gradient-to-r from-[#002865] to-[#004ec3]"
+          : location.pathname === "/userprofile" &&
+            location.pathname === "/download" &&
+            "bg-[#090E34]"
       }`}
     >
+      <a className="cursor-pointer " onClick={handleLogoClick} href="">
+        <img src={Logo} alt="Logo" className="invert" />
+      </a>
 
-      <a className='cursor-pointer' onClick={handleLogoClick} href=''><img src={Logo}  alt="Logo"/></a>
-
-      <div onClick={()=>setOpen(!open)} className='text-3xl absolute right-8 top-8 cursor-pointer md:hidden'>
-        <ion-icon name={open ? 'close':'menu'}></ion-icon>
+      <div
+        onClick={() => setOpen(!open)}
+        className="text-3xl absolute right-8 top-8 cursor-pointer md:hidden"
+      >
+        <ion-icon name={open ? "close" : "menu"}></ion-icon>
       </div>
 
       {location.pathname == "/" && (
-        <ul className={`md:flex justify-evenly md:items-center bg-white font-semibold md:pb-0 pb-10 absolute md:static md:z-auto z-[-1] left-0 md:w-[60%] w-full 
-        md:pl-0 pl-7 md:pr-0 pr-9 transition-all duration-500 ease-in  ${open ? 'top-20':'top-[-490px]'}`}>
-
+        <ul
+          className={`md:flex justify-evenly md:items-center font-semibold md:pb-0 pb-10 absolute md:static md:z-auto z-[-1] left-0 md:w-[60%] w-full 
+        md:pl-0 pl-7 md:pr-0 pr-9 transition-all duration-500 ease-in  ${
+          open ? "top-20" : "top-[-490px]"
+        }`}
+        >
           <li className="md:my-0 my-5">
-            <a className="transition-all duration-500 cursor-pointer text-[#1d2144] md:text-xl font-Inter-Regular text-lg hover:text-[#004EC3]">
+            <a className="transition-all duration-500 cursor-pointer md:text-xl font-Inter-Regular text-lg">
               <span>HOME</span>
             </a>
           </li>
           <li className="md:my-0 my-5">
-            <a href="#how_it_works" className="transition-all duration-500 text-[#1d2144] md:text-xl font-Inter-Regular text-lg hover:text-[#004EC3]">
+            <a
+              href="#how_it_works"
+              className="transition-all duration-500 md:text-xl font-Inter-Regular text-lg"
+            >
               <span>HOW IT WOKRS</span>
             </a>
           </li>
           <li className="md:my-0 my-5">
-            <a href="#pricing" className="transition-all duration-500 text-[#1d2144] md:text-xl font-Inter-Regular text-lg hover:text-[#004EC3]">
+            <a
+              href="#pricing"
+              className="transition-all duration-500 md:text-xl font-Inter-Regular text-lg"
+            >
               <span>PRICING</span>
             </a>
           </li>
@@ -80,19 +94,18 @@ const Navbar = () => {
 
           <div className="md:hidden flex-col mt-6 space-y-5">
             <button
-              className="bg-[#002865] text-white md:text-xl text-lg font-Inter-Regular font-semibold py-2 px-6 rounded-full w-full hover:bg-[#004EC3] duration-500"
+              className="bg-white/85 text-[#0B113A] md:text-xl text-lg font-Inter-Regular font-semibold py-2 px-6 rounded-full w-full hover:bg-[fff] duration-500"
               onClick={navigateToLogin}
             >
               LOGIN
             </button>
             <button
-              className="bg-[#002865] text-white md:text-xl text-lg font-Inter-Regular font-semibold py-2 px-6 rounded-full w-full hover:bg-[#004EC3] duration-500"
+              className="bg-white/85 text-[#0B113A] md:text-xl text-lg font-Inter-Regular font-semibold py-2 px-6 rounded-full w-full hover:bg-[fff] duration-500"
               onClick={navigateToSignup}
             >
               SIGNUP
             </button>
           </div>
-
         </ul>
       )}
 
@@ -100,7 +113,7 @@ const Navbar = () => {
         <div className="flex items-center">
           {location.pathname == "/" && (
             <button
-              className="bg-[#002865] text-white md:text-xl text-lg font-Inter-Regular font-semibold py-2 px-6 rounded-full md:ml-8 md:mr-4 mr-2 w-[140px] hover:bg-[#004EC3] duration-500"
+              className="bg-white/85 text-[#0B113A] md:text-xl text-lg font-Inter-Regular font-semibold py-2 px-6 rounded-full md:ml-8 md:mr-4 mr-2 w-[140px] hover:bg-[#fff] duration-500"
               onClick={navigateToLogout}
             >
               LOGOUT
@@ -124,7 +137,6 @@ const Navbar = () => {
           />
         </div>
       ) : (
-
         <div className="md:flex md:flex-row flex-col md:my-0 my-7 items-center">
           {location.pathname === "/" && (
             <div className="md:flex items-center space-x-4 hidden">
@@ -143,14 +155,8 @@ const Navbar = () => {
             </div>
           )}
         </div>
-
-
-        
       )}
-      
     </div>
-
-
   );
 };
 

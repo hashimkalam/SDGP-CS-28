@@ -59,10 +59,10 @@ function App() {
             element={
               <div>
                 {currentUser ? (
-                  <>
+                  <div className="bg-[#090E34] h-screen">
                     <Navbar />
                     <Workspaces />
-                  </>
+                  </div>
                 ) : (
                   <PageNotFound />
                 )}
