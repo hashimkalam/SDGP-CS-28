@@ -3,7 +3,7 @@ import "./priceBox.css";
 
 function PriceBox(prop) {
   return (
-    <div className="PriceBox w-fit p-5 px-10">
+    <div className="PriceBox w-fit p-5 px-7">
       <h1 className="price">${prop.price}</h1>
       <div className="feature">
         <p>{prop.f1}</p>

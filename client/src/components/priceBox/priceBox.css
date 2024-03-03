@@ -1,6 +1,5 @@
 .PriceBox {
   height: 447px;
-  flex-shrink: 0;
   border-radius: 16px;
   background: #090e34;
   background-image: url("../../../public/images/img_svg.png");

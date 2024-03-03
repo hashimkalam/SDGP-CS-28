@@ -10,7 +10,6 @@ import Workspaces from "./Pages/workspace/Workspaces";
 import Navbar from "./components/navbar/navbar";
 
 import UserProfile from "./Pages/UserProfile/userProfile";
-import Panel from "./Pages/dashboard/Panel";
 import { useSelector } from "react-redux";
 import PageNotFound from "./components/PageNotFound/PageNotFound";
 
@@ -59,10 +58,10 @@ function App() {
             element={
               <div>
                 {currentUser ? (
-                  <>
+                  <div className="bg-[#090E34] h-screen">
                     <Navbar />
                     <Workspaces />
-                  </>
+                  </div>
                 ) : (
                   <PageNotFound />
                 )}
