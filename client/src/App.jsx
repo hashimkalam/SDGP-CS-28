@@ -7,6 +7,7 @@ import Workspace from "./Pages/workspace/Workspace";
 import ResetPassword from "./Pages/Reset/reset";
 import ArchitectPanel from "./Pages/ArchitectPanel/ArchitectPanel";
 import Workspaces from "./Pages/workspace/Workspaces";
+import Panel from "./Pages/dashboard/Panel";
 import Navbar from "./components/navbar/navbar";
 
 import UserProfile from "./Pages/UserProfile/userProfile";
