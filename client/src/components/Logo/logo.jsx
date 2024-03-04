@@ -12,3 +12,5 @@ export const Logo = ({ logoIcon = "images/img_logoicon.svg" }) => {
     </div>
   );
 };
+
+export default Logo;
