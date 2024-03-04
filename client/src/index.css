@@ -3,7 +3,6 @@
 @tailwind base;
 @tailwind components;
 
-
 @tailwind utilities;
 
 * {
@@ -11,6 +10,7 @@
   padding: 0;
   box-sizing: border-box;
   font-family: "poppins";
+  scroll-behavior: smooth;
 }
 body {
   overflow-x: hidden; /* Prevent horizontal scroll */
@@ -19,6 +19,25 @@ body {
 
 :root {
   --bg-image: url("./assets/pattern.png");
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+  position: fixed;
+  right: 0;
+}
+
+::-webkit-scrollbar-track {
+  background-color: transparent;
+  background-color: #090e34;
+  position: relative;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #0f3dde;
+  opacity: 0.8;
+  border-radius: 2px;
+  width: 0px;
 }
 
 @layer components {
@@ -39,6 +58,9 @@ body {
   }
   .hoverEffect {
     @apply duration-150 ease-in-out cursor-pointer flex-1;
+  }
+  .profileDetails {
+    @apply bg-[#090e34] m-[1px] p-[10px] text-sm font-normal flex items-center justify-between;
   }
 }
 

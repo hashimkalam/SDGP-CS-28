@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 
 import { Button, IconButton } from "@mui/material";
@@ -16,6 +16,19 @@ import signUpPersonImage from "../../assets/signup_person.png";
 import googleLogo from "../../assets/google_logo.jpg";
 import logo from "../../assets/Logo.png";
 import Select from "react-select";
+import {
+  signInStart,
+  signInFailure,
+  signInSuccess,
+  selectSelectedOption,
+  setSelectedOption,
+} from "../../redux/user/userSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { GoogleAuthProvider, getAuth, signInWithPopup } from "firebase/auth";
+import { app } from "../../firebase";
+import SignInModel from "../../components/model/SignInModel";
+
+import { useSnackbar } from "notistack";
 
 const options = [
   { value: "individual", label: "Individual" },
@@ -39,17 +52,23 @@ const customStyles = {
 function Register() {
   const navigate = useNavigate();
   const location = useLocation();
+  const dispatch = useDispatch();
+  const { enqueueSnackbar } = useSnackbar();
 
-  const [loginPage, setLoginPage] = useState(true);
+  const [loginPage, setLoginPage] = useState(location.pathname === "/login");
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
-  const [selectOption, setSelectOption] = useState("");
   const [password, setPassword] = useState("");
   const [passPlaceholder, setPassPlaceholder] = useState(true);
   const [visibility, setVisibility] = useState(false);
   const [errorMsg, setErrorMessage] = useState(false);
   const [formData, setFormData] = useState({});
   const [message, setMessage] = useState("");
+
+  const { error, loading } = useSelector((state) => state.user);
+
+  const [showRoleSelectionModal, setShowRoleSelectionModal] = useState(false);
+  const selectedOption = useSelector(selectSelectedOption);
 
   const styles = {
     border: "1px solid #d9d9d9",
@@ -73,22 +92,47 @@ function Register() {
     boxShadow: "0px 8px 21px 0px rgba(0, 0, 0, .16)",
   };
 
+  const setErrorWithTimeout = (e_message) => {
+    setErrorMessage(e_message);
+    setTimeout(() => {
+      setErrorMessage(false);
+    }, 3000);
+  };
+
   const submitHandler = async (e) => {
     e.preventDefault();
 
-    if (email === "" || password === "") {
-      setErrorMessage(true);
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const passwordPattern = /^(?=.*\d)/;
 
-      setTimeout(() => {
-        setErrorMessage(false);
-      }, 3500);
-    } else {
-      setErrorMessage(false);
+    if (email === "" || password === "") {
+      setErrorWithTimeout("Fill in the containers!");
+      return;
+    }
+
+    if (!emailPattern.test(email)) {
+      setErrorWithTimeout("Please enter a valid email address.");
+      return;
+    }
+
+    if (password === "") {
+      setErrorWithTimeout("Password is required.");
+      return;
+    } else if (password.length < 8) {
+      setErrorWithTimeout("Password must be at least 8 characters long.");
+      return;
+    } else if (!passwordPattern.test(password)) {
+      setErrorWithTimeout("Password must contain at least one digit.");
+      return;
+    }
+
+    try {
+      dispatch(signInStart());
 
       const res = await fetch(
-        !loginPage
-          ? "http://localhost:3000/api/auth/signup"
-          : "http://localhost:3000/api/auth/signin",
+        loginPage
+          ? "http://localhost:3000/api/auth/signin"
+          : "http://localhost:3000/api/auth/signup",
         {
           method: "POST",
           headers: {
@@ -97,23 +141,130 @@ function Register() {
           body: JSON.stringify(formData),
         }
       );
-      var data = await res.json();
+
+      const data = await res.json();
+      console.log("data", data);
+
+      if (res.ok === false) {
+        dispatch(signInFailure(data.message));
+        setErrorWithTimeout(data.message);
+
+        return;
+      }
+      dispatch(signInSuccess(data));
+
       setMessage(data.message);
-      console.log(data);
+
+      if (res.ok) {
+        // success message
+        {
+          location.pathname === "/login"
+            ? enqueueSnackbar("Logged In Successfully", {
+                variant: "success",
+              })
+            : enqueueSnackbar("Signed In Successfully", {
+                variant: "success",
+              });
+        }
+        navigate("/workspace");
+      }
+    } catch (error) {
+      dispatch(signInFailure(error));
+      setErrorWithTimeout(error);
     }
+  };
+
+  const handleGoogleButton = async () => {
+    setShowRoleSelectionModal(true);
+  };
+
+  useEffect(() => {
+    const fetchData = async () => {
+      if (showRoleSelectionModal) {
+        const option = await selectedOption;
+        if (option || location.pathname === "/login") {
+          setShowRoleSelectionModal(false);
+
+          try {
+            const provider = new GoogleAuthProvider();
+            const auth = getAuth(app);
+
+            const result = await signInWithPopup(auth, provider);
+
+            if (result && result.user) {
+              // User exists, proceed with login
+              const res = await fetch("http://localhost:3000/api/auth/google", {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                  name: result.user.displayName,
+                  email: result.user.email,
+                  photo: result?.user?.photoURL,
+                  role: option,
+                }),
+              });
+
+              if (res.ok) {
+                const data = await res.json();
+                dispatch(signInSuccess(data));
+                console.log(data);
+
+                // success message
+                {
+                  location.pathname === "/login"
+                    ? enqueueSnackbar("Logged In Successfully", {
+                        variant: "success",
+                      })
+                    : enqueueSnackbar("Signed In Successfully", {
+                        variant: "success",
+                      });
+                }
+                navigate("/workspace");
+              } else {
+                enqueueSnackbar("Error. Create an Account First!", {
+                  variant: "error",
+                });
+                dispatch(setSelectedOption(""));
+
+                // redirect to signup page
+                setTimeout(() => {
+                  setLoginPage(false);
+                  navigate("/signup");
+                }, 1000);
+              }
+            } else {
+              // User does not exist, handle this scenario
+              console.log("User does not have an account or sign-in failed");
+            }
+          } catch (error) {
+            console.log("Could not login with google: " + error);
+          }
+        }
+        dispatch(setSelectedOption("")); // empty it
+      }
+    };
+
+    fetchData();
+  }, [showRoleSelectionModal, selectedOption]);
+
+  const handleRoleSelection = (option) => {
+    dispatch(setSelectedOption(option));
+    setShowRoleSelectionModal(false);
   };
 
   const switchScreen = (e) => {
     setUsername("");
     setEmail("");
-    setSelectOption("");
+    dispatch(setSelectedOption(""));
     setPassword("");
+    setErrorMessage("");
 
     setLoginPage(!loginPage);
-    {
-      loginPage ? navigate("/login") : navigate("/signup");
-    }
   };
+
+  console.log(selectedOption);
 
   return (
     <div className="md:flex">
@@ -129,19 +280,19 @@ function Register() {
         <div className="grid place-items-center h-[85vh] lg:h-[83vh]">
           <div className="displayFlex flex-col w-full -mt-[4vh]">
             <h2 className="uppercase font-bold text-2xl text-center pt-5 pb-10">
-              {!isSignup ? "login" : "get started now"}
+              {loginPage ? "login" : "get started now"}
             </h2>
             <form
               className="w-3/4 sm:w-2/4 md:w-3/4 displayFlex flex-col "
               onSubmit={submitHandler}
             >
-              {!isSignup && (
+              {!loginPage && (
                 <div className="link ">
                   <PersonOutlineIcon />
                   <input
                     type="text"
                     placeholder="Username"
-                    className="innerLink "
+                    className="innerLink"
                     value={username}
                     onChange={(e) => {
                       setUsername(e.target.value);
@@ -168,16 +319,17 @@ function Register() {
                   }}
                 />
               </div>
-              {!isSignup && (
+
+              {!loginPage && (
                 <div className="link py-2.5">
                   <AddCardIcon />
                   <Select
                     className="innerLink"
                     styles={customStyles}
                     options={options}
-                    value={selectOption}
+                    value={selectedOption}
                     onChange={(selected) => {
-                      setSelectOption(selected);
+                      dispatch(setSelectedOption(selected));
                       setFormData((prevFormData) => ({
                         ...prevFormData,
                         role: selected.value,
@@ -213,13 +365,12 @@ function Register() {
                 </IconButton>
               </div>
 
-              {errorMsg && (
-                <p className="text-red-700 font-semibold text-center">
-                  {message}
-                </p>
-              )}
+              <p className="text-red-700 font-semibold text-center">
+                {/*{error ? error || "Something went wrong!" : ""}*/}
+                {errorMsg}
+              </p>
 
-              {!isSignup && (
+              {loginPage && (
                 <Link
                   to="/forgotpassword"
                   className="text-sm text-center text-blue-700 opacity-75 hover:opacity-100 cursor-pointer"
@@ -228,7 +379,7 @@ function Register() {
                 </Link>
               )}
 
-              {!isSignup ? (
+              {loginPage ? (
                 <Button
                   type="submit"
                   style={buttonStyles}
@@ -246,7 +397,7 @@ function Register() {
                 </Button>
               )}
             </form>
-            
+
             <div className="flex items-center">
               <hr className="w-[13vw] bg-[#525252] " />
               <p className="mx-4 text-[#707070]">or</p>
@@ -255,7 +406,7 @@ function Register() {
 
             <div className="flex flex-col justify-center mt-6">
               <div className="flex flex-col sm:flex-row gap-x-2">
-                <Button style={styles}>
+                <Button style={styles} onClick={handleGoogleButton}>
                   <img
                     src={googleLogo}
                     className="w-6 mr-1.5"
@@ -272,7 +423,7 @@ function Register() {
               <div className="mt-4 -mb-[4vh]">
                 <p className="font-semibold text-center">
                   Don't have an account?
-                  {!isSignup ? (
+                  {loginPage ? (
                     <Link
                       to="/signup"
                       className="registerOptions"
@@ -296,6 +447,12 @@ function Register() {
         </div>
       </div>
 
+      {showRoleSelectionModal && location.pathname === "/signup" && (
+        <SignInModel
+          handleClose={() => setShowRoleSelectionModal(false)}
+          handleContinue={() => handleRoleSelection(selectedOption)}
+        />
+      )}
       <div
         style={{ backgroundImage: `url(${pattern_img})` }}
         className="bg-cover hidden sm:hidden lg:flex justify-center items-center md:w-1/2"
@@ -306,7 +463,7 @@ function Register() {
             bring it to life
           </p>
 
-          {!isSignup ? (
+          {loginPage ? (
             <img
               src={logInPersonImage}
               className="registerImg lg:right-[-20px] xl:right-[-80px] scale-90 lg:scale-100"

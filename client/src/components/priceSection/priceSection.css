@@ -1,11 +1,12 @@
 .PriceSection {
   background: linear-gradient(180deg, #00265f 0%, rgba(0, 47, 215, 0.84) 100%);
   color: #ffffff;
+  display: flex;
+  flex-direction: column;
   text-align: center;
-  height: 100vh;
-
+  justify-content: center;
+  min-height: 100vh;
 }
-
 
 /* The switch - the box around the slider */
 .switch {
@@ -13,7 +14,6 @@
   display: inline-block;
   width: 60px;
   height: 24px;
-  
 }
 
 /* Hide default HTML checkbox */
@@ -21,7 +21,6 @@
   opacity: 0;
   width: 0;
   height: 0;
- 
 }
 
 /* The slider */
@@ -33,8 +32,8 @@
   right: 0;
   bottom: 0;
   background-color: rgb(31, 4, 105);
-  -webkit-transition: .4s;
-  transition: .4s;
+  -webkit-transition: 0.4s;
+  transition: 0.4s;
 }
 
 .slider:before {
@@ -45,16 +44,16 @@
   left: 4px;
   bottom: 4px;
   background-color: rgb(0, 26, 255);
-  -webkit-transition: .4s;
-  transition: .4s;
+  -webkit-transition: 0.4s;
+  transition: 0.4s;
 }
 
 input:checked + .slider {
-  background-color: #2196F3;
+  background-color: #2196f3;
 }
 
 input:focus + .slider {
-  box-shadow: 0 0 1px #2196F3;
+  box-shadow: 0 0 1px #2196f3;
 }
 
 input:checked + .slider:before {
@@ -71,16 +70,16 @@ input:checked + .slider:before {
 .slider.round:before {
   border-radius: 50%;
 }
-
-
-
-
-.title p{
-  margin:16px; 
+.title {
+  padding: 15px;
 }
 
-.title label{
-  margin: 7px; 
+.title p {
+  margin: 16px;
+}
+
+.title label {
+  margin: 7px;
 }
 
 .title {
@@ -92,19 +91,8 @@ input:checked + .slider:before {
 
 .priceBox {
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
-
+  padding: 20px 0;
 }
-@media screen and (max-width: 600px) {
-  .priceBox {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-direction: column;
-  
-  }
-}
-
-
-

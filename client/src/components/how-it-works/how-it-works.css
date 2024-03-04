@@ -21,7 +21,8 @@
     width: 30%;
     margin: auto;
     border: none;
-    margin-bottom: 10px;
+    margin-bottom: 20px;
+    margin-top: 10px;
   }
   .label {
     height: 138px;
@@ -43,5 +44,10 @@
     line-height: 56.2px;
     text-align: center;
     align-items: center;
-    width: 584px;
+    width: 100%;
+}
+
+.steps-container{
+  margin-bottom: 20px;
+  margin-top: 50px;
 }
