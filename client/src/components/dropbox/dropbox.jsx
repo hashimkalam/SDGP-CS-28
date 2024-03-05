@@ -1,37 +1,19 @@
 import React, { useState } from 'react'
-import { useSelector } from "react-redux";
-import { storage } from "../../firebase"
-import { ref, uploadBytes } from 'firebase/storage'
-import { v4 } from "uuid"
-
-function dropbox() {
-    const currentUser = useSelector((state) => state.user.currentUser);
-    const id = currentUser.user._id;
 
 
-    const [img, setImg] = useState("")
-
-
-    const uploadData = () => {
-        const imgRef = ref(storage, `arch_files/${id}/floorplan_${v4()}.png`)
-        uploadBytes(imgRef, img);
-
-    }
-
+function dropbox(props) {
     const handleOnChange = (e) => {
         e.preventDefault();
-        setImg(e.target.files[0])
         console.log("selected file", e.target.files);
-        uploadData();
+        props.floorplanAdded(e.target.files[0])
     }
 
 
     const handleDrop = (e) => {
-        setImg(e.dataTransfer.files[0])
         e.stopPropagation();
         e.preventDefault();
         console.log("drag and drop", e.dataTransfer.files);
-        uploadData();
+        props.floorplanAdded(e.dataTransfer.files[0])
     }
 
     const handledragover = (e) => {
