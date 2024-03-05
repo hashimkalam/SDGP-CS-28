@@ -4,21 +4,37 @@ import UserProfile from "../UserProfile/userProfile";
 import { useNavigate } from "react-router-dom";
 import Dropbox from '../../components/dropbox/dropbox';
 
+import { uploadBytes } from 'firebase/storage'
+
 import { storage } from "../../firebase"
 import { getDownloadURL, listAll, ref } from "firebase/storage";
+import { v4 } from "uuid"
 
 const Panel = () => {
 
   const currentUser = useSelector((state) => state.user.currentUser);
   const id = currentUser.user._id;
 
-  const [slide, setSlide] = useState("projescts");
+  const [slide, setSlide] = useState("projects");
   const [imgUrl, setImgUrl] = useState([]);
+  const [initialRender, setInitialRender] = useState(true);
+  const [uploadImg, setUploadImg] = useState();
   const navigate = useNavigate();
 
-
+  const upload = (image) => {
+    var imgRef = ref(storage, `arch_files/${id}/floorplan_${v4()}.png`)
+    uploadBytes(imgRef, image);
+    setUploadImg(image);
+  }
   useEffect(() => {
-    const fetchImages = async () => {
+    if (initialRender) {
+      var delay = 0;
+      setInitialRender(false);
+    }
+    else {
+      delay = 2000;
+    }
+    const timeoutId = setTimeout(async () => {
       try {
         const imgs = await listAll(ref(storage, `arch_files/${id}`));
         console.log(imgs);
@@ -30,10 +46,10 @@ const Panel = () => {
       } catch (error) {
         console.error("Error fetching images:", error);
       }
-    };
+    }, delay);
 
-    fetchImages();
-  }, []);
+    return () => clearTimeout(timeoutId); // Clear timeout on component unmount
+  }, [uploadImg]);
 
 
   console.log(imgUrl, "imgurl")
@@ -98,13 +114,20 @@ const Panel = () => {
         <section className="grid md:grid-cols-2 xl:grid-cols-4 gap-6 mt-10">
 
           {imgUrl.map((dataVal, index) => (
-            <div key={index} className="flex items-center bg-white shadow rounded-lg h-[10rem] w-[20rem] xl:h-[200px] cursor-pointer transform transition-transform hover:scale-105 duration-500">
+            <div key={index}
+
+              className="relative flex items-center bg-white shadow rounded-lg h-[10rem] w-[20rem] xl:h-[200px] cursor-pointer transform transition-transform hover:scale-105 duration-500">
               <img src={dataVal} className='h-full w-full' alt={`Image ${index}`} />
             </div>
+
+
           ))}
 
           <div className="flex items-center bg-white shadow rounded-lg h-[10rem] w-[20rem] xl:h-[200px] cursor-pointer transform transition-transform hover:scale-105 duration-500">
-            <Dropbox />
+            <Dropbox
+              floorplanAdded={(e) => upload(e)}
+
+            />
           </div>
 
         </section>
