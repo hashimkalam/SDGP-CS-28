@@ -3,7 +3,7 @@ import "./navbar.css";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { signOut } from "../../redux/user/userSlice";
-import Logo from "../../assets/Logo.png";
+import { Logo } from "../Logo/logo";
 
 const Navbar = () => {
   const { currentUser } = useSelector((state) => state.user);
@@ -51,7 +51,7 @@ const Navbar = () => {
       }`}
     >
       <a className="cursor-pointer " onClick={handleLogoClick} href="">
-        <img src={Logo} alt="Logo" className="invert" />
+        <Logo/>
       </a>
 
       <div
@@ -146,7 +146,7 @@ const Navbar = () => {
         <div className="md:flex items-center hidden">
           {location.pathname == "/" && (
             <button
-              className="bg-white/85 text-[#0B113A] md:text-xl text-lg font-Inter-Regular font-semibold py-2 px-6 rounded-full md:ml-8 md:mr-4 mr-2 w-[140px] hover:bg-[#fff] duration-500"
+              className="bg-white text-custom-blue md:text-xl text-lg font-Inter-Regular font-semibold py-2 px-6 rounded-full md:ml-8 md:mr-4 mr-2 w-[140px] hover:bg-[#fff] duration-500"
               onClick={navigateToLogout}
             >
               LOGOUT
@@ -178,13 +178,13 @@ const Navbar = () => {
           {location.pathname === "/" && (
             <div className="md:flex items-center space-x-4 hidden">
               <button
-                className="bg-[#002865] text-white md:text-xl text-lg font-Inter-Regular font-semibold py-2 px-6 rounded-full md:mr-1 mr-2 w-[140px] hover:bg-[#004EC3] duration-500"
+                className="bg-white text-custom-blue md:text-xl text-lg font-Inter-Regular font-semibold py-2 px-6 rounded-full md:mr-1 mr-2 w-[140px] hover:bg-[#004EC3] duration-500"
                 onClick={navigateToLogin}
               >
                 LOGIN
               </button>
               <button
-                className="bg-[#002865] text-white md:text-xl text-lg font-Inter-Regular font-semibold py-2 px-6 rounded-full md:mr-1 mr-2 w-[140px] hover:bg-[#004EC3] duration-500"
+                className="bg-white text-custom-blue md:text-xl text-lg font-Inter-Regular font-semibold py-2 px-6 rounded-full md:mr-1 mr-2 w-[140px] hover:bg-[#004EC3] duration-500"
                 onClick={navigateToSignup}
               >
                 SIGNUP
