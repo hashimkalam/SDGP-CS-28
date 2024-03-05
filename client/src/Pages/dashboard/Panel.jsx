@@ -59,7 +59,7 @@ const Panel = () => {
         </div>
         <button
           className="justify-center self-start px-8 py-4  font-Inter-Regular font-semibold leading-6 text-center text-white text-lg rounded-md bg-[#1d2144] max-md:px-5 focus:outline-none"
-          onClick={() => navigate("/architectpanel")}
+          onClick={() => navigate("/workspace")}
         >
           Generate Plan
         </button>

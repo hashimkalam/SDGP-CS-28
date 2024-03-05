@@ -46,3 +46,8 @@
     align-items: center;
     width: 100%;
 }
+
+.steps-container{
+  margin-bottom: 20px;
+  margin-top: 50px;
+}
