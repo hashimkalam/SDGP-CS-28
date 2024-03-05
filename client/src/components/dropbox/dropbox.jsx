@@ -5,7 +5,10 @@ function dropbox(props) {
     const handleOnChange = (e) => {
         e.preventDefault();
         console.log("selected file", e.target.files);
-        props.floorplanAdded(e.target.files[0])
+        if (e.target.files.length >= 1) {
+            props.floorplanAdded(e.target.files[0])
+        }
+      
     }
 
 
@@ -13,7 +16,10 @@ function dropbox(props) {
         e.stopPropagation();
         e.preventDefault();
         console.log("drag and drop", e.dataTransfer.files);
-        props.floorplanAdded(e.dataTransfer.files[0])
+        if (e.dataTransfer.files.length > 1 ) {
+            props.floorplanAdded(e.dataTransfer.files[0])     
+        }
+        
     }
 
     const handledragover = (e) => {

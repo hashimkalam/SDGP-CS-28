@@ -9,7 +9,6 @@ import { uploadBytes } from 'firebase/storage'
 import { storage } from "../../firebase"
 import { getDownloadURL, listAll, ref } from "firebase/storage";
 import { v4 } from "uuid"
-import { set } from 'firebase/database';
 
 const Panel = () => {
 
@@ -18,17 +17,24 @@ const Panel = () => {
 
   const [slide, setSlide] = useState("projects");
   const [imgUrl, setImgUrl] = useState([]);
+  const [initialRender, setInitialRender] = useState(true);
   const [uploadImg, setUploadImg] = useState();
   const navigate = useNavigate();
 
-
- 
-  useEffect(() => {
-    
+  const upload = (image) => {
     var imgRef = ref(storage, `arch_files/${id}/floorplan_${v4()}.png`)
-    uploadBytes(imgRef, uploadImg);
-
-    const fetchImages = async () => {
+    uploadBytes(imgRef, image);
+    setUploadImg(image);
+  }
+  useEffect(() => {
+    if (initialRender) {
+      var delay = 0;
+      setInitialRender(false);
+    }
+    else {
+      delay = 2000;
+    }
+    const timeoutId = setTimeout(async () => {
       try {
         const imgs = await listAll(ref(storage, `arch_files/${id}`));
         console.log(imgs);
@@ -40,9 +46,9 @@ const Panel = () => {
       } catch (error) {
         console.error("Error fetching images:", error);
       }
-    };
+    }, delay);
 
-    fetchImages();
+    return () => clearTimeout(timeoutId); // Clear timeout on component unmount
   }, [uploadImg]);
 
 
@@ -119,7 +125,7 @@ const Panel = () => {
 
           <div className="flex items-center bg-white shadow rounded-lg h-[10rem] w-[20rem] xl:h-[200px] cursor-pointer transform transition-transform hover:scale-105 duration-500">
             <Dropbox
-              floorplanAdded={(e) => setUploadImg(e)}
+              floorplanAdded={(e) => upload(e)}
 
             />
           </div>
