@@ -129,46 +129,48 @@ const Workspaces = () => {
         </div>
       </div>
       <div className="flex-1 bg-[#fff] flex-0 md:flex-[.75] rounded-3xl overflow-y-scroll">
-      <div className="bg-[#fff] w-[75%] rounded-3xl overflow-y-scroll">
+        <div className="bg-[#fff] w-[75%] rounded-3xl overflow-y-scroll">
+          <button
+            className="absolute right-14 mt-4 mr-3 py-3 px-4 bg-[#0065FF]/85 font-Inter-Regular hover:bg-[#0065FF] duration-150 ease-out text-white p-3 rounded-lg"
+            onClick={handleDownload}
+          >
+            Download
+          </button>
 
-        <button className="absolute right-14 mt-4 mr-3 py-3 px-4 bg-[#0065FF]/85 font-Inter-Regular hover:bg-[#0065FF] duration-150 ease-out text-white p-3 rounded-lg"
-            onClick={handleDownload}>
-         Download
-        </button>
-
-        <div className="flex flex-row mx-4">
-          {floorPlansData ? (
-            <RightChat
-              key={`right-${floorPlansData.id}`}
-              floorPlanPathPng={floorPlansData.floorPlanPathPng}
-            />
-          ) : (
-            <div className="input-field flex flex-row mx-[10%] relative h-[77.5vh] ">
-              <form
-                onSubmit={handleGenerate}
-                className="absolute bottom-0 w-full flex items-center"
-              >
-                <input
-                  type="text"
-                  className="rounded-full w-full p-2 px-4 outline-none"
-                  value={inputDesc}
-                  onChange={(e) => setInputDesc(e.target.value)}
-                />
-                <div
-                  className="bg-[#0065FF] rounded-full text-sm flex items-center"
-                  onClick={handleGenerate}
+          <div className="flex flex-row mx-4">
+            {floorPlansData ? (
+              <RightChat
+                key={`right-${floorPlansData.id}`}
+                floorPlanPathPng={floorPlansData.floorPlanPathPng}
+              />
+            ) : (
+              <div className="input-field flex flex-row mx-[10%] relative h-[77.5vh] ">
+                <form
+                  onSubmit={handleGenerate}
+                  className="absolute bottom-0 w-full flex items-center"
                 >
-                  <button type="submit" className="hidden md:block">
-                    Generate
-                  </button>
-                  <SendIcon
-                    className="text-white md:-ml-3 md:mr-4 m-2 md:m-0"
-                    fontSize="small"
+                  <input
+                    type="text"
+                    className="rounded-full w-full p-2 px-4 outline-none"
+                    value={inputDesc}
+                    onChange={(e) => setInputDesc(e.target.value)}
                   />
-                </div>
-              </form>
-            </div>
-          )}
+                  <div
+                    className="bg-[#0065FF] rounded-full text-sm flex items-center"
+                    onClick={handleGenerate}
+                  >
+                    <button type="submit" className="hidden md:block">
+                      Generate
+                    </button>
+                    <SendIcon
+                      className="text-white md:-ml-3 md:mr-4 m-2 md:m-0"
+                      fontSize="small"
+                    />
+                  </div>
+                </form>
+              </div>
+            )}
+          </div>
         </div>
       </div>
     </div>
