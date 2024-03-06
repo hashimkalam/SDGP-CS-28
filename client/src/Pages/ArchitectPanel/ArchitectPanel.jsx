@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
-import Navbar from "../../components/navbar/navbar";
 import Architect from "./Architect";
+import { useNavigate } from "react-router-dom";
 
 const ArchitectPanel = () => {
   const [architects, setArchitects] = useState([]);
@@ -36,6 +36,8 @@ const ArchitectPanel = () => {
     return <div>Error: {error}</div>;
   }
 
+  const navigate = useNavigate();
+
   return (
     <div className="h-full bg-custom-blue">
       <div className="flex flex-col justify-center items-center">
@@ -43,7 +45,8 @@ const ArchitectPanel = () => {
           Our Panel of Architects
         </h1>
         <h5 className="text-xs sm:text-sm md:text-base lg:text-lg xl:text-xl 2xl:text-2xl text-center text-white">
-          Choose an architect to meet and discuss your project with them in detail
+          Choose an architect to meet and discuss your project with them in
+          detail
         </h5>
       </div>
 
@@ -54,7 +57,10 @@ const ArchitectPanel = () => {
       </div>
 
       <div className="flex justify-center">
-        <button className="bg-gradient-to-r from-[#667EEA] to-[#5E5ABA] hover:from-[#5E5ABA] hover:to-[#667EEA] text-white p-4 rounded-md m-10">
+        <button
+          className="bg-gradient-to-r from-[#667EEA] to-[#5E5ABA] hover:from-[#5E5ABA] hover:to-[#667EEA] text-white p-4 rounded-md m-10"
+          onClick={() => navigate("/appointment")}
+        >
           Book an appointment to meet an architect
         </button>
       </div>

@@ -8,7 +8,7 @@ import ArchitectPanel from "./Pages/ArchitectPanel/ArchitectPanel";
 import Workspaces from "./Pages/workspace/Workspaces";
 import Panel from "./Pages/dashboard/Panel";
 import Navbar from "./components/navbar/navbar";
-
+import AppointmentForm from "./components/AppointmentForm";
 import UserProfile from "./Pages/UserProfile/userProfile";
 import { useSelector } from "react-redux";
 import PageNotFound from "./components/PageNotFound/PageNotFound";
@@ -102,6 +102,15 @@ function App() {
                 <Navbar />
                 <ArchitectPanel />
                 <Footer />
+              </div>
+            }
+          />
+          <Route
+            path="/appointment"
+            element={
+              <div className="bg- bg-[#005BE2] h-screen">
+                <Navbar />
+                <AppointmentForm/>
               </div>
             }
           />
