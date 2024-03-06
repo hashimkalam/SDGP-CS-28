@@ -3,7 +3,7 @@ import "./navbar.css";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { signOut } from "../../redux/user/userSlice";
-import Logo from "../../assets/Logo.png";
+import { Logo } from "../Logo/logo";
 
 const Navbar = () => {
   const { currentUser } = useSelector((state) => state.user);
@@ -14,7 +14,7 @@ const Navbar = () => {
   const navigateToProfileOrDashboard = () => {
     currentUser.user.role === "architect"
       ? navigate("/dashboard")
-      : navigate("/workspace");
+      : navigate("/userprofile");
   };
 
   const navigateToLogin = () => {
@@ -51,7 +51,7 @@ const Navbar = () => {
       }`}
     >
       <a className="cursor-pointer " onClick={handleLogoClick} href="">
-        <img src={Logo} alt="Logo" className="invert" />
+        <Logo/>
       </a>
 
       <div
@@ -141,10 +141,12 @@ const Navbar = () => {
       )}
 
       {currentUser ? (
+
+        
         <div className="md:flex items-center hidden">
           {location.pathname == "/" && (
             <button
-              className="bg-white/85 text-[#0B113A] md:text-xl text-lg font-Inter-Regular font-semibold py-2 px-6 rounded-full md:ml-8 md:mr-4 mr-2 w-[140px] hover:bg-[#fff] duration-500"
+              className="bg-white text-custom-blue md:text-xl text-lg font-Inter-Regular font-semibold py-2 px-6 rounded-full md:ml-8 md:mr-4 mr-2 w-[140px] hover:bg-[#fff] duration-500"
               onClick={navigateToLogout}
             >
               LOGOUT
@@ -167,18 +169,22 @@ const Navbar = () => {
             onClick={navigateToProfileOrDashboard}
           />
         </div>
+
+        
+
       ) : (
+
         <div className="md:flex md:flex-row flex-col md:my-0 my-7 items-center">
           {location.pathname === "/" && (
             <div className="md:flex items-center space-x-4 hidden">
               <button
-                className="bg-[#002865] text-white md:text-xl text-lg font-Inter-Regular font-semibold py-2 px-6 rounded-full md:mr-1 mr-2 w-[140px] hover:bg-[#004EC3] duration-500"
+                className="bg-white text-custom-blue md:text-xl text-lg font-Inter-Regular font-semibold py-2 px-6 rounded-full md:mr-1 mr-2 w-[140px] hover:bg-[#004EC3] duration-500"
                 onClick={navigateToLogin}
               >
                 LOGIN
               </button>
               <button
-                className="bg-[#002865] text-white md:text-xl text-lg font-Inter-Regular font-semibold py-2 px-6 rounded-full md:mr-1 mr-2 w-[140px] hover:bg-[#004EC3] duration-500"
+                className="bg-white text-custom-blue md:text-xl text-lg font-Inter-Regular font-semibold py-2 px-6 rounded-full md:mr-1 mr-2 w-[140px] hover:bg-[#004EC3] duration-500"
                 onClick={navigateToSignup}
               >
                 SIGNUP
@@ -186,7 +192,44 @@ const Navbar = () => {
             </div>
           )}
         </div>
+        
       )}
+
+{open && currentUser && (
+  <div className="md:hidden justify-between flex-col items-center mt-4 absolute top-20 left-0 w-full bg-white transition-all duration-500 ease-in">
+    {(location.pathname === "/workspace" || location.pathname === "/download") && (
+      <div className="flex-col items-center mt-10  pl-7 pr-9 pb-10">
+        <a
+          href="#"
+          className="bg-[#0B113A] text-white text-center font-semibold font-Inter-Regular hover:bg-[#0065FF] duration-150 ease-out  py-2 px-6 rounded-full block"
+        >
+          ARCHITECT CONSULTATION
+        </a>
+
+        <div className="flex mt-6 space-x-4">
+
+        <a
+        href="#"
+        className="bg-[#0B113A] text-white text-center font-semibold font-Inter-Regular hover:bg-[#0065FF] duration-150 ease-out  py-2 px-[82px] rounded-full block"
+        >
+          DOWNLOAD
+        </a>
+        <img
+          src={currentUser?.user?.profilePicture}
+          alt="profilePicture"
+          className="h-9 w-9 md:mr-2 rounded-full object-cover cursor-pointer"
+          onClick={navigateToProfileOrDashboard}
+        />
+
+        </div>
+        
+      </div>
+    )}
+  </div>
+)}
+
+
+
     </div>
   );
 };

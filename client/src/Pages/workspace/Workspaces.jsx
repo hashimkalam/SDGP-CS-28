@@ -94,6 +94,18 @@ const Workspaces = () => {
     setInputDesc("");
   };
 
+  const handleDownload = () => {
+    if (floorPlansData) {
+      const { floorPlanPathDxf } = floorPlansData;
+      const downloadLink = document.createElement("a");
+      downloadLink.href = floorPlanPathDxf;
+      downloadLink.download = `floor_plan_${floorPlansData.id}.dxf`;
+      document.body.appendChild(downloadLink);
+      downloadLink.click();
+      document.body.removeChild(downloadLink);
+    }
+  };
+
   return (
     <div className="m-10 gap-5 flex h-[80vh]">
       <div className="bg-[#005BE2] flex-0 md:flex-[.25] rounded-3xl overflow-y-scroll overflow-x-hidden">
@@ -117,6 +129,13 @@ const Workspaces = () => {
         </div>
       </div>
       <div className="flex-1 bg-[#fff] flex-0 md:flex-[.75] rounded-3xl overflow-y-scroll">
+      <div className="bg-[#fff] w-[75%] rounded-3xl overflow-y-scroll">
+
+        <button className="absolute right-14 mt-4 mr-3 py-3 px-4 bg-[#0065FF]/85 font-Inter-Regular hover:bg-[#0065FF] duration-150 ease-out text-white p-3 rounded-lg"
+            onClick={handleDownload}>
+         Download
+        </button>
+
         <div className="flex flex-row mx-4">
           {floorPlansData ? (
             <RightChat
