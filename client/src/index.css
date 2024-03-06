@@ -62,6 +62,9 @@ body {
   .profileDetails {
     @apply bg-[#090e34] m-[1px] p-[10px] text-sm font-normal flex items-center justify-between;
   }
+  .buttonHover {
+    @apply relative z-10 before:absolute before:left-0 before:bottom-0 before:-z-10 before:h-full before:w-full before:origin-top-left before:scale-x-0   before:bg-[#090e34] before:transition-transform before:duration-300 before:content-[''] before:hover:scale-x-100 before:hover:rounded-lg after:hover:rounded-lg;
+  }
 }
 
 html {

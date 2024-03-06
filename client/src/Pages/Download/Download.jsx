@@ -74,7 +74,7 @@ function Download() {
             rough sketch into a polished blueprint.
           </p>
           <div className="flex justify-center">
-            <Button sx={buttonStyles}>Explore Architect Consultation</Button>
+            <Button sx={buttonStyles}>Connect with an Architect Now</Button>
           </div>
         </div>
       </div>

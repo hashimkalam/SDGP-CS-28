@@ -2,7 +2,6 @@ import React from "react";
 import { useState, useEffect } from "react";
 import LeftChat from "../../components/workspace-panel/LeftChat.jsx";
 import RightChat from "../../components/workspace-panel/RightChat.jsx";
-import Form from "../../components/form/form.jsx";
 import SendIcon from "@mui/icons-material/Send";
 
 import { useSelector } from "react-redux";
@@ -10,8 +9,10 @@ import { useSelector } from "react-redux";
 import { ref, onValue } from "firebase/database";
 import { getDownloadURL, ref as storageRef } from "firebase/storage";
 import { database, storage } from "../../firebase";
+import { useNavigate } from "react-router-dom";
 
 const Workspaces = () => {
+  const navigate = useNavigate();
   const { currentUser } = useSelector((state) => state.user);
   const [floorPlans, setFloorPlans] = useState([]);
 
@@ -94,9 +95,23 @@ const Workspaces = () => {
     setInputDesc("");
   };
 
+  const handleDownload = () => {
+    if (floorPlansData) {
+      const { floorPlanPathDxf } = floorPlansData; // downloading part of the file
+      const downloadLink = document.createElement("a");
+      downloadLink.href = floorPlanPathDxf;
+      downloadLink.download = `floor_plan_${floorPlansData.id}.dxf`;
+      document.body.appendChild(downloadLink);
+      downloadLink.click();
+      document.body.removeChild(downloadLink);
+
+      navigate("/download"); // re direct to this download page
+    }
+  };
+
   return (
-    <div className="m-10 gap-5 flex h-[80vh]">
-      <div className="bg-[#005BE2] w-[25%] rounded-3xl overflow-y-scroll overflow-x-hidden">
+    <div className="m-10 mt-5 gap-1 md:gap-5 flex h-[80vh]">
+      <div className="bg-[#005BE2] flex-0 md:flex-[.25] rounded-xl overflow-y-scroll overflow-x-hidden">
         {floorPlans.map((floorPlan) => (
           <div className="flex flex-row">
             <LeftChat
@@ -110,49 +125,53 @@ const Workspaces = () => {
         ))}
 
         <div
-          className="bg-white hover:bg-slate-200 ease-out duration-150 mt-5 cursor-pointer w-auto py-3 mx-5 rounded-3xl"
+          className="bg-white hover:bg-slate-200 ease-out duration-150 mt-5 cursor-pointer w-auto px-2 md:py-3 mx-5 rounded-l-xl rounded-r-lg"
           onClick={() => handleOnClickNewChat("")}
         >
-          <h5 className="text-[#767171] hover:text-black ease-out duration-150 text-1xl font-semibold text-center items-center flex justify-center">
-            +Add New Description
+          <h5 className="text-[#111] ease-out duration-150 text-1xl font-semibold text-center items-center flex justify-center">
+            + <span className="hidden md:block">Add New Description</span>
           </h5>
         </div>
       </div>
-      <div className="bg-[#fff] w-[75%] rounded-3xl overflow-y-scroll">
-        <div className="flex flex-row mx-4">
-          {floorPlansData ? (
-            <RightChat
-              key={`right-${floorPlansData.id}`}
-              floorPlanPathPng={floorPlansData.floorPlanPathPng}
-            />
-          ) : (
-            <div className="input-field flex flex-row mx-[10%] relative h-[77.75vh] ">
-              <form
-                onSubmit={handleGenerate}
-                className="absolute bottom-0 w-full flex items-center"
+      <div className="flex-1 bg-[#fff] flex-0 md:flex-[.75] rounded-l-lg rounded-r-3xl overflow-y-scroll px-4">
+        <button
+          className="absolute right-14 mt-4 mr-3 px-4 z-50 cursor-pointer bg-[#0065FF]/85 hover:bg-[#0065FF] duration-150 ease-out text-white p-3 rounded-lg"
+          onClick={handleDownload}
+        >
+          Download
+        </button>
+        {floorPlansData ? (
+          <RightChat
+            key={`right-${floorPlansData.id}`}
+            floorPlanPathPng={floorPlansData.floorPlanPathPng}
+          />
+        ) : (
+          <div className="input-field flex flex-row relative h-[77.2vh] ">
+            <form
+              onSubmit={handleGenerate}
+              className="absolute bottom-0 flex items-center justify-between w-full space-x-2"
+            >
+              <input
+                type="text"
+                className="rounded-full w-full p-2 px-4 outline-none bg-[#0047FF33] flex-1"
+                value={inputDesc}
+                onChange={(e) => setInputDesc(e.target.value)}
+              />
+              <div
+                className="bg-[#0065FF] rounded-full text-sm flex flex-0 items-center md:p-2.5 px-2 pl-1 md:px-4 space-x-2 text-white cursor-pointer"
+                onClick={handleGenerate}
               >
-                <input
-                  type="text"
-                  className="rounded-full w-full p-2 px-4 outline-none"
-                  value={inputDesc}
-                  onChange={(e) => setInputDesc(e.target.value)}
+                <button type="submit" className="hidden md:block">
+                  Generate
+                </button>
+                <SendIcon
+                  className="text-white md:-ml-3 md:mr-4 m-2 md:m-0"
+                  fontSize="small"
                 />
-                <div
-                  className="bg-[#0065FF] rounded-full text-sm flex items-center"
-                  onClick={handleGenerate}
-                >
-                  <button type="submit" className="hidden md:block">
-                    Generate
-                  </button>
-                  <SendIcon
-                    className="text-white md:-ml-3 md:mr-4 m-2 md:m-0"
-                    fontSize="small"
-                  />
-                </div>
-              </form>
-            </div>
-          )}
-        </div>
+              </div>
+            </form>
+          </div>
+        )}
       </div>
     </div>
   );
