@@ -3,7 +3,6 @@ import Home from "./Pages/Home/Home";
 import ForgotPassword from "./Pages/ForgotPassword/ForgotPassword";
 import Register from "./Pages/Register/Register";
 import Download from "./Pages/Download/Download";
-import Workspace from "./Pages/workspace/Workspace";
 import ResetPassword from "./Pages/Reset/reset";
 import ArchitectPanel from "./Pages/ArchitectPanel/ArchitectPanel";
 import Workspaces from "./Pages/workspace/Workspaces";
@@ -16,6 +15,7 @@ import PageNotFound from "./components/PageNotFound/PageNotFound";
 
 function App() {
   const currentUser = useSelector((state) => state.user.currentUser);
+
   return (
     <div className="bg-[#5E5ABA] min-h-screen">
       <Router>
@@ -69,15 +69,6 @@ function App() {
               </div>
             }
           />
-          {/*<Route
-            path="/workspaceHistory"
-            element={
-              <div>
-                <Navbar />
-                <WorkspaceHistory />
-              </div>
-            }
-          />*/}
 
           <Route
             path="/userprofile"
@@ -120,15 +111,18 @@ function App() {
               </div>
             }
           />
-          <Route
-            path="/dashboard"
-            element={
-              <div className="bg-gray-100 h-screen">
-                <Navbar />
-                <Panel />
-              </div>
-            }
-          />
+          {currentUser.user.role === "architect" && (
+            <Route
+              path="/dashboard"
+              element={
+                <div className="bg-gray-100 h-screen">
+                  <Navbar />
+                  <Panel />
+                </div>
+              }
+            />
+          )}
+
           <Route
             path="/"
             element={
@@ -138,14 +132,7 @@ function App() {
               </div>
             }
           />
-          <Route
-            path="/dashboard"
-            element={
-              <div className="bg-[#5E5ABA] h-screen">
-                <Panel />
-              </div>
-            }
-          />
+
           <Route path="*" element={<PageNotFound />} />
         </Routes>
       </Router>

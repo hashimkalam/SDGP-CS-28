@@ -8,6 +8,8 @@ import { Logo } from "../Logo/logo";
 import darkLogo from "../../../public/images/Logo.png";
 
 const Navbar = () => {
+  let [open, setOpen] = useState(false);
+
   const { currentUser } = useSelector((state) => state.user);
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -39,8 +41,6 @@ const Navbar = () => {
       console.log(error);
     }
   };
-
-  let [open, setOpen] = useState(false);
 
   return (
     <div
@@ -159,7 +159,10 @@ const Navbar = () => {
           )}
           {location.pathname == "/workspace" && (
             <div className="space-x-4 mr-8">
-              <button className="bg-[#0065FF]/85 font-Inter-Regular hover:bg-[#0065FF] duration-150 ease-out text-white p-3 rounded-lg">
+              <button
+                onClick={() => navigate("/download")}
+                className="bg-[#0065FF]/85 font-Inter-Regular hover:bg-[#0065FF] duration-150 ease-out text-white p-3 rounded-lg"
+              >
                 Explore Achitect Consultatiom
               </button>
             </div>

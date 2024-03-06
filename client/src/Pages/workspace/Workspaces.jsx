@@ -2,7 +2,6 @@ import React from "react";
 import { useState, useEffect } from "react";
 import LeftChat from "../../components/workspace-panel/LeftChat.jsx";
 import RightChat from "../../components/workspace-panel/RightChat.jsx";
-import Form from "../../components/form/form.jsx";
 import SendIcon from "@mui/icons-material/Send";
 
 import { useSelector } from "react-redux";
@@ -10,8 +9,10 @@ import { useSelector } from "react-redux";
 import { ref, onValue } from "firebase/database";
 import { getDownloadURL, ref as storageRef } from "firebase/storage";
 import { database, storage } from "../../firebase";
+import { useNavigate } from "react-router-dom";
 
 const Workspaces = () => {
+  const navigate = useNavigate();
   const { currentUser } = useSelector((state) => state.user);
   const [floorPlans, setFloorPlans] = useState([]);
 
@@ -96,13 +97,15 @@ const Workspaces = () => {
 
   const handleDownload = () => {
     if (floorPlansData) {
-      const { floorPlanPathDxf } = floorPlansData;
+      const { floorPlanPathDxf } = floorPlansData; // downloading part of the file
       const downloadLink = document.createElement("a");
       downloadLink.href = floorPlanPathDxf;
       downloadLink.download = `floor_plan_${floorPlansData.id}.dxf`;
       document.body.appendChild(downloadLink);
       downloadLink.click();
       document.body.removeChild(downloadLink);
+
+      navigate("/download"); // re direct to this download page
     }
   };
 

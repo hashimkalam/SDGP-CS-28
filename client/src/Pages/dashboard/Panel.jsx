@@ -17,8 +17,7 @@ const Panel = () => {
   const [slide, setSlide] = useState("projects");
   const [imgUrl, setImgUrl] = useState([]);
   const [initialRender, setInitialRender] = useState(true);
-  const [uploadImg, setUploadImg] = useState();
-  const navigate = useNavigate();
+  const [uploadImg, setUploadImg] = useState(); 
 
   const upload = (image) => {
     var imgRef = ref(storage, `arch_files/${id}/floorplan_${v4()}.png`);
