@@ -62,9 +62,12 @@ const Navbar = () => {
       </div>
 
       {location.pathname == "/" && (
-        <ul className={`md:flex justify-between md:items-center md:text-white text-[#090E34] font-semibold md:pb-0 pb-10 absolute md:static md:z-auto z-[-1] left-0 md:w-[38%] w-[100%] 
-        md:pl-0 pl-7 md:pr-0 pr-9 transition-all duration-500 ease-in  ${open ? 'top-20 bg-white':'top-[-490px]'}`}>
-
+        <ul
+          className={`md:flex justify-between md:items-center md:text-white text-[#090E34] font-semibold md:pb-0 pb-10 absolute md:static md:z-auto z-[-1] left-0 md:w-[38%] w-[100%] 
+        md:pl-0 pl-7 md:pr-0 pr-9 transition-all duration-500 ease-in  ${
+          open ? "top-20 bg-white" : "top-[-490px]"
+        }`}
+        >
           <li className="md:my-0 my-5">
             <a className="transition-all duration-500 cursor-pointer md:text-xl font-Inter-Regular text-lg">
               <span>HOME</span>
@@ -92,15 +95,15 @@ const Navbar = () => {
           <div className="md:hidden">
             {currentUser ? (
               <>
-              {/* Looged-in users */}
+                {/* Looged-in users */}
 
-              <div className="flex items-center mt-6 space-x-4">
-                <button
-                  className="bg-[#002865] text-white md:text-xl text-lg font-Inter-Regular font-semibold py-2 px-6 rounded-full w-full hover:bg-[#004EC3] duration-500"
-                  onClick={navigateToLogout}
-                >
-                  LOGOUT
-                </button>
+                <div className="flex items-center mt-6 space-x-4">
+                  <button
+                    className="bg-[#002865] text-white md:text-xl text-lg font-Inter-Regular font-semibold py-2 px-6 rounded-full w-full hover:bg-[#004EC3] duration-500"
+                    onClick={navigateToLogout}
+                  >
+                    LOGOUT
+                  </button>
 
                   <img
                     src={currentUser?.user?.profilePicture}
@@ -108,35 +111,32 @@ const Navbar = () => {
                     className="h-10 w-10 md:mr-2 rounded-full object-cover cursor-pointer"
                     onClick={navigateToProfileOrDashboard}
                   />
-                  <div className="text-[#1d2144] font-Inter-Regular text-lg">{currentUser?.user?.username}</div>
-              
-              </div>
-                
+                  <div className="text-[#1d2144] font-Inter-Regular text-lg">
+                    {currentUser?.user?.username}
+                  </div>
+                </div>
               </>
             ) : (
               <>
-              {/* unregistered */}
+                {/* unregistered */}
 
-              <div className="flex-col mt-6 space-y-5">
-
-                <button
-                  className="bg-[#002865] text-white md:text-xl text-lg font-Inter-Regular font-semibold py-2 px-6 rounded-full w-full hover:bg-[#004EC3] duration-500"
-                  onClick={navigateToLogin}
-                >
-                  LOGIN
-                </button>
-                <button
-                  className="bg-[#002865] text-white md:text-xl text-lg font-Inter-Regular font-semibold py-2 px-6 rounded-full w-full hover:bg-[#004EC3] duration-500"
-                  onClick={navigateToSignup}
-                >
-                  SIGNUP
-                </button>
-               
-              </div>
+                <div className="flex-col mt-6 space-y-5">
+                  <button
+                    className="bg-[#002865] text-white md:text-xl text-lg font-Inter-Regular font-semibold py-2 px-6 rounded-full w-full hover:bg-[#004EC3] duration-500"
+                    onClick={navigateToLogin}
+                  >
+                    LOGIN
+                  </button>
+                  <button
+                    className="bg-[#002865] text-white md:text-xl text-lg font-Inter-Regular font-semibold py-2 px-6 rounded-full w-full hover:bg-[#004EC3] duration-500"
+                    onClick={navigateToSignup}
+                  >
+                    SIGNUP
+                  </button>
+                </div>
               </>
             )}
           </div>
-          
         </ul>
       )}
 
