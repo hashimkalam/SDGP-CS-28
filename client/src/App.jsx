@@ -14,7 +14,7 @@ import { useSelector } from "react-redux";
 import PageNotFound from "./components/PageNotFound/PageNotFound";
 
 function App() {
-  const currentUser = useSelector((state) => state.user.currentUser);
+  const currentUser = useSelector((state) => state?.user?.currentUser);
 
   return (
     <div className="bg-[#5E5ABA] min-h-screen">
@@ -111,7 +111,7 @@ function App() {
               </div>
             }
           />
-          {currentUser.user.role === "architect" && (
+          {currentUser?.user?.role === "architect" && (
             <Route
               path="/dashboard"
               element={
