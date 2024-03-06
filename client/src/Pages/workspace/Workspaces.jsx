@@ -102,6 +102,7 @@ const Workspaces = () => {
             <LeftChat
               key={`left-${floorPlan.id}`}
               floorPlanDetails={floorPlan.formData}
+              floorPlanPath={floorPlan} // Add this line
               click={() => handleOnClick(floorPlan.id)}
             />
           </div>
