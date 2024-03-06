@@ -13,6 +13,7 @@ import Navbar from "./components/navbar/navbar";
 import UserProfile from "./Pages/UserProfile/userProfile";
 import { useSelector } from "react-redux";
 import PageNotFound from "./components/PageNotFound/PageNotFound";
+import Footer from "./components/footer/footer";
 
 function App() {
   const currentUser = useSelector((state) => state.user.currentUser);
@@ -106,9 +107,10 @@ function App() {
           <Route
             path="/architectpanel"
             element={
-              <div className="bg-[#5E5ABA]">
+              <div className="bg-[#005BE2]">
                 <Navbar />
                 <ArchitectPanel />
+                <Footer />
               </div>
             }
           />
