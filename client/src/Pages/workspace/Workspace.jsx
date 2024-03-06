@@ -1,5 +1,4 @@
 import React from "react";
-import "./workspace.css"; // Import the CSS file
 import Form from "../../components/form/form";
 
 function workspace() {

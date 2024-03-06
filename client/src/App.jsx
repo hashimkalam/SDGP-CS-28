@@ -123,7 +123,8 @@ function App() {
           <Route
             path="/dashboard"
             element={
-              <div className="bg-[#5E5ABA] h-screen">
+              <div className="bg-gray-100 h-screen">
+                <Navbar />
                 <Panel />
               </div>
             }
