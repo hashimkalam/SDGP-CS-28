@@ -7,10 +7,10 @@ const AppointmentForm = () => {
       name: '',
       email: '',
       date: '',
-      // Add other form fields here
+      contactNumber: '',
     },
 
-    
+
     onSubmit: values => {
       const currentDate = new Date().toISOString().split('T')[0];
       emailjs.send('service_3mt8z5o', 'template_fhfk3a6', {
@@ -38,22 +38,27 @@ const AppointmentForm = () => {
             type="text"
             onChange={formik.handleChange}
             value={formik.values.name}
+            required="required"
             className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
             placeholder="Your Name"
         />
+         {formik.errors.name ? <div>{formik.errors.name}</div> : null}
         <input
             id="email"
             name="email"
             type="email"
+            required="required"
             onChange={formik.handleChange}
             value={formik.values.email}
             className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline mt-4"
             placeholder="Your Email"
         />
+        {formik.errors.email ? <div>{formik.errors.email}</div> : null}
         <input
             id="contactNumber"
             name="contactNumber"
             type="tel"
+            required="required"
             onChange={formik.handleChange}
             value={formik.values.contactNumber}
             className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline mt-4"
