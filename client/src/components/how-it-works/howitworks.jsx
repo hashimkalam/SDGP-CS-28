@@ -12,7 +12,7 @@ const steps = [
       "Ditch the blueprints, grab your keyboard. EliteBluPrint turns your natural language vision into detailed floor plans. No jargon, no fuss, just pure imagination",
   },
   {
-    title: "Generate floor plan",
+    title: "Generate plan",
     steps: "2",
     description:
       "From Wishful Thinking to Stunning Renderings: Watch your dream unfold as EliteBluPrint weaves your words into a visual masterpiece.",
@@ -37,9 +37,12 @@ const HowItWorks = () => {
   };
 
   return (
-    <div className="how-it-works-section" id="how_it_works">
-      <div className="label">
-        <p className="heading-simple-and">
+    <div
+      className="bg-gradient-to-r from-[#002865] to-[#004ec3] text-white min-h-screen p-5 md:p-10 flex flex-col justify-between relative"
+      id="how_it_works"
+    >
+      <div className="m-4 w-144 flex items-center justify-center mx-auto">
+        <p className="font-inter font-bold text-2xl  lg:text-3xl leading-relaxed text-center align-middle w-full">
           Master the Magic: Your Guide to Generating Perfect Floor Plans
         </p>
       </div>
@@ -53,7 +56,10 @@ const HowItWorks = () => {
           />
         ))}
       </div>
-      <button className="custom-button" onClick={handleButtonClick}>
+      <button
+        className="custom-button buttonHover cursor-pointer text-center rounded-lg bg-[#090e34]/75 ease-out duration-150 font-semibold py-3 w-[26vw] mx-auto text-sm md:text-md lg:text-lg"
+        onClick={handleButtonClick}
+      >
         Try It Out
       </button>
     </div>

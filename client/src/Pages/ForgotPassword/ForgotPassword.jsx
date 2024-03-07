@@ -73,6 +73,7 @@ function ForgotPassword() {
 
   const formSubmit = async (e) => {
     e.preventDefault();
+    console.log("Entered Email:", enteredEmail);
 
     const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 

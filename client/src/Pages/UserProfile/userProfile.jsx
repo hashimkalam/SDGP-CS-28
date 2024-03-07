@@ -15,6 +15,7 @@ import {
   reauthenticateWithCredential,
 } from "firebase/auth";
 import UserDelete from "../../components/model/UserDelete";
+// import EditUserDetails from "../../components/model/editUserDetails";
 
 import { ref, remove } from "firebase/database";
 import { database, storage } from "../../firebase";
@@ -28,7 +29,8 @@ function userProfile() {
   const password = currentUser?.user?.password;
   const userID = currentUser?.user?._id;
 
-  const [editMode, setEditMode] = useState(false);
+  const [nameEditMode, setNameEditMode] = useState(false);
+  const [passEditMode, setPassEditMode] = useState(false);
   const [edittedName, setEdittedName] = useState(name);
   const [edittedPassword, setEdittedPassword] = useState(password);
   const [loadingState, setLoadingState] = useState(false);
@@ -109,7 +111,7 @@ function userProfile() {
   };
 
   // updatig details
-  const updateDetails = async () => {
+  const updateUserName = async () => {
     try {
       const res = await fetch("http://localhost:3000/api/auth/update", {
         method: "PUT",
@@ -119,7 +121,6 @@ function userProfile() {
         body: JSON.stringify({
           email: email,
           name: edittedName,
-          password: edittedPassword,
         }),
       });
 
@@ -130,7 +131,7 @@ function userProfile() {
           variant: "success",
         });
 
-        setEditMode(false);
+        setNameEditMode(false);
       } else {
         enqueueSnackbar("Failed to update details", { variant: "error" });
       }
@@ -139,10 +140,46 @@ function userProfile() {
     }
   };
 
+  const updateUserPassword = async () => {
+    try {
+      const res = await fetch(
+        "http://localhost:3000/api/password/resetpassword",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            email: email,
+            newPassword: edittedPassword,
+          }),
+        }
+      );
+
+      if (res.ok) {
+        dispatch(
+          updateUserDetails({ password: edittedPassword, name: edittedName })
+        );
+
+        enqueueSnackbar("Account details updated successfully", {
+          variant: "success",
+        });
+
+        setPassEditMode(false);
+      } else {
+        enqueueSnackbar("Failed to update details", { variant: "error" });
+      }
+    } catch (error) {
+      console.log("Error in updating details: ", error);
+    }
+  };
+
+  console.log(nameEditMode);
+
   return (
     <div>
       {loadingState ? (
-        <LoadingState planLoading={false} />
+        <LoadingState />
       ) : (
         <div
           className={`${
@@ -152,7 +189,6 @@ function userProfile() {
           }`}
         >
           <h1>Account</h1>
-
           <div className="flex items-center justify-center flex-col mb-10">
             <img
               className="w-[80px] rounded-full m-[10px]"
@@ -161,17 +197,34 @@ function userProfile() {
             />
             <h4>{name}</h4>
           </div>
-
           <div className="items-center justify-center flex-col flex gap-[30px]">
             <div className="bg-gray-500 w-[300px] md:w-[400px] lg:w-[500px] font-semibold border-[1px] border-gray-300 rounded-xl">
               <p className="py-[5px] px-[8px]">Account Datails</p>
-              <div className="profileDetails">{email}</div>
-              <div className="profileDetails">
-                {editMode ? (
+              <div
+                className={
+                  location.pathname === "/userprofile"
+                    ? "profileDetails"
+                    : "bg-white profileDetails"
+                }
+              >
+                {email}
+              </div>
+              <div
+                className={
+                  location.pathname === "/userprofile"
+                    ? "profileDetails"
+                    : "bg-white profileDetails"
+                }
+              >
+                {nameEditMode ? (
                   <input
                     type="text"
                     value={edittedName}
-                    className="bg-[#121a56] outline-none p-1 w-full"
+                    className={
+                      location.pathname === "/userprofile"
+                        ? "bg-[#121a56] outline-none p-1 w-full"
+                        : "bg-gray-500 outline-none p-1 w-full"
+                    }
                     onChange={(e) => {
                       console.log(e.target.value);
                       setEdittedName(e.target.value);
@@ -181,60 +234,135 @@ function userProfile() {
                   name
                 )}
 
-                {editMode ? (
+                {nameEditMode ? (
                   <IconButton
                     className="pointer"
-                    onClick={() => setEditMode(!editMode)}
+                    onClick={() => setNameEditMode(!nameEditMode)}
                   >
-                    <DoneIcon className="text-white" />
+                    <DoneIcon
+                      className={
+                        location.pathname === "/userprofile"
+                          ? "text-white"
+                          : "text-black"
+                      }
+                      onClick={updateUserName}
+                    />
                   </IconButton>
                 ) : (
                   <IconButton
                     className="pointer"
-                    onClick={() => setEditMode(!editMode)}
+                    onClick={() => setNameEditMode(!nameEditMode)}
                   >
-                    <EditIcon className="text-white" />
+                    <EditIcon
+                      className={
+                        location.pathname === "/userprofile"
+                          ? "text-white"
+                          : "text-black"
+                      }
+                    />
                   </IconButton>
                 )}
               </div>
 
-              <div className="profileDetails">
-                *******
-                <IconButton
-                  className="pointer"
-                  onClick={() => setEditMode(!editMode)}
-                >
-                  <EditIcon className="text-white" />
-                </IconButton>
+              <div
+                className={
+                  location.pathname === "/userprofile"
+                    ? "profileDetails"
+                    : "bg-white profileDetails"
+                }
+              >
+                {passEditMode ? (
+                  <input
+                    type="text"
+                    className={
+                      location.pathname === "/userprofile"
+                        ? "bg-[#121a56] outline-none p-1 w-full"
+                        : "bg-gray-500 outline-none p-1 w-full"
+                    }
+                    onChange={(e) => {
+                      console.log(e.target.value);
+                      setEdittedPassword(e.target.value);
+                    }}
+                  />
+                ) : (
+                  "********"
+                )}
+                {passEditMode ? (
+                  <IconButton
+                    className="pointer"
+                    onClick={() => setPassEditMode(!passEditMode)}
+                  >
+                    <DoneIcon
+                      className={
+                        location.pathname === "/userprofile"
+                          ? "text-white"
+                          : "text-black"
+                      }
+                      onClick={updateUserPassword}
+                    />
+                  </IconButton>
+                ) : (
+                  <IconButton
+                    className="pointer"
+                    onClick={() => setPassEditMode(!passEditMode)}
+                  >
+                    <EditIcon
+                      className={
+                        location.pathname === "/userprofile"
+                          ? "text-white"
+                          : "text-black"
+                      }
+                    />
+                  </IconButton>
+                )}
               </div>
-              <div className="profileDetails p-[0px] text-center hover:text-white rounded-b-xl pointer">
+
+              <div
+                className={
+                  location.pathname === "/userprofile"
+                    ? "profileDetails p-[0px] text-center hover:text-white rounded-b-xl pointer"
+                    : "bg-white profileDetails p-[0px] text-center hover:text-white rounded-b-xl pointer"
+                }
+              >
                 <button
                   onClick={navigateToLogout}
-                  className="w-full p-2 rounded-bl-xl hover:bg-sky-700 duration-300 ease-in-out"
+                  className=" w-full p-2 rounded-bl-xl hover:bg-sky-700 duration-300 ease-in-out"
                 >
                   log out
-                </button>
-                <button
-                  onClick={updateDetails}
-                  className="w-full p-2 rounded-br-xl hover:bg-green-700 duration-300 ease-in-out"
-                >
-                  save
                 </button>
               </div>
             </div>
             <div className="bg-gray-500 w-[300px] md:w-[400px] lg:w-[500px]  font-semibold border-[1px] border-gray-300 rounded-xl">
               <p className="py-[5px] px-[8px]">Subscription</p>
-              <div className="profileDetails rounded-b-xl">
+              <div
+                className={
+                  location.pathname === "/userprofile"
+                    ? "profileDetails rounded-b-xl"
+                    : "bg-white profileDetails rounded-b-xl"
+                }
+              >
                 Premium (Annual)
               </div>
             </div>
             <div className="bg-gray-500 w-[300px] md:w-[400px] lg:w-[500px]  font-semibold border-[1px] border-gray-300 rounded-xl">
               <p className="py-[5px] px-[8px]">SETTINGS</p>
-              <div className="profileDetails">
+              <div
+                className={
+                  location.pathname === "/userprofile"
+                    ? "profileDetails"
+                    : "bg-white profileDetails"
+                }
+              >
                 To manage parental controls for profiles on your account, visit
                 Edit Profiles and select a Profile.
               </div>
-              <div className="profileDetails p-[0px] text-center text-red-500 rounded-b-xl hover:bg-red-700 hover:text-white duration-300 ease-in-out pointer">
+              <div
+                className={
+                  location.pathname === "/userprofile"
+                    ? "profileDetails p-[0px] text-center text-red-500 rounded-b-xl hover:bg-red-700 hover:text-white duration-300 ease-in-out pointer"
+                    : "bg-white profileDetails p-[0px] text-center text-red-500 rounded-b-xl hover:bg-red-700 hover:text-white duration-300 ease-in-out pointer"
+                }
+              >
                 <UserDelete deleteUser={deleteUser} name="Delete Account" />
               </div>
             </div>

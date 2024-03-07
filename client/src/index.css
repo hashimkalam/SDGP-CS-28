@@ -10,9 +10,34 @@
   padding: 0;
   box-sizing: border-box;
   font-family: "poppins";
+  scroll-behavior: smooth;
 }
+body {
+  overflow-x: hidden; /* Prevent horizontal scroll */
+  
+}
+
 :root {
   --bg-image: url("./assets/pattern.png");
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+  position: fixed;
+  right: 0;
+}
+
+::-webkit-scrollbar-track {
+  background-color: transparent;
+  background-color: #090e34;
+  position: relative;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #0f3dde;
+  opacity: 0.8;
+  border-radius: 2px;
+  width: 0px;
 }
 
 @layer components {
@@ -37,4 +62,11 @@
   .profileDetails {
     @apply bg-[#090e34] m-[1px] p-[10px] text-sm font-normal flex items-center justify-between;
   }
+  .buttonHover {
+    @apply relative z-10 before:absolute before:left-0 before:bottom-0 before:-z-10 before:h-full before:w-full before:origin-top-left before:scale-x-0   before:bg-[#090e34] before:transition-transform before:duration-300 before:content-[''] before:hover:scale-x-100 before:hover:rounded-lg after:hover:rounded-lg;
+  }
+}
+
+html {
+  scroll-behavior: smooth;
 }

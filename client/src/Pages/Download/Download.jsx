@@ -1,6 +1,6 @@
 import { Button } from "@mui/material";
 import React from "react";
-
+import { useNavigate } from "react-router-dom";
 import tick_image from "../../assets/tick_svg.svg";
 import person_image from "../../assets/download_person.png";
 
@@ -19,6 +19,8 @@ function Download() {
       background: "rgba(0, 101, 255, 1)",
     },
   };
+
+  const navigate = useNavigate();
 
   return (
     <div className="max-w-[1560px] z-0 mx-auto mt-0 lg:-mt-14 min-h-[96.25vh] overflow-hidden lg:overflow-auto flex flex-col lg:flex-row text-white p-10">
@@ -74,7 +76,12 @@ function Download() {
             rough sketch into a polished blueprint.
           </p>
           <div className="flex justify-center">
-            <Button sx={buttonStyles}>Explore Architect Consultation</Button>
+            <Button
+              sx={buttonStyles}
+              onClick={() => navigate("/architectpanel")}
+            >
+              Connect with an Architect Now
+            </Button>
           </div>
         </div>
       </div>
