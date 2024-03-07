@@ -94,6 +94,7 @@ const Workspaces = () => {
               key={`left-${floorPlan.id}`}
               floorPlanDetails={floorPlan.formData}
               click={() => handleOnClick(floorPlan.id)}
+              floorPlanPath = {floorPlan.floorPlanPathPng}
             />
           </div>
         ))}
