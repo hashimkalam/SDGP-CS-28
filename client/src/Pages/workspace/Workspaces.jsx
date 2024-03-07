@@ -120,6 +120,7 @@ const Workspaces = () => {
               floorPlanPath={floorPlan}
               userId={currentUser.user._id}
               click={() => handleOnClick(floorPlan.id)}
+              floorPlanPath = {floorPlan.floorPlanPathPng}
             />
           </div>
         ))}

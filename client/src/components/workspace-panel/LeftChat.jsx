@@ -1,5 +1,6 @@
 import React from "react";
 import { FaTrash } from "react-icons/fa";
+
 import { ref } from "firebase/storage";
 import { storage, database } from "../../firebase";
 import { ref as dbRef, remove } from "firebase/database";
