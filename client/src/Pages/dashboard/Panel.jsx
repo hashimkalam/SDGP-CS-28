@@ -3,6 +3,7 @@ import { useSelector } from "react-redux";
 import UserProfile from "../UserProfile/userProfile";
 import { useNavigate } from "react-router-dom";
 import Dropbox from "../../components/dropbox/dropbox";
+import { useSnackbar } from "notistack";
 
 import { uploadBytes } from "firebase/storage";
 
@@ -19,7 +20,17 @@ const Panel = () => {
   const [initialRender, setInitialRender] = useState(true);
   const [uploadImg, setUploadImg] = useState(); 
 
+  const { enqueueSnackbar } = useSnackbar();
+
+  
   const upload = (image) => {
+    // Check if the file type is one of the allowed types
+    if (!['image/png', 'image/jpeg', 'image/jpg'].includes(image.type)) {
+      console.error('Invalid file type. Please upload a PNG, JPEG, or JPG image.');
+      enqueueSnackbar("Invalid file type. Please upload a PNG, JPEG, or JPG image.", { variant: "error" });
+      return;
+    }
+  
     var imgRef = ref(storage, `arch_files/${id}/floorplan_${v4()}.png`);
     uploadBytes(imgRef, image);
     setUploadImg(image);
