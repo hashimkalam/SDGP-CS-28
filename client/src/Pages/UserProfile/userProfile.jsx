@@ -104,9 +104,6 @@ function userProfile() {
     }
   };
 
-  
-
-
   return (
     <div>
       {loadingState ? (
@@ -147,9 +144,7 @@ function userProfile() {
                     : "bg-white profileDetails"
                 }
               >
-                
-                  {name}
-
+                {name}
               </div>
 
               <div
@@ -159,25 +154,23 @@ function userProfile() {
                     : "bg-white profileDetails"
                 }
               >
-                
-                  ********
-                
+                ********
               </div>
 
               <div
                 className={
                   location.pathname === "/userprofile"
-                    ? "profileDetails p-[0px] text-center hover:text-white rounded-b-xl pointer"
-                    : "bg-white profileDetails p-[0px] text-center hover:text-white rounded-b-xl pointer"
+                    ? "profileDetails p-[0px] text-center rounded-b-xl pointer"
+                    : "bg-white profileDetails p-[0px] text-center rounded-b-xl pointer"
                 }
               >
                 <button
                   onClick={navigateToLogout}
-                  className=" w-full p-2 rounded-bl-xl hover:bg-sky-700 duration-300 ease-in-out"
+                  className=" w-full p-2 rounded-bl-xl hover:text-white hover:bg-sky-700 duration-300 ease-in-out"
                 >
                   log out
                 </button>
-                <EditUser/>
+                <EditUser />
               </div>
             </div>
             <div className="bg-gray-500 w-[300px] md:w-[400px] lg:w-[500px]  font-semibold border-[1px] border-gray-300 rounded-xl">

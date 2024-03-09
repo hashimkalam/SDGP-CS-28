@@ -120,7 +120,7 @@ const Workspaces = () => {
               floorPlanPath={floorPlan}
               userId={currentUser.user._id}
               click={() => handleOnClick(floorPlan.id)}
-              floorPlanPath = {floorPlan.floorPlanPathPng}
+              // floorPlanPath={floorPlan.floorPlanPathPng}
             />
           </div>
         ))}
@@ -129,14 +129,14 @@ const Workspaces = () => {
           className="bg-white hover:bg-slate-200 ease-out duration-150 mt-5 cursor-pointer w-auto px-2 md:py-3 mx-5 rounded-l-xl rounded-r-lg"
           onClick={() => handleOnClickNewChat("")}
         >
-          <h5 className="text-[#111] ease-out duration-150 text-1xl font-semibold text-center items-center flex justify-center">
+          <h5 className="text-[#5b5353] ease-out duration-150 text-1xl font-semibold text-center items-center flex justify-center">
             + <span className="hidden md:block">Add New Description</span>
           </h5>
         </div>
       </div>
       <div className="flex-1 bg-[#fff] flex-0 md:flex-[.75] rounded-l-lg rounded-r-3xl overflow-y-scroll px-4">
         <button
-          className="absolute right-14 mt-4 mr-3 px-4 z-50 cursor-pointer bg-[#0065FF]/85 hover:bg-[#0065FF] duration-150 ease-out text-white p-3 rounded-lg"
+          className="absolute right-14 mt-4 mr-3 px-4 z-40 cursor-pointer bg-[#0065FF]/85 hover:bg-[#0065FF] duration-150 ease-out text-white p-3 rounded-lg"
           onClick={handleDownload}
         >
           Download

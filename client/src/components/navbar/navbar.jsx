@@ -8,7 +8,7 @@ import { Logo } from "../Logo/logo";
 import darkLogo from "../../../public/images/Logo.png";
 
 const Navbar = () => {
-  let [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(false);
 
   const { currentUser } = useSelector((state) => state.user);
   const navigate = useNavigate();
@@ -61,11 +61,21 @@ const Navbar = () => {
         </a>
       )}
 
-      <div
-        onClick={() => setOpen(!open)}
-        className="text-3xl absolute right-8 top-8 cursor-pointer md:hidden"
-      >
-        <ion-icon name={open ? "close" : "menu"}></ion-icon>
+      <div className="text-3xl space-x-3 absolute right-8 top-8 cursor-pointer md:hidden flex">
+        <div className="flex items-center">
+          <img
+            src={currentUser?.user?.profilePicture}
+            alt="profilePicture"
+            className="h-9 w-9 md:mr-2 rounded-full object-cover cursor-pointer"
+            onClick={navigateToProfileOrDashboard}
+          />
+        </div>
+
+        {location.pathname !== "/userprofile" && (
+          <div onClick={() => setOpen(!open)} className="flex items-center">
+            <ion-icon name={open ? "close" : "menu"}></ion-icon>
+          </div>
+        )}
       </div>
 
       {location.pathname == "/" && (
@@ -112,12 +122,6 @@ const Navbar = () => {
                     LOGOUT
                   </button>
 
-                  <img
-                    src={currentUser?.user?.profilePicture}
-                    alt="profilePicture"
-                    className="h-10 w-10 md:mr-2 rounded-full object-cover cursor-pointer"
-                    onClick={navigateToProfileOrDashboard}
-                  />
                   <div className="text-[#1d2144] font-Inter-Regular text-lg">
                     {currentUser?.user?.username}
                   </div>
@@ -159,12 +163,21 @@ const Navbar = () => {
           )}
           {location.pathname == "/workspace" && (
             <div className="space-x-4 mr-8">
-              <button
-                onClick={() => navigate("/download")}
-                className="bg-[#0065FF]/85 font-Inter-Regular hover:bg-[#0065FF] duration-150 ease-out text-white p-3 rounded-lg"
-              >
-                Explore Achitect Consultatiom
-              </button>
+              {currentUser?.user?.role === "architect" ? (
+                <button
+                  onClick={() => navigate("/dashboard")}
+                  className="bg-[#0065FF]/85 font-Inter-Regular hover:bg-[#0065FF] duration-150 ease-out text-white p-3 rounded-lg"
+                >
+                  Navigate To Dashboard
+                </button>
+              ) : (
+                <button
+                  onClick={() => navigate("/download")}
+                  className="bg-[#0065FF]/85 font-Inter-Regular hover:bg-[#0065FF] duration-150 ease-out text-white p-3 rounded-lg"
+                >
+                  Explore Achitect Consultatiom
+                </button>
+              )}
             </div>
           )}
 
@@ -205,31 +218,32 @@ const Navbar = () => {
       )}
 
       {open && currentUser && (
-        <div className="md:hidden justify-between flex-col items-center mt-4 absolute top-20 left-0 w-full bg-white transition-all duration-500 ease-in">
+        <div className="md:hidden justify-between flex-col z-50 items-center mt-4 absolute top-20 left-0 w-full bg-white transition-all duration-500 ease-in">
           {(location.pathname === "/workspace" ||
             location.pathname === "/download") && (
-            <div className="flex-col items-center mt-10  pl-7 pr-9 pb-10">
-              <a
-                href="#"
-                className="bg-[#0B113A] text-white text-center font-semibold font-Inter-Regular hover:bg-[#0065FF] duration-150 ease-out  py-2 px-6 rounded-full block"
-              >
-                ARCHITECT CONSULTATION
-              </a>
-
-              <div className="flex mt-6 space-x-4">
+            <div className="flex-col items-center mt-10  pl-7 pr-9 pb-10 space-y-4">
+              {currentUser?.user?.role === "architect" ? (
                 <a
                   href="#"
-                  className="bg-[#0B113A] text-white text-center font-semibold font-Inter-Regular hover:bg-[#0065FF] duration-150 ease-out  py-2 px-[82px] rounded-full block"
+                  className="bg-[#0B113A] uppercase text-white text-center font-semibold font-Inter-Regular hover:bg-[#0065FF] duration-150 ease-out  py-2 px-6 rounded-full block"
                 >
-                  DOWNLOAD
+                  dashboard
                 </a>
-                <img
-                  src={currentUser?.user?.profilePicture}
-                  alt="profilePicture"
-                  className="h-9 w-9 md:mr-2 rounded-full object-cover cursor-pointer"
-                  onClick={navigateToProfileOrDashboard}
-                />
-              </div>
+              ) : (
+                <a
+                  href="#"
+                  className="bg-[#0B113A] text-white text-center font-semibold font-Inter-Regular hover:bg-[#0065FF] duration-150 ease-out  py-2 px-6 rounded-full block"
+                >
+                  ARCHITECT CONSULTATION
+                </a>
+              )}
+
+              <a
+                href="#"
+                className="bg-[#0B113A] text-white text-center font-semibold font-Inter-Regular hover:bg-[#0065FF] duration-150 ease-out  py-2 px-[82px] rounded-full block"
+              >
+                DOWNLOAD
+              </a>
             </div>
           )}
         </div>
