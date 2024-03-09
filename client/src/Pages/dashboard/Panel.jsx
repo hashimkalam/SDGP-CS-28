@@ -18,19 +18,23 @@ const Panel = () => {
   const [slide, setSlide] = useState("projects");
   const [imgUrl, setImgUrl] = useState([]);
   const [initialRender, setInitialRender] = useState(true);
-  const [uploadImg, setUploadImg] = useState(); 
+  const [uploadImg, setUploadImg] = useState();
 
   const { enqueueSnackbar } = useSnackbar();
 
-  
   const upload = (image) => {
     // Check if the file type is one of the allowed types
-    if (!['image/png', 'image/jpeg', 'image/jpg'].includes(image.type)) {
-      console.error('Invalid file type. Please upload a PNG, JPEG, or JPG image.');
-      enqueueSnackbar("Invalid file type. Please upload a PNG, JPEG, or JPG image.", { variant: "error" });
+    if (!["image/png", "image/jpeg", "image/jpg"].includes(image.type)) {
+      console.error(
+        "Invalid file type. Please upload a PNG, JPEG, or JPG image."
+      );
+      enqueueSnackbar(
+        "Invalid file type. Please upload a PNG, JPEG, or JPG image.",
+        { variant: "error" }
+      );
       return;
     }
-  
+
     var imgRef = ref(storage, `arch_files/${id}/floorplan_${v4()}.png`);
     uploadBytes(imgRef, image);
     setUploadImg(image);
@@ -100,7 +104,7 @@ const Panel = () => {
       </section>
 
       {slide === "projects" ? (
-        <section className="grid md:grid-cols-2 xl:grid-cols-4 gap-6 mt-10">
+        <section className="grid md:grid-cols-2 xl:grid-cols-4 gap-6 mt-10 mx-10">
           {imgUrl.map((dataVal, index) => (
             <div
               key={index}

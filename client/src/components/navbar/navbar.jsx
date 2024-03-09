@@ -55,7 +55,12 @@ const Navbar = () => {
       }`}
     >
       {location.pathname === "/dashboard" ? (
-        <img src={darkLogo} alt="" />
+        <img
+          src={darkLogo}
+          onClick={() => navigate("/")}
+          className="cursor-pointer"
+          alt="Logo"
+        />
       ) : (
         <motion.a
           initial={{ opacity: 0 }}

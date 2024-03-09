@@ -105,7 +105,7 @@ function userProfile() {
   };
 
   return (
-    <div>
+    <div className="min-h-[89.2vh]">
       {loadingState ? (
         <LoadingState />
       ) : (
