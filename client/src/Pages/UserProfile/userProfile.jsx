@@ -48,10 +48,7 @@ function userProfile() {
 
   useEffect(() => {
     const auth = getAuth();
-    const unsubscribe = onAuthStateChanged(auth, async (user) => {
-      if (!user) {
-      }
-    });
+    const unsubscribe = onAuthStateChanged(auth, (async) => {});
 
     return () => unsubscribe(); // to prevent memory leaks
   }, []);

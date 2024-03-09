@@ -70,9 +70,9 @@ const Panel = () => {
   return (
     <main className="min-h-screen z-999 flex flex-col px-8 pt-7 pb-12 bg-gray-100 max-md:px-5 overflow-hidden">
       <section className="flex justify-center items-center text-center text-white whitespace-nowrap rounded-xl bg-[#1d2144] max-md:px-5 max-md:max-w-full">
-        <div className="flex gap-5 items-center justify-evenly w-full max-md:flex-wrap">
+        <div className="flex gap-5 items-center justify-evenly w-full max-sm:flex-wrap">
           <div
-            className="flex gap-5  justify-center cursor-pointer w-full py-5"
+            className="flex justify-center gap-5 cursor-pointer w-full py-5"
             onClick={() => setSlide("projects")}
           >
             <img
@@ -81,13 +81,13 @@ const Panel = () => {
               className="aspect-square w-[35px]"
               alt="Projects Icon"
             />
-            <div className="self-start mt-2 font-semibold font-Inter-Regular leading-6 text-xl">
+            <div className="self-start mt-1.5 font-semibold font-Inter-Regular leading-6 text-xl">
               PROJECTS
             </div>
           </div>
 
           <div
-            className="flex gap-5  justify-center cursor-pointer w-full py-5"
+            className="flex justify-center gap-5 cursor-pointer w-full py-5"
             onClick={() => setSlide("profile")}
           >
             <img
@@ -96,7 +96,7 @@ const Panel = () => {
               className="aspect-square w-[35px]"
               alt="Architect Icon"
             />
-            <div className="self-start mt-3 font-semibold font-Inter-Regular leading-4 text-xl">
+            <div className="self-start mt-2 font-semibold font-Inter-Regular leading-4 text-xl">
               My Profile
             </div>
           </div>

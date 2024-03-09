@@ -85,12 +85,12 @@ const Navbar = () => {
           </div>
         )}
 
-        {location.pathname !== "/userprofile" ||
-          (location.pathname !== "/architectpanel" && (
+        {location.pathname !== "/userprofile" &&
+          location.pathname !== "/architectpanel" && (
             <div onClick={() => setOpen(!open)} className="flex items-center">
               <ion-icon name={open ? "close" : "menu"}></ion-icon>
             </div>
-          ))}
+          )}
       </div>
 
       {location.pathname == "/" && (

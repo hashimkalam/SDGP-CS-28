@@ -15,8 +15,8 @@ function hero() {
           transition={{ duration: 1 }}
           className="relative pt-20 w-fit mx-auto"
         >
-          <img src={glow} className="absolute -left-10 top-16" />
-          <h1 className="text-2xl md:text-4xl lg:text-5xl xl:text-[60px]">
+          <img src={glow} className="absolute -left-10 top-10" />
+          <h1 className="text-2xl md:text-4xl lg:text-5xl xl:text-[60px] font-bold">
             Unleash Your Inner Architect
           </h1>
         </motion.div>

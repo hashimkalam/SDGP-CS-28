@@ -55,13 +55,14 @@ const HowItWorks = () => {
           Master the Magic: Your Guide to Generating Perfect Floor Plans
         </motion.p>
       </div>
-      <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 mt-10 mb-5">
+      <div className="flex items-center justify-center max-xl:flex-wrap mt-10 mb-5">
         {steps.map((step, index) => (
           <motion.div
             key={index}
             initial={{ opacity: 0, translateY: 50 }}
             animate={inView ? { opacity: 1, translateY: 0 } : {}}
             transition={{ duration: 0.75, delay: index * 0.5 }}
+            className="mx-5"
           >
             <Stepcard
               title={step.title}

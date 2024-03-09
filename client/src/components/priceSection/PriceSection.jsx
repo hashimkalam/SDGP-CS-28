@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import PriceBox from "../priceBox/PriceBox.jsx";
 import "./priceSection.css";
 
-import { delay, motion } from "framer-motion";
+import { motion } from "framer-motion";
 import { useInView } from "react-intersection-observer";
 
 function PriceSection() {
@@ -37,12 +37,17 @@ function PriceSection() {
   };
 
   return (
-    <div className="PriceSection" id="pricing" ref={ref}>
-      <div className="title">
+    <div
+      className="PriceSection text-white flex items-center flex-col justify-center"
+      id="pricing"
+      ref={ref}
+    >
+      <div className="title mt-20 md:mt-0">
         <motion.h1
           initial={{ opacity: 0, translateY: 10 }}
           animate={inView ? { opacity: 1, translateY: 0 } : {}}
           transition={{ duration: 0.5 }}
+          className="text-2xl md:text-3xl font-bold md:w-[80vw] text-center"
         >
           Simple And Affordable Pricing
         </motion.h1>
@@ -50,6 +55,7 @@ function PriceSection() {
           initial={{ opacity: 0, translateY: 10 }}
           animate={inView ? { opacity: 1, translateY: 0 } : {}}
           transition={{ duration: 0.5, delay: 0.2 }}
+          className="text-md md:text-xl text-center leading-8 md:w-[80vw]"
         >
           Skip the subscriptions, say goodbye to recurring fees. Build your
           forever home with one-time access to unlimited floor plan generation.
@@ -72,7 +78,7 @@ function PriceSection() {
         </motion.div>
       </div>
       <div></div>
-      <div className="flex sm:flex-col items-center justify-center">
+      <div className="flex sm:flex-col mb-20 md:mb-0 items-center justify-center">
         <div className="flex flex-col md:flex-row">
           {priceList.map((data, index) => (
             <motion.div
