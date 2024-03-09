@@ -20,6 +20,7 @@ import UserDelete from "../../components/model/UserDelete";
 import { ref, remove } from "firebase/database";
 import { database, storage } from "../../firebase";
 import LoadingState from "../../components/loadingState/LoadingState";
+import EditUser from "../../components/model/EditUser";
 
 function userProfile() {
   const currentUser = useSelector((state) => state.user.currentUser);
@@ -330,6 +331,7 @@ function userProfile() {
                 >
                   log out
                 </button>
+                <EditUser/>
               </div>
             </div>
             <div className="bg-gray-500 w-[300px] md:w-[400px] lg:w-[500px]  font-semibold border-[1px] border-gray-300 rounded-xl">

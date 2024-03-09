@@ -1,16 +1,18 @@
 import { Button, Modal, Box, Typography } from "@mui/material";
-
 import { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 
-
-import PictureEdit from "./PictureEdit";
-import NameEdit from "./NameEdit";
-import PasswordEdit from "./PasswordEdit";
-
-const EditUser = () => {
+const PictureEdit = () => {
+    const currentUser = useSelector((state) => state.user.currentUser);
+    const name = currentUser?.user?.name;
+    const profilePic = currentUser?.user?.profilePicture;
+    const email = currentUser?.user?.email;
+    const password = currentUser?.user?.password;
+    const userID = currentUser?.user?._id;
 
 
     const [open, setOpen] = useState(false);
+
 
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
@@ -24,8 +26,8 @@ const EditUser = () => {
 
     return (
         <>
-            <button onClick={handleOpen} className="w-full p-2 rounded-b-xl">
-                Edit
+            <button onClick={handleOpen} className="p-2 border-black border-2 rounded-lg hover:bg-gray-300 duration-200 ease-in-out">
+                Edit Profile Picture
             </button>
             <Modal
                 open={open}
@@ -38,12 +40,11 @@ const EditUser = () => {
                     sx={style}
                     className="rounded-xl bg-white/90 absolute p-4 shadow-2xl w-[45vw] text-center"
                 >
-                    <h1 className="mt-0 font-semibold">Edit Informations</h1>
+                    <h1 className="mt-0 font-semibold">Edit profile picture</h1>
 
                     <div className="flex flex-col space-y-2 m-5 ">
-                        <PictureEdit />
-                        <NameEdit />
-                        <PasswordEdit />
+                        d
+                 
 
                     </div>
 
@@ -52,7 +53,12 @@ const EditUser = () => {
                         sx={{ mt: 2 }}
                         className="flex justify-evenly space-x-2"
                     >
+                        <button
+                            className="p-1 bg-green-400 hover:bg-green-600 hover:font-bold hover:text-white duration-200 ease-in-out flex-[.5]"
 
+                        >
+                            Yes
+                        </button>
                         <button
                             className="p-1 bg-red-400 hover:bg-red-600 hover:font-bold hover:text-white duration-200 ease-in-out flex-[.5]"
                             onClick={() => setOpen(false)}
@@ -66,4 +72,4 @@ const EditUser = () => {
     );
 }
 
-export default EditUser;
+export default PictureEdit;
