@@ -19,8 +19,8 @@ const PasswordEdit = () => {
     const dispatch = useDispatch();
 
     const [open, setOpen] = useState(false);
-    const [edittedPassword, setEdittedPassword] = useState(password);
-    const [confirmPassword, setconfirmPassword] = useState(password);
+    const [edittedPassword, setEdittedPassword] = useState("");
+    const [confirmPassword, setconfirmPassword] = useState("");
 
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
@@ -39,7 +39,7 @@ const PasswordEdit = () => {
             return
         }
 
-        if (edittedPassword ==="" || confirmPassword === "") {
+        if (edittedPassword === "" || confirmPassword === "") {
             enqueueSnackbar("Password cannot be empty", { variant: "warning" });
             return  
         }

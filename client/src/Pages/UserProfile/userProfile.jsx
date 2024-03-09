@@ -4,9 +4,6 @@ import { useSnackbar } from "notistack";
 import { useNavigate, useLocation } from "react-router-dom";
 import { signOut, updateUserDetails } from "../../redux/user/userSlice";
 
-import EditIcon from "@mui/icons-material/Edit";
-import DoneIcon from "@mui/icons-material/Done";
-import { IconButton } from "@mui/material";
 import {
   getAuth,
   deleteUser as deleteFirebaseUser,
@@ -152,7 +149,7 @@ function userProfile() {
               >
                 
                   {name}
-  
+
               </div>
 
               <div
@@ -163,7 +160,7 @@ function userProfile() {
                 }
               >
                 
-                  "********"
+                  ********
                 
               </div>
 

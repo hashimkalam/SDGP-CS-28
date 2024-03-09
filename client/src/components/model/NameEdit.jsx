@@ -13,7 +13,7 @@ const NameEdit = () => {
 
 
     const [open, setOpen] = useState(false);
-    const [edittedName, setEdittedName] = useState(name);
+    const [edittedName, setEdittedName] = useState("");
 
     const { enqueueSnackbar } = useSnackbar();
     const dispatch = useDispatch();
