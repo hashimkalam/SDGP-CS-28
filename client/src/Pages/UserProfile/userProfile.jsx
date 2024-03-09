@@ -30,10 +30,6 @@ function userProfile() {
   const password = currentUser?.user?.password;
   const userID = currentUser?.user?._id;
 
-  const [nameEditMode, setNameEditMode] = useState(false);
-  const [passEditMode, setPassEditMode] = useState(false);
-  const [edittedName, setEdittedName] = useState(name);
-  const [edittedPassword, setEdittedPassword] = useState(password);
   const [loadingState, setLoadingState] = useState(false);
 
   const { enqueueSnackbar } = useSnackbar();
@@ -111,71 +107,8 @@ function userProfile() {
     }
   };
 
-  // updatig details
-  const updateUserName = async () => {
-    try {
-      const res = await fetch("http://localhost:3000/api/auth/update", {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          email: email,
-          name: edittedName,
-        }),
-      });
+  
 
-      if (res.ok) {
-        dispatch(updateUserDetails({ name: edittedName }));
-
-        enqueueSnackbar("Account details updated successfully", {
-          variant: "success",
-        });
-
-        setNameEditMode(false);
-      } else {
-        enqueueSnackbar("Failed to update details", { variant: "error" });
-      }
-    } catch (error) {
-      console.log("Error in updating details: ", error);
-    }
-  };
-
-  const updateUserPassword = async () => {
-    try {
-      const res = await fetch(
-        "http://localhost:3000/api/password/resetpassword",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            email: email,
-            newPassword: edittedPassword,
-          }),
-        }
-      );
-
-      if (res.ok) {
-        dispatch(
-          updateUserDetails({ password: edittedPassword, name: edittedName })
-        );
-
-        enqueueSnackbar("Account details updated successfully", {
-          variant: "success",
-        });
-
-        setPassEditMode(false);
-      } else {
-        enqueueSnackbar("Failed to update details", { variant: "error" });
-      }
-    } catch (error) {
-      console.log("Error in updating details: ", error);
-    }
-  };
-
-  console.log(nameEditMode);
 
   return (
     <div>
@@ -217,52 +150,9 @@ function userProfile() {
                     : "bg-white profileDetails"
                 }
               >
-                {nameEditMode ? (
-                  <input
-                    type="text"
-                    value={edittedName}
-                    className={
-                      location.pathname === "/userprofile"
-                        ? "bg-[#121a56] outline-none p-1 w-full"
-                        : "bg-gray-500 outline-none p-1 w-full"
-                    }
-                    onChange={(e) => {
-                      console.log(e.target.value);
-                      setEdittedName(e.target.value);
-                    }}
-                  />
-                ) : (
-                  name
-                )}
-
-                {nameEditMode ? (
-                  <IconButton
-                    className="pointer"
-                    onClick={() => setNameEditMode(!nameEditMode)}
-                  >
-                    <DoneIcon
-                      className={
-                        location.pathname === "/userprofile"
-                          ? "text-white"
-                          : "text-black"
-                      }
-                      onClick={updateUserName}
-                    />
-                  </IconButton>
-                ) : (
-                  <IconButton
-                    className="pointer"
-                    onClick={() => setNameEditMode(!nameEditMode)}
-                  >
-                    <EditIcon
-                      className={
-                        location.pathname === "/userprofile"
-                          ? "text-white"
-                          : "text-black"
-                      }
-                    />
-                  </IconButton>
-                )}
+                
+                  {name}
+  
               </div>
 
               <div
@@ -272,50 +162,9 @@ function userProfile() {
                     : "bg-white profileDetails"
                 }
               >
-                {passEditMode ? (
-                  <input
-                    type="text"
-                    className={
-                      location.pathname === "/userprofile"
-                        ? "bg-[#121a56] outline-none p-1 w-full"
-                        : "bg-gray-500 outline-none p-1 w-full"
-                    }
-                    onChange={(e) => {
-                      console.log(e.target.value);
-                      setEdittedPassword(e.target.value);
-                    }}
-                  />
-                ) : (
+                
                   "********"
-                )}
-                {passEditMode ? (
-                  <IconButton
-                    className="pointer"
-                    onClick={() => setPassEditMode(!passEditMode)}
-                  >
-                    <DoneIcon
-                      className={
-                        location.pathname === "/userprofile"
-                          ? "text-white"
-                          : "text-black"
-                      }
-                      onClick={updateUserPassword}
-                    />
-                  </IconButton>
-                ) : (
-                  <IconButton
-                    className="pointer"
-                    onClick={() => setPassEditMode(!passEditMode)}
-                  >
-                    <EditIcon
-                      className={
-                        location.pathname === "/userprofile"
-                          ? "text-white"
-                          : "text-black"
-                      }
-                    />
-                  </IconButton>
-                )}
+                
               </div>
 
               <div
