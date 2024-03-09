@@ -6,6 +6,7 @@ import { signOut } from "../../redux/user/userSlice";
 import { Logo } from "../Logo/logo";
 
 import darkLogo from "../../../public/images/Logo.png";
+import { motion } from "framer-motion";
 
 const Navbar = () => {
   const [open, setOpen] = useState(false);
@@ -56,9 +57,15 @@ const Navbar = () => {
       {location.pathname === "/dashboard" ? (
         <img src={darkLogo} alt="" />
       ) : (
-        <a className="cursor-pointer " onClick={handleLogoClick} href="">
+        <motion.a
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.5 }}
+          className="cursor-pointer"
+          onClick={handleLogoClick}
+        >
           <Logo />
-        </a>
+        </motion.a>
       )}
 
       <div className="text-3xl space-x-3 absolute right-8 top-8 cursor-pointer md:hidden flex">
@@ -73,15 +80,19 @@ const Navbar = () => {
           </div>
         )}
 
-        {location.pathname !== "/userprofile" && (
-          <div onClick={() => setOpen(!open)} className="flex items-center">
-            <ion-icon name={open ? "close" : "menu"}></ion-icon>
-          </div>
-        )}
+        {location.pathname !== "/userprofile" ||
+          (location.pathname !== "/architectpanel" && (
+            <div onClick={() => setOpen(!open)} className="flex items-center">
+              <ion-icon name={open ? "close" : "menu"}></ion-icon>
+            </div>
+          ))}
       </div>
 
       {location.pathname == "/" && (
-        <ul
+        <motion.ul
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.5 }}
           className={`md:flex justify-between md:items-center md:text-white text-[#090E34] font-semibold md:pb-0 pb-10 absolute md:static md:z-auto z-[-1] left-0 md:w-[38%] w-[100%] 
         md:pl-0 pl-7 md:pr-0 pr-9 transition-all duration-500 ease-in  ${
           open ? "top-20 bg-white" : "top-[-490px]"
@@ -150,11 +161,16 @@ const Navbar = () => {
               </>
             )}
           </div>
-        </ul>
+        </motion.ul>
       )}
 
       {currentUser ? (
-        <div className="md:flex items-center hidden">
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.5 }}
+          className="md:flex items-center hidden"
+        >
           {location.pathname == "/" && (
             <button
               className="bg-white text-custom-blue md:text-xl text-lg font-Inter-Regular font-semibold py-2 px-6 rounded-full md:ml-8 md:mr-4 mr-2 w-[140px] hover:bg-[#fff] duration-500"
@@ -197,7 +213,7 @@ const Navbar = () => {
             className="h-9 w-9 md:mr-2 rounded-full object-cover cursor-pointer"
             onClick={navigateToProfileOrDashboard}
           />
-        </div>
+        </motion.div>
       ) : (
         <div className="md:flex md:flex-row flex-col md:my-0 my-7 items-center">
           {location.pathname === "/" && (
