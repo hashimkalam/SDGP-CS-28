@@ -62,14 +62,16 @@ const Navbar = () => {
       )}
 
       <div className="text-3xl space-x-3 absolute right-8 top-8 cursor-pointer md:hidden flex">
-        <div className="flex items-center">
-          <img
-            src={currentUser?.user?.profilePicture}
-            alt="profilePicture"
-            className="h-9 w-9 md:mr-2 rounded-full object-cover cursor-pointer"
-            onClick={navigateToProfileOrDashboard}
-          />
-        </div>
+        {currentUser?.user && (
+          <div className="flex items-center">
+            <img
+              src={currentUser?.user?.profilePicture}
+              alt="profilePicture"
+              className="h-9 w-9 md:mr-2 rounded-full object-cover cursor-pointer"
+              onClick={navigateToProfileOrDashboard}
+            />
+          </div>
+        )}
 
         {location.pathname !== "/userprofile" && (
           <div onClick={() => setOpen(!open)} className="flex items-center">
@@ -224,26 +226,19 @@ const Navbar = () => {
             <div className="flex-col items-center mt-10  pl-7 pr-9 pb-10 space-y-4">
               {currentUser?.user?.role === "architect" ? (
                 <a
-                  href="#"
+                  onClick={() => navigate("/dashboard")}
                   className="bg-[#0B113A] uppercase text-white text-center font-semibold font-Inter-Regular hover:bg-[#0065FF] duration-150 ease-out  py-2 px-6 rounded-full block"
                 >
                   dashboard
                 </a>
               ) : (
                 <a
-                  href="#"
+                  onClick={() => navigate("/download")}
                   className="bg-[#0B113A] text-white text-center font-semibold font-Inter-Regular hover:bg-[#0065FF] duration-150 ease-out  py-2 px-6 rounded-full block"
                 >
                   ARCHITECT CONSULTATION
                 </a>
               )}
-
-              <a
-                href="#"
-                className="bg-[#0B113A] text-white text-center font-semibold font-Inter-Regular hover:bg-[#0065FF] duration-150 ease-out  py-2 px-[82px] rounded-full block"
-              >
-                DOWNLOAD
-              </a>
             </div>
           )}
         </div>
