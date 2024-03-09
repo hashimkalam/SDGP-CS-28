@@ -28,7 +28,7 @@ function UserDelete({ name, deleteUser }) {
       >
         <Box
           sx={style}
-          className="rounded-xl bg-white/90 absolute p-4 shadow-2xl w-[45vw] text-center"
+          className="rounded-xl bg-white/90 absolute p-4 shadow-2xl w-[30vw] text-center"
         >
           <h1 className="mt-0 font-semibold">Delete Confirmation</h1>
 

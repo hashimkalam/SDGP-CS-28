@@ -11,6 +11,8 @@ import { getDownloadURL, ref as storageRef } from "firebase/storage";
 import { database, storage } from "../../firebase";
 import { useNavigate } from "react-router-dom";
 
+import { motion } from "framer-motion";
+
 const Workspaces = () => {
   const navigate = useNavigate();
   const { currentUser } = useSelector((state) => state.user);
@@ -111,7 +113,12 @@ const Workspaces = () => {
 
   return (
     <div className="m-10 mt-5 gap-1 md:gap-5 flex h-[80vh]">
-      <div className="bg-[#005BE2] flex-0 md:flex-[.25] rounded-xl overflow-y-scroll overflow-x-hidden">
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 2 }}
+        className="bg-[#005BE2] flex-0 md:flex-[.25] rounded-xl overflow-y-scroll overflow-x-hidden"
+      >
         {floorPlans.map((floorPlan) => (
           <div className="flex flex-row">
             <LeftChat
@@ -133,8 +140,13 @@ const Workspaces = () => {
             + <span className="hidden md:block">Add New Description</span>
           </h5>
         </div>
-      </div>
-      <div className="flex-1 bg-[#fff] flex-0 md:flex-[.75] rounded-l-lg rounded-r-3xl overflow-y-scroll px-4">
+      </motion.div>
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 2 }}
+        className="flex-1 bg-[#fff] flex-0 md:flex-[.75] rounded-l-lg rounded-r-3xl overflow-y-scroll px-4"
+      >
         <button
           className="absolute right-14 mt-4 mr-3 px-4 z-40 cursor-pointer bg-[#0065FF]/85 hover:bg-[#0065FF] duration-150 ease-out text-white p-3 rounded-lg"
           onClick={handleDownload}
@@ -173,7 +185,7 @@ const Workspaces = () => {
             </form>
           </div>
         )}
-      </div>
+      </motion.div>
     </div>
   );
 };

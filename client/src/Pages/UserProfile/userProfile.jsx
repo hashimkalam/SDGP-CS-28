@@ -2,22 +2,21 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useSnackbar } from "notistack";
 import { useNavigate, useLocation } from "react-router-dom";
-import { signOut, updateUserDetails } from "../../redux/user/userSlice";
+import { signOut } from "../../redux/user/userSlice";
 
 import {
   getAuth,
   deleteUser as deleteFirebaseUser,
   onAuthStateChanged,
-  EmailAuthProvider,
-  reauthenticateWithCredential,
 } from "firebase/auth";
 import UserDelete from "../../components/model/UserDelete";
-// import EditUserDetails from "../../components/model/editUserDetails";
 
 import { ref, remove } from "firebase/database";
 import { database, storage } from "../../firebase";
 import LoadingState from "../../components/loadingState/LoadingState";
 import EditUser from "../../components/model/EditUser";
+
+import { motion } from "framer-motion";
 
 function userProfile() {
   const currentUser = useSelector((state) => state.user.currentUser);
@@ -116,17 +115,34 @@ function userProfile() {
               : "displayFlex flex-col pb-[10%]"
           }`}
         >
-          <h1>Account</h1>
-          <div className="flex items-center justify-center flex-col mb-10">
+          <motion.h1
+            initial={{ opacity: 0, translateY: 5 }}
+            animate={{ opacity: 1, translateY: 0 }}
+            transition={{ duration: 0.35 }}
+          >
+            Account
+          </motion.h1>
+          <motion.div
+            initial={{ opacity: 0, translateY: 5 }}
+            animate={{ opacity: 1, translateY: 0 }}
+            transition={{ duration: 0.35, delay: 0.1 }}
+            className="flex items-center justify-center flex-col mb-10"
+          >
             <img
               className="w-[80px] rounded-full m-[10px]"
               src={profile}
               alt=""
             />
             <h4>{name}</h4>
-          </div>
+          </motion.div>
+
           <div className="items-center justify-center flex-col flex gap-[30px]">
-            <div className="bg-gray-500 w-[300px] md:w-[400px] lg:w-[500px] font-semibold border-[1px] border-gray-300 rounded-xl">
+            <motion.div
+              initial={{ opacity: 0, translateY: 5 }}
+              animate={{ opacity: 1, translateY: 0 }}
+              transition={{ duration: 0.5, delay: 0.2 }}
+              className="bg-gray-500 w-[300px] md:w-[400px] lg:w-[500px] font-semibold border-[1px] border-gray-300 rounded-xl"
+            >
               <p className="py-[5px] px-[8px]">Account Datails</p>
               <div
                 className={
@@ -172,8 +188,13 @@ function userProfile() {
                 </button>
                 <EditUser />
               </div>
-            </div>
-            <div className="bg-gray-500 w-[300px] md:w-[400px] lg:w-[500px]  font-semibold border-[1px] border-gray-300 rounded-xl">
+            </motion.div>
+            <motion.div
+              initial={{ opacity: 0, translateY: 5 }}
+              animate={{ opacity: 1, translateY: 0 }}
+              transition={{ duration: 0.35, delay: 0.3 }}
+              className="bg-gray-500 w-[300px] md:w-[400px] lg:w-[500px]  font-semibold border-[1px] border-gray-300 rounded-xl"
+            >
               <p className="py-[5px] px-[8px]">Subscription</p>
               <div
                 className={
@@ -184,8 +205,13 @@ function userProfile() {
               >
                 Premium (Annual)
               </div>
-            </div>
-            <div className="bg-gray-500 w-[300px] md:w-[400px] lg:w-[500px]  font-semibold border-[1px] border-gray-300 rounded-xl">
+            </motion.div>
+            <motion.div
+              initial={{ opacity: 0, translateY: 5 }}
+              animate={{ opacity: 1, translateY: 0 }}
+              transition={{ duration: 0.35, delay: 0.5 }}
+              className="bg-gray-500 w-[300px] md:w-[400px] lg:w-[500px]  font-semibold border-[1px] border-gray-300 rounded-xl"
+            >
               <p className="py-[5px] px-[8px]">SETTINGS</p>
               <div
                 className={
@@ -206,7 +232,7 @@ function userProfile() {
               >
                 <UserDelete deleteUser={deleteUser} name="Delete Account" />
               </div>
-            </div>
+            </motion.div>
           </div>
         </div>
       )}
