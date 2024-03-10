@@ -3,6 +3,8 @@ import Architect from "./Architect";
 import { useNavigate } from "react-router-dom";
 
 
+import LoadingState from "../../components/loadingState/LoadingState";
+
 const ArchitectPanel = () => {
 
   const navigate = useNavigate();
@@ -33,7 +35,11 @@ const ArchitectPanel = () => {
   }, []); // Empty dependency array means this effect will only run once, similar to componentDidMount
 
   if (loading) {
-    return <div>Loading...</div>;
+    return (
+      <div>
+        <LoadingState />
+      </div>
+    );
   }
 
   if (error) {
