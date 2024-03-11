@@ -4,11 +4,12 @@ import UserProfile from "../UserProfile/userProfile";
 import { useNavigate } from "react-router-dom";
 import Dropbox from "../../components/dropbox/dropbox";
 import { useSnackbar } from "notistack";
+import DeleteIcon from '@mui/icons-material/Delete';
 
 import { uploadBytes } from "firebase/storage";
 
 import { storage } from "../../firebase";
-import { getDownloadURL, listAll, ref } from "firebase/storage";
+import { getDownloadURL, listAll, ref ,deleteObject} from "firebase/storage";
 import { v4 } from "uuid";
 
 const Panel = () => {
@@ -19,6 +20,8 @@ const Panel = () => {
   const [imgUrl, setImgUrl] = useState([]);
   const [initialRender, setInitialRender] = useState(true);
   const [uploadImg, setUploadImg] = useState();
+
+  const [openImage, setOpenImage] = useState();
 
   const { enqueueSnackbar } = useSnackbar();
 
@@ -49,7 +52,7 @@ const Panel = () => {
     const timeoutId = setTimeout(async () => {
       try {
         const imgs = await listAll(ref(storage, `arch_files/${id}`));
-        console.log(imgs);
+        console.log("all images",imgs);
         const urls = await Promise.all(
           imgs.items.map(async (val) => {
             const url = await getDownloadURL(val);
@@ -66,6 +69,22 @@ const Panel = () => {
   }, [uploadImg]);
 
   console.log(imgUrl, "imgurl");
+
+  const HandleDelete = async(image) => {
+    const imgRef = ref(storage, `${image}`);
+    console.log(imgRef.fullPath);
+    try {
+      await deleteObject(imgRef)
+      console.log("Image deleted successfully");
+      setUploadImg(image);
+      enqueueSnackbar("Image deleted successfully", { variant: "success" });
+    } catch (error) {
+      console.error("Error deleting image:", error);
+      enqueueSnackbar("Error deleting image", { variant: "error" });
+    }
+
+
+  }
 
   return (
     <main className="min-h-screen z-999 flex flex-col px-8 pt-7 pb-12 bg-gray-100 max-md:px-5 overflow-hidden">
@@ -109,14 +128,36 @@ const Panel = () => {
             <div
               key={index}
               className="relative flex items-center bg-white shadow rounded-lg h-[10rem] w-[20rem] xl:h-[200px] cursor-pointer transform transition-transform hover:scale-105 duration-500"
+              
             >
               <img
                 src={dataVal}
-                className="h-full w-full"
+                className="h-full w-full rounded-lg"
                 alt={`Image ${index}`}
+                onClick={() => {
+                  setOpenImage(dataVal);
+                }}
+
+              />
+              <DeleteIcon 
+              className="absolute text-white bottom-2 right-4 hover:text-red-500 cursor-pointer" 
+              onClick={(e)=>{HandleDelete(dataVal)}}
+              
               />
             </div>
           ))}
+          {openImage && (
+            <div
+              className="fixed inset-0 z-50 bg-black bg-opacity-20 flex items-center justify-center transform transition-transform duration-500 ease-in-out hover:scale-105 cursor-pointer"
+              onClick={() => setOpenImage(null)}
+            >
+              <img
+                src={openImage}
+                className="h-5/6 w-5/6 object-contain"
+                alt="Image"
+              />
+            </div>
+          )}
 
           <div className="flex items-center bg-white shadow rounded-lg h-[10rem] w-[20rem] xl:h-[200px] cursor-pointer transform transition-transform hover:scale-105 duration-500">
             <Dropbox floorplanAdded={(e) => upload(e)} />
