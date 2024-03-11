@@ -171,7 +171,7 @@ const Workspaces = () => {
         <div className="absolute right-14 mt-4 mr-3 flex items-center space-x-2 z-40">
           <label></label>
           <select
-            className="px-4 bg-[#0065FF]/85 hover:bg-[#0065FF] duration-150 ease-out text-white p-3 rounded-lg outline-none"
+            className="px-4 mt-[110px] w-[113px] absolute bg-[#0065FF]/85 hover:bg-[#0065FF] duration-150 ease-out text-white p-3 rounded-lg outline-none"
             value={downloadOption}
             onChange={(e) => setDownloadOption(e.target.value)}
           >
