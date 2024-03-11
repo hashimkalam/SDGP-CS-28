@@ -20,6 +20,8 @@ const Workspaces = () => {
 
   const [inputDesc, setInputDesc] = useState("");
 
+  const [downloadOption, setDownloadOption] = useState("dxf"); // Default to DXF
+
   useEffect(() => {
     if (currentUser) {
       fetchFloorPlans(currentUser.user._id);
@@ -99,17 +101,35 @@ const Workspaces = () => {
 
   const handleDownload = () => {
     if (floorPlansData) {
-      const { floorPlanPathDxf } = floorPlansData; // downloading part of the file
-      const downloadLink = document.createElement("a");
-      downloadLink.href = floorPlanPathDxf;
-      downloadLink.download = `floor_plan_${floorPlansData.id}.dxf`;
-      document.body.appendChild(downloadLink);
-      downloadLink.click();
-      document.body.removeChild(downloadLink);
+      const { floorPlanPathDxf, floorPlanPathPng } = floorPlansData;
+      const selectedPath =
+        downloadOption === "dxf" ? floorPlanPathDxf : floorPlanPathPng;
+  
+      if (!selectedPath) {
+        console.error("Selected path is undefined or null.");
+        return;
+      }
 
-      navigate("/download"); // re direct to this download page
+      const downloadLink = document.createElement("a");
+
+      downloadLink.href = selectedPath;
+  
+      // download attribute and file name
+      downloadLink.download = `floor_plan_${floorPlansData.id}.${downloadOption}`;
+  
+      document.body.appendChild(downloadLink);
+      try {
+        downloadLink.click();
+      } catch (error) {
+        console.error("Error triggering download:", error);
+      }
+      document.body.removeChild(downloadLink);
+    } else {
+      console.error("No floor plan data available for download.");
     }
+      navigate("/download"); // re direct to this download page
   };
+
 
   return (
     <div className="m-10 mt-5 gap-1 md:gap-5 flex h-[80vh]">
@@ -147,12 +167,23 @@ const Workspaces = () => {
         transition={{ duration: 2 }}
         className="flex-1 bg-[#fff] flex-0 md:flex-[.75] rounded-l-lg rounded-r-3xl overflow-y-scroll px-4"
       >
-        <button
-          className="absolute right-14 mt-4 mr-3 px-4 z-40 cursor-pointer bg-[#0065FF]/85 hover:bg-[#0065FF] duration-150 ease-out text-white p-3 rounded-lg"
-          onClick={handleDownload}
-        >
-          Download
-        </button>
+        <div className="absolute right-14 mt-4 mr-3 flex items-center space-x-2 z-40">
+          <label></label>
+          <select
+            className="px-4 bg-[#0065FF]/85 hover:bg-[#0065FF] duration-150 ease-out text-white p-3 rounded-lg outline-none"
+            value={downloadOption}
+            onChange={(e) => setDownloadOption(e.target.value)}
+          >
+            <option value="dxf">DXF</option>
+            <option value="png">PNG</option>
+          </select>
+          <button
+            className="px-4 bg-[#0065FF]/85 hover:bg-[#0065FF] duration-150 ease-out text-white p-3 rounded-lg"
+            onClick={handleDownload}
+          >
+            Download
+          </button>
+        </div>
         {floorPlansData ? (
           <RightChat
             key={`right-${floorPlansData.id}`}
