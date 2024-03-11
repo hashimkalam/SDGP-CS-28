@@ -5,13 +5,13 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { signOut } from "../../redux/user/userSlice";
 
 import {
-  getAuth,
+  
   deleteUser as deleteFirebaseUser,
-  onAuthStateChanged,
+  onAuthStateChanged, getAuth, reauthenticateWithPopup, GoogleAuthProvider
 } from "firebase/auth";
 import UserDelete from "../../components/model/UserDelete";
 
-import { ref, remove } from "firebase/database";
+import { deleteObject, ref, remove } from "firebase/database";
 import { database, storage } from "../../firebase";
 import LoadingState from "../../components/loadingState/LoadingState";
 import EditUser from "../../components/model/EditUser";
@@ -53,52 +53,55 @@ function userProfile() {
     return () => unsubscribe(); // to prevent memory leaks
   }, []);
 
-  const deleteUser = async () => {
+
+  
+
+ 
+
+const deleteUser = async () => {
     try {
-      // const reauthPassword = prompt("Re enter your password");
-      setLoadingState(true);
+        setLoadingState(true);
 
-      // removing the plans first
-      const floorPlansRef = ref(database, `users/${userID}/floorPlans`);
-      await remove(floorPlansRef);
+        // Firebase Authentication
+        const auth = getAuth();
+        const firebaseUser = auth.currentUser;
 
-      const auth = getAuth();
-      const firebaseUser = auth?.currentUser;
+        // Delete associated data from Firebase Realtime Database (assuming 'userID' is defined)
+        const floorPlansRef = ref(database, `users/${userID}/floorPlans`);
+        await remove(floorPlansRef);
 
-      // Reauthenticate the user
-      // const credentials = EmailAuthProvider.credential(email, reauthPassword);
-      // await reauthenticateWithCredential(firebaseUser, credentials);
+        // Delete user from Firebase Authentication
+        if (firebaseUser) {
+            await firebaseUser.delete();
+        }
 
-      // deleting user from firebase
-      if (firebaseUser) await deleteFirebaseUser(firebaseUser);
+        // Custom user deletion logic for users not authenticated through Firebase
+        const res = await fetch("http://localhost:3000/api/auth/delete", {
+            method: "DELETE",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                _id: userID,
+            }),
+        });
 
-      // finally deleting user from MongoDB
-      const res = await fetch("http://localhost:3000/api/auth/delete", {
-        method: "DELETE",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          _id: userID,
-        }),
-      });
-
-      if (res.ok) {
-        enqueueSnackbar("Account Deleted Successfully", { variant: "success" });
-        navigateToLogout();
-        navigate("/");
-      } else {
-        enqueueSnackbar("Failed to delete account", { variant: "error" });
-      }
+        if (res.ok) {
+            enqueueSnackbar("Account Deleted Successfully", { variant: "success" });
+            navigateToLogout();
+            navigate("/");
+        } else {
+            enqueueSnackbar("Failed to delete account", { variant: "error" });
+        }
     } catch (error) {
-      console.log("Error in deleting account: ", error);
-      enqueueSnackbar("Error in deleting account. Please try again.", {
-        variant: "error",
-      });
+        console.log("Error in deleting account: ", error);
+        enqueueSnackbar("Error in deleting account. Please try again.", {
+            variant: "error",
+        });
     } finally {
-      setLoadingState(false);
+        setLoadingState(false);
     }
-  };
+};
 
   return (
     <div className="min-h-[89.2vh]">
