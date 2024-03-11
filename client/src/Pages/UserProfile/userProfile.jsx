@@ -11,7 +11,7 @@ import {
 } from "firebase/auth";
 import UserDelete from "../../components/model/UserDelete";
 
-import { ref, remove } from "firebase/database";
+import { deleteObject, ref, remove } from "firebase/database";
 import { database, storage } from "../../firebase";
 import LoadingState from "../../components/loadingState/LoadingState";
 import EditUser from "../../components/model/EditUser";
@@ -56,54 +56,52 @@ function userProfile() {
 
   
 
-  const deleteUser = async () => {
-      try {
-          setLoadingState(true);
-  
-          // Reauthenticate the user using a popup (assuming the user signed in with Google)
-          const user = getAuth().currentUser;
-          const provider = new GoogleAuthProvider();
-  
-          await reauthenticateWithPopup(user, provider);
-  
-          // Continue with account deletion
-          const floorPlansRef = ref(database, `users/${userID}/floorPlans`);
-          await remove(floorPlansRef);
-  
-          const firebaseUser = user;
-  
-          // deleting user from firebase
-          if (firebaseUser) await deleteFirebaseUser(firebaseUser);
-  
-          const res = await fetch("http://localhost:3000/api/auth/delete", {
-              method: "DELETE",
-              headers: {
-                  "Content-Type": "application/json",
-              },
-              body: JSON.stringify({
-                  _id: userID,
-              }),
-          });
-  
-          if (res.ok) {
-              enqueueSnackbar("Account Deleted Successfully", { variant: "success" });
-              navigateToLogout();
-              navigate("/");
-          } else {
-              enqueueSnackbar("Failed to delete account", { variant: "error" });
-          }
-      } catch (error) {
-          console.log("Error in deleting account: ", error);
-          enqueueSnackbar("Error in deleting account. Please try again.", {
-              variant: "error",
-          });
-      } finally {
-          setLoadingState(false);
-      }
-  };
-  
+ 
 
+const deleteUser = async () => {
+    try {
+        setLoadingState(true);
 
+        // Firebase Authentication
+        const auth = getAuth();
+        const firebaseUser = auth.currentUser;
+
+        // Delete associated data from Firebase Realtime Database (assuming 'userID' is defined)
+        const floorPlansRef = ref(database, `users/${userID}/floorPlans`);
+        await remove(floorPlansRef);
+
+        // Delete user from Firebase Authentication
+        if (firebaseUser) {
+            await firebaseUser.delete();
+        }
+
+        // Custom user deletion logic for users not authenticated through Firebase
+        const res = await fetch("http://localhost:3000/api/auth/delete", {
+            method: "DELETE",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                _id: userID,
+            }),
+        });
+
+        if (res.ok) {
+            enqueueSnackbar("Account Deleted Successfully", { variant: "success" });
+            navigateToLogout();
+            navigate("/");
+        } else {
+            enqueueSnackbar("Failed to delete account", { variant: "error" });
+        }
+    } catch (error) {
+        console.log("Error in deleting account: ", error);
+        enqueueSnackbar("Error in deleting account. Please try again.", {
+            variant: "error",
+        });
+    } finally {
+        setLoadingState(false);
+    }
+};
 
   return (
     <div className="min-h-[89.2vh]">
