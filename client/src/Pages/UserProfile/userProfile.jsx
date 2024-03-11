@@ -4,15 +4,11 @@ import { useSnackbar } from "notistack";
 import { useNavigate, useLocation } from "react-router-dom";
 import { signOut } from "../../redux/user/userSlice";
 
-import {
-  
-  deleteUser as deleteFirebaseUser,
-  onAuthStateChanged, getAuth, reauthenticateWithPopup, GoogleAuthProvider
-} from "firebase/auth";
+import { onAuthStateChanged, getAuth } from "firebase/auth";
 import UserDelete from "../../components/model/UserDelete";
 
-import { deleteObject, ref, remove } from "firebase/database";
-import { database, storage } from "../../firebase";
+import { ref, remove } from "firebase/database";
+import { database } from "../../firebase";
 import LoadingState from "../../components/loadingState/LoadingState";
 import EditUser from "../../components/model/EditUser";
 
@@ -23,7 +19,6 @@ function userProfile() {
   const name = currentUser?.user?.name;
   const profile = currentUser?.user?.profilePicture;
   const email = currentUser?.user?.email;
-  const password = currentUser?.user?.password;
   const userID = currentUser?.user?._id;
 
   const [loadingState, setLoadingState] = useState(false);
@@ -53,55 +48,50 @@ function userProfile() {
     return () => unsubscribe(); // to prevent memory leaks
   }, []);
 
-
-  
-
- 
-
-const deleteUser = async () => {
+  const deleteUser = async () => {
     try {
-        setLoadingState(true);
+      setLoadingState(true);
 
-        // Firebase Authentication
-        const auth = getAuth();
-        const firebaseUser = auth.currentUser;
+      // Firebase Authentication
+      const auth = getAuth();
+      const firebaseUser = auth.currentUser;
 
-        // Delete associated data from Firebase Realtime Database (assuming 'userID' is defined)
-        const floorPlansRef = ref(database, `users/${userID}/floorPlans`);
-        await remove(floorPlansRef);
+      // Delete associated data from Firebase Realtime Database (assuming 'userID' is defined)
+      const floorPlansRef = ref(database, `users/${userID}/floorPlans`);
+      await remove(floorPlansRef);
 
-        // Delete user from Firebase Authentication
-        if (firebaseUser) {
-            await firebaseUser.delete();
-        }
+      // Delete user from Firebase Authentication
+      if (firebaseUser) {
+        await firebaseUser.delete();
+      }
 
-        // Custom user deletion logic for users not authenticated through Firebase
-        const res = await fetch("http://localhost:3000/api/auth/delete", {
-            method: "DELETE",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-                _id: userID,
-            }),
-        });
+      // Custom user deletion logic for users not authenticated through Firebase
+      const res = await fetch("http://localhost:3000/api/auth/delete", {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          _id: userID,
+        }),
+      });
 
-        if (res.ok) {
-            enqueueSnackbar("Account Deleted Successfully", { variant: "success" });
-            navigateToLogout();
-            navigate("/");
-        } else {
-            enqueueSnackbar("Failed to delete account", { variant: "error" });
-        }
+      if (res.ok) {
+        enqueueSnackbar("Account Deleted Successfully", { variant: "success" });
+        navigateToLogout();
+        navigate("/");
+      } else {
+        enqueueSnackbar("Failed to delete account", { variant: "error" });
+      }
     } catch (error) {
-        console.log("Error in deleting account: ", error);
-        enqueueSnackbar("Error in deleting account. Please try again.", {
-            variant: "error",
-        });
+      console.log("Error in deleting account: ", error);
+      enqueueSnackbar("Error in deleting account. Please try again.", {
+        variant: "error",
+      });
     } finally {
-        setLoadingState(false);
+      setLoadingState(false);
     }
-};
+  };
 
   return (
     <div className="min-h-[89.2vh]">

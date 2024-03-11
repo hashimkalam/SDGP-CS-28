@@ -104,7 +104,7 @@ const Workspaces = () => {
       const { floorPlanPathDxf, floorPlanPathPng } = floorPlansData;
       const selectedPath =
         downloadOption === "dxf" ? floorPlanPathDxf : floorPlanPathPng;
-  
+
       if (!selectedPath) {
         console.error("Selected path is undefined or null.");
         return;
@@ -113,10 +113,10 @@ const Workspaces = () => {
       const downloadLink = document.createElement("a");
 
       downloadLink.href = selectedPath;
-  
+
       // download attribute and file name
       downloadLink.download = `floor_plan_${floorPlansData.id}.${downloadOption}`;
-  
+
       document.body.appendChild(downloadLink);
       try {
         downloadLink.click();
@@ -127,9 +127,10 @@ const Workspaces = () => {
     } else {
       console.error("No floor plan data available for download.");
     }
-      navigate("/download"); // re direct to this download page
+    {
+      currentUser?.user?.role === "individual" && navigate("/download");
+    } // re direct to this download page
   };
-
 
   return (
     <div className="m-10 mt-5 gap-1 md:gap-5 flex h-[80vh]">

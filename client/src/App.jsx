@@ -21,40 +21,46 @@ function App() {
     <div className="bg-[#5E5ABA] min-h-screen">
       <Router>
         <Routes>
-          <Route
-            path="/login"
-            element={
-              <div>
-                <Register />
-              </div>
-            }
-          />
-          <Route
-            path="/signup"
-            element={
-              <div>
-                <Register />
-              </div>
-            }
-          />
-
-          <Route
-            path="/forgotpassword"
-            element={
-              <div>
-                <ForgotPassword />
-              </div>
-            }
-          />
-
-          <Route
-            path="/resetpassword"
-            element={
-              <div>
-                <ResetPassword />
-              </div>
-            }
-          />
+          {!currentUser?.user && (
+            <Route
+              path="/login"
+              element={
+                <div>
+                  <Register />
+                </div>
+              }
+            />
+          )}
+          {!currentUser?.user && (
+            <Route
+              path="/signup"
+              element={
+                <div>
+                  <Register />
+                </div>
+              }
+            />
+          )}
+          {!currentUser?.user && (
+            <Route
+              path="/forgotpassword"
+              element={
+                <div>
+                  <ForgotPassword />
+                </div>
+              }
+            />
+          )}
+          {!currentUser?.user && (
+            <Route
+              path="/resetpassword"
+              element={
+                <div>
+                  <ResetPassword />
+                </div>
+              }
+            />
+          )}
           <Route
             path="/workspace"
             element={
@@ -70,31 +76,17 @@ function App() {
               </div>
             }
           />
-
-          <Route
-            path="/userprofile"
-            element={
-              <div className="bg-[#090E34]">
-                {currentUser ? (
-                  <>
-                    <Navbar />
-                    <UserProfile />
-                  </>
-                ) : (
-                  <PageNotFound />
-                )}
-              </div>
-            }
-          />
-          <Route
-            path="/download"
-            element={
-              <div className="bg-[#090E34]">
-                <Navbar />
-                <Download />
-              </div>
-            }
-          />
+          {currentUser?.user?.role === "individual" && (
+            <Route
+              path="/download"
+              element={
+                <div className="bg-[#090E34]">
+                  <Navbar />
+                  <Download />
+                </div>
+              }
+            />
+          )}
           <Route
             path="/architectpanel"
             element={
@@ -105,23 +97,28 @@ function App() {
               </div>
             }
           />
-          <Route
-            path="/appointment"
-            element={
-              <div className="bg- bg-[#005BE2] h-screen">
-                <Navbar />
-                <AppointmentForm/>
-              </div>
-            }
-          />
-          <Route
-            path="/userprofile"
-            element={
-              <div className="bg-[#090E34] h-screen">
-                <UserProfile />
-              </div>
-            }
-          />
+          {currentUser?.user?.role === "individual" && (
+            <Route
+              path="/appointment"
+              element={
+                <div className="bg- bg-[#005BE2] h-screen">
+                  <Navbar />
+                  <AppointmentForm />
+                </div>
+              }
+            />
+          )}
+          {currentUser?.user?.role === "individual" && (
+            <Route
+              path="/userprofile"
+              element={
+                <div className="bg-[#090E34] min-h-screen">
+                  <Navbar />
+                  <UserProfile />
+                </div>
+              }
+            />
+          )}
           {currentUser?.user?.role === "architect" && (
             <Route
               path="/dashboard"

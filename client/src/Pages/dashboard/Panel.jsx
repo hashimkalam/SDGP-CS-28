@@ -4,12 +4,12 @@ import UserProfile from "../UserProfile/userProfile";
 import { useNavigate } from "react-router-dom";
 import Dropbox from "../../components/dropbox/dropbox";
 import { useSnackbar } from "notistack";
-import DeleteIcon from '@mui/icons-material/Delete';
+import DeleteIcon from "@mui/icons-material/Delete";
 
 import { uploadBytes } from "firebase/storage";
 
 import { storage } from "../../firebase";
-import { getDownloadURL, listAll, ref ,deleteObject} from "firebase/storage";
+import { getDownloadURL, listAll, ref, deleteObject } from "firebase/storage";
 import { v4 } from "uuid";
 
 const Panel = () => {
@@ -52,7 +52,7 @@ const Panel = () => {
     const timeoutId = setTimeout(async () => {
       try {
         const imgs = await listAll(ref(storage, `arch_files/${id}`));
-        console.log("all images",imgs);
+        console.log("all images", imgs);
         const urls = await Promise.all(
           imgs.items.map(async (val) => {
             const url = await getDownloadURL(val);
@@ -70,11 +70,11 @@ const Panel = () => {
 
   console.log(imgUrl, "imgurl");
 
-  const HandleDelete = async(image) => {
+  const HandleDelete = async (image) => {
     const imgRef = ref(storage, `${image}`);
     console.log(imgRef.fullPath);
     try {
-      await deleteObject(imgRef)
+      await deleteObject(imgRef);
       console.log("Image deleted successfully");
       setUploadImg(image);
       enqueueSnackbar("Image deleted successfully", { variant: "success" });
@@ -82,9 +82,7 @@ const Panel = () => {
       console.error("Error deleting image:", error);
       enqueueSnackbar("Error deleting image", { variant: "error" });
     }
-
-
-  }
+  };
 
   return (
     <main className="min-h-screen z-999 flex flex-col px-8 pt-7 pb-12 bg-gray-100 max-md:px-5 overflow-hidden">
@@ -128,7 +126,6 @@ const Panel = () => {
             <div
               key={index}
               className="relative flex items-center bg-white shadow rounded-lg h-[10rem] w-[20rem] xl:h-[200px] cursor-pointer transform transition-transform hover:scale-105 duration-500"
-              
             >
               <img
                 src={dataVal}
@@ -137,13 +134,15 @@ const Panel = () => {
                 onClick={() => {
                   setOpenImage(dataVal);
                 }}
-
               />
-              <DeleteIcon 
-              className="absolute text-white bottom-2 right-4 hover:text-red-500 cursor-pointer" 
-              onClick={(e)=>{HandleDelete(dataVal)}}
-              
-              />
+              <div className="absolute bottom-2 right-4 bg-sky-400 pb-[2px]">
+                <DeleteIcon
+                  className="text-white hover:text-red-500 cursor-pointer"
+                  onClick={(e) => {
+                    HandleDelete(dataVal);
+                  }}
+                />
+              </div>
             </div>
           ))}
           {openImage && (
@@ -164,7 +163,7 @@ const Panel = () => {
           </div>
         </section>
       ) : (
-        <div>
+        <div className="mt-10">
           <UserProfile />
         </div>
       )}

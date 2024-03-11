@@ -49,8 +49,8 @@ const NameEdit = () => {
       } else if (edittedName === "") {
         enqueueSnackbar("Username cannot be empty", { variant: "warning" });
         return;
-      } else if (edittedName.length < 3) {
-        enqueueSnackbar("Username must be atleast 3 characters long", {
+      } else if (edittedName.length < 4) {
+        enqueueSnackbar("Username must be atleast 4 characters long", {
           variant: "warning",
         });
         return;

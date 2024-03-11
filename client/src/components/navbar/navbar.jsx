@@ -86,7 +86,8 @@ const Navbar = () => {
         )}
 
         {location.pathname !== "/userprofile" &&
-          location.pathname !== "/architectpanel" && (
+          location.pathname !== "/architectpanel" &&
+          location.pathname !== "/download" && (
             <div onClick={() => setOpen(!open)} className="flex items-center">
               <ion-icon name={open ? "close" : "menu"}></ion-icon>
             </div>
