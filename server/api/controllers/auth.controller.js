@@ -126,7 +126,7 @@ export const signin = async (req, res, next) => {
 
 export const userDelete = async (req, res, next) => {
   const { _id } = req.body;
-
+  // delete method
   try {
     // Find the user first
     const user = await User.findOne({ _id });

@@ -57,7 +57,7 @@ const Workspaces = () => {
                 id: floorPlanId,
                 floorPlanPathPng: downloadURLPng,
                 floorPlanPathDxf: downloadURLDxf,
-                formData: floorPlan.formData,
+                description: floorPlan.Description,
               });
               console.log(floorPlansList);
             } catch (error) {
@@ -96,8 +96,34 @@ const Workspaces = () => {
 
   console.log("floorPlansData:", floorPlans);
 
-  const handleGenerate = (e) => {
+  const handleGenerate = async (e) => {
     e.preventDefault();
+    try {
+      const response = await fetch("http://127.0.0.1:5000/submit-textInput", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Origin": "*",
+        },
+        body: JSON.stringify({
+          "USER_ID": currentUser.user._id,
+          "inputData": inputDesc,
+        }),
+      });
+  
+      if (response.ok) {
+        // Form data submitted successfully
+        const result = await response.json();
+        console.log(result.message);
+        fetchFloorPlans(currentUser.user._id)
+      } else {
+        console.log(response);
+        // Handle errors
+        console.error('Failed to submit form data');
+      }
+    } catch (error) {
+      console.error(error);
+    }
 
     setInputDesc("");
   };
@@ -147,11 +173,10 @@ const Workspaces = () => {
           <div className="flex flex-row">
             <LeftChat
               key={`left-${floorPlan.id}`}
-              floorPlanDetails={floorPlan.formData}
-              floorPlanPath={floorPlan}
               userId={currentUser.user._id}
               click={() => handleOnClick(floorPlan.id)}
-              // floorPlanPath={floorPlan.floorPlanPathPng}
+              floorPlanPath = {floorPlan.floorPlanPathPng}
+              description = {floorPlan.description}    
             />
           </div>
         ))}
