@@ -1,18 +1,16 @@
-import React from "react";
-import { useState, useEffect } from "react";
+import React, { useState } from "react";
+import { useEffect } from "react";
 import LeftChat from "../../components/workspace-panel/LeftChat.jsx";
 import RightChat from "../../components/workspace-panel/RightChat.jsx";
 import SendIcon from "@mui/icons-material/Send";
-
 import { useSelector } from "react-redux";
-
-import { ref, onValue } from "firebase/database";
+import { ref, onValue, off } from "firebase/database";
 import { getDownloadURL, ref as storageRef } from "firebase/storage";
 import { database, storage } from "../../firebase";
 import { useNavigate } from "react-router-dom";
-
 import { motion } from "framer-motion";
 import LoadingState from "../../components/loadingState/LoadingState";
+import Preview from "../../components/Preview.jsx";
 
 const Workspaces = () => {
   const navigate = useNavigate();
@@ -32,7 +30,6 @@ const Workspaces = () => {
     console.log("Fetching floor plans for user:", userId);
 
     try {
-      setLoadingState(true);
       const floorPlansRef = ref(database, `users/${userId}/floorPlans`);
 
       const floorPlansSnapshot = await onValue(
@@ -74,8 +71,6 @@ const Workspaces = () => {
       };
     } catch (error) {
       console.error("Error fetching floor plans:", error);
-    } finally {
-      setLoadingState(false);
     }
   };
 
@@ -94,11 +89,12 @@ const Workspaces = () => {
     setFloorPlansData(null);
   };
 
-  console.log("floorPlansData:", floorPlans);
-
   const handleGenerate = async (e) => {
     e.preventDefault();
+
+    console.log("working");
     try {
+      setLoadingState(true);
       const response = await fetch("http://127.0.0.1:5000/submit-textInput", {
         method: "POST",
         headers: {
@@ -106,23 +102,25 @@ const Workspaces = () => {
           "Access-Control-Allow-Origin": "*",
         },
         body: JSON.stringify({
-          "USER_ID": currentUser.user._id,
-          "inputData": inputDesc,
+          USER_ID: currentUser.user._id,
+          inputData: inputDesc,
         }),
       });
-  
+
       if (response.ok) {
         // Form data submitted successfully
         const result = await response.json();
         console.log(result.message);
-        fetchFloorPlans(currentUser.user._id)
+        fetchFloorPlans(currentUser.user._id);
       } else {
         console.log(response);
         // Handle errors
-        console.error('Failed to submit form data');
+        console.error("Failed to submit form data");
       }
     } catch (error) {
       console.error(error);
+    } finally {
+      setLoadingState(false);
     }
 
     setInputDesc("");
@@ -161,6 +159,10 @@ const Workspaces = () => {
     } // re direct to this download page
   };
 
+  const handleTextSelect = (text) => {
+    setInputDesc(text);
+  };
+
   return (
     <div className="m-10 mt-5 gap-1 md:gap-5 flex h-[80vh]">
       <motion.div
@@ -175,8 +177,8 @@ const Workspaces = () => {
               key={`left-${floorPlan.id}`}
               userId={currentUser.user._id}
               click={() => handleOnClick(floorPlan.id)}
-              floorPlanPath = {floorPlan.floorPlanPathPng}
-              description = {floorPlan.description}    
+              floorPlanPath={floorPlan.floorPlanPathPng}
+              description={floorPlan.description}
             />
           </div>
         ))}
@@ -199,8 +201,11 @@ const Workspaces = () => {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 2 }}
-          className="flex-1 bg-[#fff] flex-0 md:flex-[.75] rounded-l-lg rounded-r-3xl overflow-y-scroll px-4"
+          className="flex-1 bg-[#fff] md:flex-[.75] rounded-l-lg rounded-r-3xl overflow-y-scroll px-4"
         >
+          <div className="absolute mt-10 z-50 w-[68vw]">
+            <Preview onTextSelect={handleTextSelect} />
+          </div>
           <div className="absolute right-14 mt-4 mr-3 flex items-center space-x-2 z-40">
             <label></label>
             <select
@@ -224,7 +229,7 @@ const Workspaces = () => {
               floorPlanPathPng={floorPlansData.floorPlanPathPng}
             />
           ) : (
-            <div className="input-field flex flex-row relative h-[77.2vh] ">
+            <div className="input-field flex flex-row relative h-[77.2vh]">
               <form
                 onSubmit={handleGenerate}
                 className="absolute bottom-0 flex items-center justify-between w-full space-x-2"
