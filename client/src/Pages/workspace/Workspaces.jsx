@@ -6,7 +6,7 @@ import SendIcon from "@mui/icons-material/Send";
 
 import { useSelector } from "react-redux";
 
-import { ref, onValue } from "firebase/database";
+import { ref, onValue, off } from "firebase/database";
 import { getDownloadURL, ref as storageRef } from "firebase/storage";
 import { database, storage } from "../../firebase";
 import { useNavigate } from "react-router-dom";
@@ -103,20 +103,20 @@ const Workspaces = () => {
           "Access-Control-Allow-Origin": "*",
         },
         body: JSON.stringify({
-          "USER_ID": currentUser.user._id,
-          "inputData": inputDesc,
+          USER_ID: currentUser.user._id,
+          inputData: inputDesc,
         }),
       });
-  
+
       if (response.ok) {
         // Form data submitted successfully
         const result = await response.json();
         console.log(result.message);
-        fetchFloorPlans(currentUser.user._id)
+        fetchFloorPlans(currentUser.user._id);
       } else {
         console.log(response);
         // Handle errors
-        console.error('Failed to submit form data');
+        console.error("Failed to submit form data");
       }
     } catch (error) {
       console.error(error);
@@ -127,35 +127,64 @@ const Workspaces = () => {
 
   const handleDownload = () => {
     if (floorPlansData) {
-      const { floorPlanPathDxf, floorPlanPathPng } = floorPlansData;
+      console.log("Downloading floor plan:", floorPlansData);
+
       const selectedPath =
-        downloadOption === "dxf" ? floorPlanPathDxf : floorPlanPathPng;
+      downloadOption === "dxf"
+        ? floorPlansData.floorPlanPathDxf
+        : floorPlansData.floorPlanPathPng;
+
+      getDownloadURL(ref(storage, selectedPath))
+        .then((selectedPath) => {
+          // This can be downloaded directly:
+          const xhr = new XMLHttpRequest();
+          xhr.responseType = "blob";
+          xhr.onload = (event) => {
+            const blob = xhr.response;
+          };
+          xhr.open("GET", selectedPath);
+          xhr.send();
+
+          // Or inserted into an <img> element
+        //   const img = document.getElementById("myimg");
+        //   img.setAttribute("src", selectedPath);
+
+        })
+        .catch((error) => {
+          // Handle any errors
+        });
+
+
 
       if (!selectedPath) {
         console.error("Selected path is undefined or null.");
         return;
       }
 
-      const downloadLink = document.createElement("a");
+      // const url = selectedPath;
+      // console.log("URL:", url);
 
-      downloadLink.href = selectedPath;
+      // // Create a link element
+      // const link = document.createElement("a");
+      // link.href = url;
+      // link.download = `floor_plan.${downloadOption}`; // Use the selected download option as the file extension
+      // link.target = "_blank";
+      // link.rel = "noopener noreferrer";
 
-      // download attribute and file name
-      downloadLink.download = `floor_plan_${floorPlansData.id}.${downloadOption}`;
+      // // Append the link to the body and click it programmatically
+      // document.body.appendChild(link);
+      // link.click();
 
-      document.body.appendChild(downloadLink);
-      try {
-        downloadLink.click();
-      } catch (error) {
-        console.error("Error triggering download:", error);
-      }
-      document.body.removeChild(downloadLink);
+      // Remove the link from the body after the download
+      // document.body.removeChild(link);
     } else {
       console.error("No floor plan data available for download.");
     }
-    {
-      currentUser?.user?.role === "individual" && navigate("/download");
-    } // re direct to this download page
+
+    // Redirect to the download page if the user is an individual
+    if (currentUser?.user?.role === "individual") {
+      navigate("/download");
+    }
   };
 
   return (
@@ -172,8 +201,8 @@ const Workspaces = () => {
               key={`left-${floorPlan.id}`}
               userId={currentUser.user._id}
               click={() => handleOnClick(floorPlan.id)}
-              floorPlanPath = {floorPlan.floorPlanPathPng}
-              description = {floorPlan.description}    
+              floorPlanPath={floorPlan.floorPlanPathPng}
+              description={floorPlan.description}
             />
           </div>
         ))}
