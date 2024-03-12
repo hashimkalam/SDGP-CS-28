@@ -33,6 +33,7 @@ const Workspaces = () => {
 
     try {
       setLoadingState(true);
+      console.log(loadingState, 'loading state')
       const floorPlansRef = ref(database, `users/${userId}/floorPlans`);
 
       const floorPlansSnapshot = await onValue(
@@ -99,6 +100,7 @@ const Workspaces = () => {
   const handleGenerate = async (e) => {
     e.preventDefault();
     try {
+      setLoadingState(true);
       const response = await fetch("http://127.0.0.1:5000/submit-textInput", {
         method: "POST",
         headers: {
@@ -115,6 +117,7 @@ const Workspaces = () => {
         // Form data submitted successfully
         const result = await response.json();
         console.log(result.message);
+        
         fetchFloorPlans(currentUser.user._id);
       } else {
         console.log(response);
@@ -123,6 +126,8 @@ const Workspaces = () => {
       }
     } catch (error) {
       console.error(error);
+    } finally {
+      setLoadingState(false);
     }
 
     setInputDesc("");
@@ -131,64 +136,40 @@ const Workspaces = () => {
   const handleDownload = () => {
     if (floorPlansData) {
       console.log("Downloading floor plan:", floorPlansData);
-
+  
       const selectedPath =
-      downloadOption === "dxf"
-        ? floorPlansData.floorPlanPathDxf
-        : floorPlansData.floorPlanPathPng;
-
-      getDownloadURL(ref(storage, selectedPath))
-        .then((selectedPath) => {
-          // This can be downloaded directly:
-          const xhr = new XMLHttpRequest();
-          xhr.responseType = "blob";
-          xhr.onload = (event) => {
-            const blob = xhr.response;
-          };
-          xhr.open("GET", selectedPath);
-          xhr.send();
-
-          // Or inserted into an <img> element
-        //   const img = document.getElementById("myimg");
-        //   img.setAttribute("src", selectedPath);
-
-        })
-        .catch((error) => {
-          // Handle any errors
-        });
-
-
-
+        downloadOption === "dxf"
+          ? floorPlansData.floorPlanPathDxf
+          : floorPlansData.floorPlanPathPng;
+  
       if (!selectedPath) {
         console.error("Selected path is undefined or null.");
         return;
       }
-
-      // const url = selectedPath;
-      // console.log("URL:", url);
-
-      // // Create a link element
-      // const link = document.createElement("a");
-      // link.href = url;
-      // link.download = `floor_plan.${downloadOption}`; // Use the selected download option as the file extension
-      // link.target = "_blank";
-      // link.rel = "noopener noreferrer";
-
-      // // Append the link to the body and click it programmatically
-      // document.body.appendChild(link);
-      // link.click();
-
-      // Remove the link from the body after the download
-      // document.body.removeChild(link);
+  
+      // Create a temporary anchor element
+      const downloadLink = document.createElement("a");
+      downloadLink.href = selectedPath;
+      downloadLink.download = `floor_plan.${downloadOption}`; // Set a default file name and extension
+  
+      // Append the anchor element to the document body
+      document.body.appendChild(downloadLink);
+  
+      // Trigger a click event on the anchor element
+      downloadLink.click();
+  
+      // Remove the anchor element from the document body
+      document.body.removeChild(downloadLink);
     } else {
       console.error("No floor plan data available for download.");
     }
-
+  
     // Redirect to the download page if the user is an individual
     if (currentUser?.user?.role === "individual") {
       navigate("/download");
     }
   };
+  
 
   return (
     <div className="m-10 mt-5 gap-1 md:gap-5 flex h-[80vh]">
