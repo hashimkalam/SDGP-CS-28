@@ -5,8 +5,7 @@ import { ref } from "firebase/storage";
 import { storage, database } from "../../firebase";
 import { ref as dbRef, remove } from "firebase/database";
 
-const LeftChat = ({ userId, floorPlanDetails, click, floorPlanPath }) => {
-  console.log("formData ", floorPlanDetails, click);
+const LeftChat = ({ userId, click, floorPlanPath, description }) => {
   console.log(userId, "id");
 
   const deletePlan = () => {
@@ -54,7 +53,8 @@ const LeftChat = ({ userId, floorPlanDetails, click, floorPlanPath }) => {
       onClick={click}
     >
       <h5 className="text-black text-1xl font-bold text-center items-center flex justify-center">
-        {floorPlanDetails.join("")}
+        {(description.length > 20) && description.substring(0, 20) + '...'          
+        }
       </h5>
 
       <FaTrash
