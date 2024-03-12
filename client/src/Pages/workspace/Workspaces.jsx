@@ -2,17 +2,25 @@ import React from "react";
 import { useState, useEffect } from "react";
 import LeftChat from "../../components/workspace-panel/LeftChat.jsx";
 import RightChat from "../../components/workspace-panel/RightChat.jsx";
-import Form from "../../components/form/form.jsx";
+import SendIcon from "@mui/icons-material/Send";
 
 import { useSelector } from "react-redux";
 
 import { ref, onValue } from "firebase/database";
 import { getDownloadURL, ref as storageRef } from "firebase/storage";
 import { database, storage } from "../../firebase";
+import { useNavigate } from "react-router-dom";
+
+import { motion } from "framer-motion";
 
 const Workspaces = () => {
+  const navigate = useNavigate();
   const { currentUser } = useSelector((state) => state.user);
   const [floorPlans, setFloorPlans] = useState([]);
+
+  const [inputDesc, setInputDesc] = useState("");
+
+  const [downloadOption, setDownloadOption] = useState("dxf"); // Default to DXF
 
   useEffect(() => {
     if (currentUser) {
@@ -30,7 +38,6 @@ const Workspaces = () => {
         floorPlansRef,
         async (snapshot) => {
           const floorPlansData = snapshot.val();
-          console.log("Fetched floor plans:", floorPlansData);
           const floorPlansList = [];
 
           for (const floorPlanId in floorPlansData) {
@@ -40,18 +47,18 @@ const Workspaces = () => {
               const downloadURLPng = await getDownloadURL(
                 storageRef(storage, floorPlan.floorPlanPathPng)
               );
-              console.log("Download URL:", floorPlan.formData, downloadURLPng);
+              console.log("Download URL:", downloadURLPng);
               const downloadURLDxf = await getDownloadURL(
                 storageRef(storage, floorPlan.floorPlanPathDxf)
               );
-              console.log("Download URL:", floorPlan.formData, floorPlan.floorPlanPathDxf);
+              console.log("Download URL:", downloadURLDxf);
               floorPlansList.push({
                 id: floorPlanId,
                 floorPlanPathPng: downloadURLPng,
                 floorPlanPathDxf: downloadURLDxf,
                 formData: floorPlan.formData,
               });
-              console.log(floorPlansList)
+              console.log(floorPlansList);
             } catch (error) {
               console.error("Error fetching download URL:", error);
             }
@@ -70,7 +77,6 @@ const Workspaces = () => {
   };
 
   const [floorPlansData, setFloorPlansData] = useState(null);
-  console.log("Floor plans dat:", floorPlansData);
 
   const handleOnClick = (id) => {
     console.log("id:", id);
@@ -87,71 +93,138 @@ const Workspaces = () => {
 
   console.log("floorPlansData:", floorPlans);
 
-  const handleDownload = () => {
-    if (floorPlansData) {
-      const { floorPlanPathDxf } = floorPlansData;
+  const handleGenerate = (e) => {
+    e.preventDefault();
 
-      const downloadLink = document.createElement("a");
-      // Store the download URL of the DXF file
-      downloadLink.href = floorPlanPathDxf;
-
-      // Specify the download attribute and file name
-      downloadLink.download = `floor_plan_${floorPlansData.id}.dxf`;
-
-      // temporarily hold download link
-      document.body.appendChild(downloadLink);
-      
-      downloadLink.click();
-      document.body.removeChild(downloadLink);
-    }
+    setInputDesc("");
   };
 
+  const handleDownload = () => {
+    if (floorPlansData) {
+      const { floorPlanPathDxf, floorPlanPathPng } = floorPlansData;
+      const selectedPath =
+        downloadOption === "dxf" ? floorPlanPathDxf : floorPlanPathPng;
+  
+      if (!selectedPath) {
+        console.error("Selected path is undefined or null.");
+        return;
+      }
+
+      const downloadLink = document.createElement("a");
+
+      downloadLink.href = selectedPath;
+  
+      // download attribute and file name
+      downloadLink.download = `floor_plan_${floorPlansData.id}.${downloadOption}`;
+  
+      document.body.appendChild(downloadLink);
+      try {
+        downloadLink.click();
+      } catch (error) {
+        console.error("Error triggering download:", error);
+      }
+      document.body.removeChild(downloadLink);
+    } else {
+      console.error("No floor plan data available for download.");
+    }
+      navigate("/download"); // re direct to this download page
+  };
+
+
   return (
-    <div className="h-[vh] m-10 gap-10 flex">
-      <div className="bg-[#005BE2] w-[25%] h-[32.5rem] rounded-3xl overflow-y-scroll overflow-x-hidden">
+    <div className="m-10 mt-5 gap-1 md:gap-5 flex h-[80vh]">
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 2 }}
+        className="bg-[#005BE2] flex-0 md:flex-[.25] rounded-xl overflow-y-scroll overflow-x-hidden"
+      >
         {floorPlans.map((floorPlan) => (
           <div className="flex flex-row">
             <LeftChat
               key={`left-${floorPlan.id}`}
               floorPlanDetails={floorPlan.formData}
+              floorPlanPath={floorPlan}
+              userId={currentUser.user._id}
               click={() => handleOnClick(floorPlan.id)}
+              // floorPlanPath={floorPlan.floorPlanPathPng}
             />
           </div>
-
         ))}
 
         <div
-          className="bg-[rgb(255,255,255)] hover:bg-slate-500 delay-300  mt-5 cursor-pointer w-auto py-3 mx-5 rounded-3xl"
+          className="bg-white hover:bg-slate-200 ease-out duration-150 mt-5 cursor-pointer w-auto px-2 md:py-3 mx-5 rounded-l-xl rounded-r-lg"
           onClick={() => handleOnClickNewChat("")}
         >
-          <h5 className="text-black text-1xl font-bold text-center items-center flex justify-center">
-            Add New Description
+          <h5 className="text-[#5b5353] ease-out duration-150 text-1xl font-semibold text-center items-center flex justify-center">
+            + <span className="hidden md:block">Add New Description</span>
           </h5>
         </div>
-      </div>
-      <div className="bg-[#005BE2] w-[75%] h-[32.5rem] rounded-3xl overflow-y-scroll">
-          <button className="absolute right-14 mt-4 mr-3 py-3 px-4 bg-white text-[#0b113a] text-xl font-semibold rounded-full hover:bg-[#0b113a] hover:text-white duration-500 ease-in"
-          onClick={handleDownload}>
-            download
+      </motion.div>
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 2 }}
+        className="flex-1 bg-[#fff] flex-0 md:flex-[.75] rounded-l-lg rounded-r-3xl overflow-y-scroll px-4"
+      >
+        <div className="absolute right-14 mt-4 mr-3 flex items-center space-x-2 z-40">
+          <label></label>
+          <select
+            className="px-4 bg-[#0065FF]/85 hover:bg-[#0065FF] duration-150 ease-out text-white p-3 rounded-lg outline-none"
+            value={downloadOption}
+            onChange={(e) => setDownloadOption(e.target.value)}
+          >
+            <option value="dxf">DXF</option>
+            <option value="png">PNG</option>
+          </select>
+          <button
+            className="px-4 bg-[#0065FF]/85 hover:bg-[#0065FF] duration-150 ease-out text-white p-3 rounded-lg"
+            onClick={handleDownload}
+          >
+            Download
           </button>
-
-        <div className="flex flex-row mx-[10%]">
-          {floorPlansData ?
-           (
-            <RightChat
-              key={`right-${floorPlansData.id}`}
-              floorPlanPath={floorPlansData.floorPlanPathPng}
-            />
-          ) : (
-              <div className="input-field flex flex-row mx-[10%]">
-                <Form />
-              </div>
-          )
-        }
         </div>
-      </div>
+        {floorPlansData ? (
+          <RightChat
+            key={`right-${floorPlansData.id}`}
+            floorPlanPathPng={floorPlansData.floorPlanPathPng}
+          />
+        ) : (
+          <div className="input-field flex flex-row relative h-[77.2vh] ">
+            <form
+              onSubmit={handleGenerate}
+              className="absolute bottom-0 flex items-center justify-between w-full space-x-2"
+            >
+              <input
+                type="text"
+                className="rounded-full w-full p-2 px-4 outline-none bg-[#0047FF33] flex-1"
+                value={inputDesc}
+                onChange={(e) => setInputDesc(e.target.value)}
+              />
+              <div
+                className="bg-[#0065FF] rounded-full text-sm flex flex-0 items-center md:p-2.5 px-2 pl-1 md:px-4 space-x-2 text-white cursor-pointer"
+                onClick={handleGenerate}
+              >
+                <button type="submit" className="hidden md:block">
+                  Generate
+                </button>
+                <SendIcon
+                  className="text-white md:-ml-3 md:mr-4 m-2 md:m-0"
+                  fontSize="small"
+                />
+              </div>
+            </form>
+          </div>
+        )}
+      </motion.div>
     </div>
   );
 };
 
 export default Workspaces;
+
+
+
+
+
+
