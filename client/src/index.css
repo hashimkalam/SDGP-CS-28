@@ -69,3 +69,9 @@ body {
 html {
   scroll-behavior: smooth;
 }
+.bg-gradient-text {
+  background: linear-gradient(to right, #fff, #243be4);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}

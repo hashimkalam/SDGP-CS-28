@@ -18,7 +18,7 @@ function App() {
   const currentUser = useSelector((state) => state?.user?.currentUser);
 
   return (
-    <div className="bg-[#5E5ABA] min-h-screen">
+    <div className="min-h-screen">
       <Router>
         <Routes>
           {!currentUser?.user && (
