@@ -37,14 +37,23 @@ const userSlice = createSlice({
     setFloorPlans: (state, action) => {
       state.floorPlans = action.payload;
     },
+    updateUserDetails(state, action) {
+      state.currentUser.user.name = action.payload.name;
+    },
   },
 });
 
 export const { setSelectedOption, setFloorPlans } = userSlice.actions;
 
 export const selectSelectedOption = (state) => state.user.selectedOption;
-export const selectFloorPlans = (state) => state.user.floorPlans; 
+export const selectFloorPlans = (state) => state.user.floorPlans;
 
-export const { signInStart, signInSuccess, signInFailure, signOut } = userSlice.actions;
+export const {
+  signInStart,
+  signInSuccess,
+  signInFailure,
+  signOut,
+  updateUserDetails,
+} = userSlice.actions;
 
 export default userSlice.reducer;

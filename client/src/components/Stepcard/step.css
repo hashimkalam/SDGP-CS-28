@@ -1,5 +1,4 @@
 .section-title {
-  color: #ffffff;
   font-size: 36px; /* Adjust as needed */
   text-align: center;
   margin-top: 40px;
@@ -15,10 +14,8 @@
 .step-card {
   position: relative;
   background-color: #090e34;
-  border-radius: 6px;
-  height: 531px;
-  position: relative;
-  width: 450px;
+  height: 440px;
+  width: 360px;
   margin: auto;
   margin-bottom: 30px;
 }
@@ -53,7 +50,6 @@
 }
 
 .text-wrapper {
-  color: #ffffff;
   font-family: "Inter-BoldItalic", Helvetica;
   font-size: 64px;
   font-style: italic;
@@ -85,15 +81,9 @@
   right: 0;
 }
 .step-description {
-  width: 354px;
-  height: 180px;
-  left: 33px;
-  top: 242px;
-  position: absolute;
-  color: white;
-  font-size: 24px;
-  font-family: "Inter", Helvetica;
-  font-weight: 500;
+  /* left: 33px; */
+  top: 150px;
   line-height: 30px;
-  word-wrap: break-word;
+  position: absolute;
+  font-family: "Inter", Helvetica;
 }

@@ -27,7 +27,8 @@
     "react-select": "^5.8.0",
     "redux-persist": "^6.0.0",
     "styled-components": "^6.1.8",
-    "tailwind": "^4.0.0"
+    "tailwind": "^4.0.0",
+    "uuid": "^9.0.1"
   },
   "devDependencies": {
     "@types/react": "^18.2.43",

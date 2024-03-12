@@ -4,10 +4,13 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        'custom-blue': '#090e34',
+        "custom-blue": "#090e34",
       },
       screens: {
         xxs: "320px",
+      },
+      animation: {
+        "pulse-fast": "pulse 0.75s infinite",
       },
     },
   },

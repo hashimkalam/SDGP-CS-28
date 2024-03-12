@@ -184,6 +184,19 @@ const Workspaces = () => {
             Download
           </button>
         </div>
+
+        <div className="flex flex-row mx-[10%]">
+          {floorPlansData ? (
+            <RightChat
+              key={`right-${floorPlansData.id}`}
+              floorPlanPathPng={floorPlansData.floorPlanPathPng}
+            />
+          ) : (
+            <div className="input-field flex flex-row mx-[10%]">
+              <Form />
+            </div>
+          )}
+        </div>
         {floorPlansData ? (
           <RightChat
             key={`right-${floorPlansData.id}`}
