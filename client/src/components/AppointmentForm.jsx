@@ -1,6 +1,6 @@
 import { useFormik } from "formik";
 import emailjs from "emailjs-com";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Alert from "@mui/material/Alert";
 import CheckIcon from "@mui/icons-material/Check";
 
@@ -35,13 +35,17 @@ const AppointmentForm = () => {
           },
           (err) => {
             console.log("FAILED...", err);
-          }
+          },
+
+          setTimeout(() => {
+            setSubmissionSuccessful(false);
+          }, 3000)
         );
     },
   });
 
   return (
-    <div className="flex flex-col justify-center items-center h-full bg-custom-blue">
+    <div className="flex flex-col justify-center items-center min-h-[86vh] bg-custom-blue">
       <h1 className="text-lg sm:text-xl md:text-2xl lg:text-3xl xl:text-4xl font-bold text-center text-white">
         Book an Appointment
       </h1>

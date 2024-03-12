@@ -29,7 +29,7 @@ function Download() {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 1, delay: 0.5 }}
-      className="max-w-[1560px] mx-auto min-h-[89vh] overflow-hidden lg:overflow-auto flex flex-col lg:flex-row text-white p-10"
+      className="max-w-[1560px] mx-auto min-h-[80vh] -mt-5 overflow-hidden lg:overflow-auto flex flex-col lg:flex-row text-white p-10"
     >
       <div className="lg:flex-[.5] flex flex-col justify-center relative mt-0 lg:-mt-20">
         <motion.h1
@@ -79,7 +79,7 @@ function Download() {
             transition={{ duration: 0.75, delay: 1 }}
             src={person_image}
             alt="Person_Image"
-            className="absolute -bottom-32 lg:-bottom-10 right-0 lg:right-10 xl:right-20 w-[250px] lg:w-[245px] xl:w-[270px] hidden sm:block"
+            className="absolute -bottom-46 lg:-bottom-10 right-24 lg:right-10 xl:right-20 w-[220px] lg:w-[235px] xl:w-[260px] hidden sm:block"
           />
         </motion.div>
       </div>
@@ -125,7 +125,7 @@ function Download() {
             initial={{ opacity: 0, translateY: 50 }}
             animate={{ opacity: 1, translateY: 0 }}
             transition={{ duration: 0.75, delay: 1.1 }}
-            className="flex leading-loose text-center lg:text-left text-[16px] md:text-[20px] xl:text-[24px] text-[#959CB1] mb-6"
+            className="flex leading-loose text-center lg:text-left text-[16px] md:text-[20px] xl:text-[24px] text-[#959CB1] mb-6 md:mb-0"
           >
             Connect with an architect through EliteBluPrint and transform your
             rough sketch into a polished blueprint.
