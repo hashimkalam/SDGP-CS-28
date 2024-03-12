@@ -2,6 +2,9 @@ import React, { useState } from "react";
 import PriceBox from "../priceBox/PriceBox.jsx";
 import "./priceSection.css";
 
+import { motion } from "framer-motion";
+import { useInView } from "react-intersection-observer";
+
 function PriceSection() {
   const [priceList, setPriceList] = useState([
     {
@@ -16,6 +19,8 @@ function PriceSection() {
       f3: "Architect consultation",
     },
   ]);
+
+  const { ref, inView } = useInView({ triggerOnce: true });
 
   const handleOnChange = (event) => {
     if (event.target.checked) {
@@ -32,14 +37,34 @@ function PriceSection() {
   };
 
   return (
-    <div className="PriceSection" id="pricing">
-      <div className="title">
-        <h1>Simple And Affordable Pricing</h1>
-        <p>
+    <div
+      className="PriceSection text-white flex items-center flex-col justify-center"
+      id="pricing"
+      ref={ref}
+    >
+      <div className="title mt-20 md:mt-0">
+        <motion.h1
+          initial={{ opacity: 0, translateY: 10 }}
+          animate={inView ? { opacity: 1, translateY: 0 } : {}}
+          transition={{ duration: 0.5 }}
+          className="text-2xl md:text-3xl font-bold md:w-[80vw] text-center"
+        >
+          Simple And Affordable Pricing
+        </motion.h1>
+        <motion.p
+          initial={{ opacity: 0, translateY: 10 }}
+          animate={inView ? { opacity: 1, translateY: 0 } : {}}
+          transition={{ duration: 0.5, delay: 0.2 }}
+          className="text-md md:text-xl text-center leading-8 md:w-[80vw]"
+        >
           Skip the subscriptions, say goodbye to recurring fees. Build your
           forever home with one-time access to unlimited floor plan generation.
-        </p>
-        <div>
+        </motion.p>
+        <motion.div
+          initial={{ opacity: 0, translateY: 10 }}
+          animate={inView ? { opacity: 1, translateY: 0 } : {}}
+          transition={{ duration: 0.5, delay: 0.35 }}
+        >
           Indivdual
           <label className="switch" htmlFor="lifetimeCheckbox">
             <input
@@ -50,19 +75,25 @@ function PriceSection() {
             <span class="slider round"></span>
           </label>
           Architect
-        </div>
+        </motion.div>
       </div>
       <div></div>
-      <div className="priceBox">
+      <div className="flex sm:flex-col mb-20 md:mb-0 items-center justify-center">
         <div className="flex flex-col md:flex-row">
           {priceList.map((data, index) => (
-            <PriceBox
+            <motion.div
               key={index}
-              price={data.price}
-              f1={data.f1}
-              f2={data.f2}
-              f3={data.f3}
-            />
+              initial={{ opacity: 0, translateY: 50 }}
+              animate={inView ? { opacity: 1, translateY: 0 } : {}}
+              transition={{ duration: 0.75, delay: index * 0.5 }}
+            >
+              <PriceBox
+                price={data.price}
+                f1={data.f1}
+                f2={data.f2}
+                f3={data.f3}
+              />
+            </motion.div>
           ))}
         </div>
       </div>

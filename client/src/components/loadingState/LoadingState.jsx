@@ -17,7 +17,7 @@ function LoadingState({ planLoading }) {
         planLoading ? "bg-sky-200" : "bg-transparent h-[90.5vh]"
       } `}
     >
-      <div className="flex items-center justify-center space-x-3">
+      <div className="flex items-center justify-center space-x-3 mb-10">
         <div className="space-y-3 h-[35vh]">
           <div
             className={`bg-sky-600 h-[70%] w-[150px] ${
@@ -46,12 +46,12 @@ function LoadingState({ planLoading }) {
       </div>
 
       {planLoading ? (
-        <h1 className="text-center w-[50vw] font-semibold">
+        <h1 className="text-center w-[50vw] font-semibold text-3xl">
           Have a small coffee break while we prepare your desired house plans
           for you!☕
         </h1>
       ) : (
-        <h1 className="text-center w-[50vw] text-white font-semibold">
+        <h1 className="text-center w-[50vw] text-white font-semibold  text-3xl">
           Your account is being deleted. Please wait.
         </h1>
       )}
