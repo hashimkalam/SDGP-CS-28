@@ -12,14 +12,14 @@ import { database, storage } from "../../firebase";
 import { useNavigate } from "react-router-dom";
 
 import { motion } from "framer-motion";
+import LoadingState from "../../components/loadingState/LoadingState";
 
 const Workspaces = () => {
   const navigate = useNavigate();
   const { currentUser } = useSelector((state) => state.user);
   const [floorPlans, setFloorPlans] = useState([]);
-
   const [inputDesc, setInputDesc] = useState("");
-
+  const [loadingState, setLoadingState] = useState(false);
   const [downloadOption, setDownloadOption] = useState("dxf"); // Default to DXF
 
   useEffect(() => {
@@ -32,6 +32,7 @@ const Workspaces = () => {
     console.log("Fetching floor plans for user:", userId);
 
     try {
+      setLoadingState(true);
       const floorPlansRef = ref(database, `users/${userId}/floorPlans`);
 
       const floorPlansSnapshot = await onValue(
@@ -73,6 +74,8 @@ const Workspaces = () => {
       };
     } catch (error) {
       console.error("Error fetching floor plans:", error);
+    } finally {
+      setLoadingState(false);
     }
   };
 
@@ -162,62 +165,68 @@ const Workspaces = () => {
           </h5>
         </div>
       </motion.div>
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 2 }}
-        className="flex-1 bg-[#fff] flex-0 md:flex-[.75] rounded-l-lg rounded-r-3xl overflow-y-scroll px-4"
-      >
-        <div className="absolute right-14 mt-4 mr-3 flex items-center space-x-2 z-40">
-          <label></label>
-          <select
-            className="px-4 mt-[110px] w-[113px] absolute bg-[#0065FF]/85 hover:bg-[#0065FF] duration-150 ease-out text-white p-3 rounded-lg outline-none"
-            value={downloadOption}
-            onChange={(e) => setDownloadOption(e.target.value)}
-          >
-            <option value="dxf">DXF</option>
-            <option value="png">PNG</option>
-          </select>
-          <button
-            className="px-4 bg-[#0065FF]/85 hover:bg-[#0065FF] duration-150 ease-out text-white p-3 rounded-lg"
-            onClick={handleDownload}
-          >
-            Download
-          </button>
+      {loadingState ? (
+        <div className="flex-1 bg-white flex-0 md:flex-[.75] rounded-l-lg rounded-r-3xl overflow-y-scroll px-4">
+          <LoadingState planLoading={true} height="20vh" />
         </div>
-        {floorPlansData ? (
-          <RightChat
-            key={`right-${floorPlansData.id}`}
-            floorPlanPathPng={floorPlansData.floorPlanPathPng}
-          />
-        ) : (
-          <div className="input-field flex flex-row relative h-[77.2vh] ">
-            <form
-              onSubmit={handleGenerate}
-              className="absolute bottom-0 flex items-center justify-between w-full space-x-2"
+      ) : (
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 2 }}
+          className="flex-1 bg-[#fff] flex-0 md:flex-[.75] rounded-l-lg rounded-r-3xl overflow-y-scroll px-4"
+        >
+          <div className="absolute right-14 mt-4 mr-3 flex items-center space-x-2 z-40">
+            <label></label>
+            <select
+              className="px-4 mt-[110px] w-[113px] absolute bg-[#0065FF]/85 hover:bg-[#0065FF] duration-150 ease-out text-white p-3 rounded-lg outline-none"
+              value={downloadOption}
+              onChange={(e) => setDownloadOption(e.target.value)}
             >
-              <input
-                type="text"
-                className="rounded-full w-full p-2 px-4 outline-none bg-[#0047FF33] flex-1"
-                value={inputDesc}
-                onChange={(e) => setInputDesc(e.target.value)}
-              />
-              <div
-                className="bg-[#0065FF] rounded-full text-sm flex flex-0 items-center md:p-2.5 px-2 pl-1 md:px-4 space-x-2 text-white cursor-pointer"
-                onClick={handleGenerate}
-              >
-                <button type="submit" className="hidden md:block">
-                  Generate
-                </button>
-                <SendIcon
-                  className="text-white md:-ml-3 md:mr-4 m-2 md:m-0"
-                  fontSize="small"
-                />
-              </div>
-            </form>
+              <option value="dxf">DXF</option>
+              <option value="png">PNG</option>
+            </select>
+            <button
+              className="px-4 bg-[#0065FF]/85 hover:bg-[#0065FF] duration-150 ease-out text-white p-3 rounded-lg"
+              onClick={handleDownload}
+            >
+              Download
+            </button>
           </div>
-        )}
-      </motion.div>
+          {floorPlansData ? (
+            <RightChat
+              key={`right-${floorPlansData.id}`}
+              floorPlanPathPng={floorPlansData.floorPlanPathPng}
+            />
+          ) : (
+            <div className="input-field flex flex-row relative h-[77.2vh] ">
+              <form
+                onSubmit={handleGenerate}
+                className="absolute bottom-0 flex items-center justify-between w-full space-x-2"
+              >
+                <input
+                  type="text"
+                  className="rounded-full w-full p-2 px-4 outline-none bg-[#0047FF33] flex-1"
+                  value={inputDesc}
+                  onChange={(e) => setInputDesc(e.target.value)}
+                />
+                <div
+                  className="bg-[#0065FF] rounded-full text-sm flex flex-0 items-center md:p-2.5 px-2 pl-1 md:px-4 space-x-2 text-white cursor-pointer"
+                  onClick={handleGenerate}
+                >
+                  <button type="submit" className="hidden md:block">
+                    Generate
+                  </button>
+                  <SendIcon
+                    className="text-white md:-ml-3 md:mr-4 m-2 md:m-0"
+                    fontSize="small"
+                  />
+                </div>
+              </form>
+            </div>
+          )}
+        </motion.div>
+      )}
     </div>
   );
 };

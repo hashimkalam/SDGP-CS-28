@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 
-function LoadingState({ planLoading }) {
+function LoadingState({ planLoading, height }) {
   const [currentAnimation, setCurrentAnimation] = useState(0);
 
   useEffect(() => {
@@ -13,9 +13,9 @@ function LoadingState({ planLoading }) {
 
   return (
     <div
-      className={`h-screen flex flex-col items-center justify-center ${
-        planLoading ? "bg-sky-200" : "bg-transparent h-[90.5vh]"
-      } `}
+      className={`h-screen flex flex-col items-center justify-center z-50 ${
+        planLoading && "bg-sky-200 h-[79.5vh]"
+      }`}
     >
       <div className="flex items-center justify-center space-x-3 mb-10">
         <div className="space-y-3 h-[35vh]">
@@ -51,9 +51,18 @@ function LoadingState({ planLoading }) {
           for you!☕
         </h1>
       ) : (
-        <h1 className="text-center w-[50vw] text-white font-semibold  text-3xl">
-          Your account is being deleted. Please wait.
-        </h1>
+        <>
+          {location.pathname === "/userprofile" ||
+            (location.pathname === "/dashboard" && (
+              <h1
+                className={`text-center w-[50vw] text-white font-semibold text-3xl ${
+                  location.pathname === "/workspace" && "text-black"
+                }`}
+              >
+                Your account is being deleted. Please wait.
+              </h1>
+            ))}
+        </>
       )}
     </div>
   );
