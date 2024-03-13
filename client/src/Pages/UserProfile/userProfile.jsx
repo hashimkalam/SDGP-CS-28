@@ -4,7 +4,8 @@ import { useSnackbar } from "notistack";
 import { useNavigate, useLocation } from "react-router-dom";
 import { signOut } from "../../redux/user/userSlice";
 
-import { onAuthStateChanged, getAuth } from "firebase/auth";
+import { onAuthStateChanged, getAuth,reauthenticateWithPopup, GoogleAuthProvider } from "firebase/auth";
+
 import UserDelete from "../../components/model/UserDelete";
 
 import { ref, remove } from "firebase/database";
@@ -62,6 +63,10 @@ function userProfile() {
 
       // Delete user from Firebase Authentication
       if (firebaseUser) {
+        const user = getAuth().currentUser;
+        const provider = new GoogleAuthProvider();
+
+        await reauthenticateWithPopup(user, provider);
         await firebaseUser.delete();
       }
 
