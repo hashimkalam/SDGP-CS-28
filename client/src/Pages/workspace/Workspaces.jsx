@@ -177,7 +177,7 @@ const Workspaces = () => {
               key={`left-${floorPlan.id}`}
               userId={currentUser.user._id}
               click={() => handleOnClick(floorPlan.id)}
-              floorPlanPath={floorPlan.floorPlanPathPng}
+              floorPlanPath={floorPlan}
               description={floorPlan.description}
             />
           </div>
