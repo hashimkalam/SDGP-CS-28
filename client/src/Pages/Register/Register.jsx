@@ -214,7 +214,7 @@ function Register() {
 
             if (result && result.user) {
               // User exists, proceed with login
-              const res = await fetch("http://localhost:3000/api/auth/google", {
+              const res = await fetch("https://sdgp-cs-28-backend-final-cp24t3kdkq-uc.a.run.app/api/auth/google", {
                 method: "POST",
                 headers: {
                   "Content-Type": "application/json",

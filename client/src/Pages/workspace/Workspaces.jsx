@@ -99,7 +99,7 @@ const Workspaces = () => {
     console.log("working");
     try {
       setLoadingState(true);
-      const response = await fetch("http://127.0.0.1:5000/submit-textInput", {
+      const response = await fetch("https://sdgp-cs-28-backend-final-cp24t3kdkq-uc.a.run.app/submit-textInput", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
