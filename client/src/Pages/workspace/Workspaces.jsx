@@ -73,6 +73,8 @@ const Workspaces = () => {
       };
     } catch (error) {
       console.error("Error fetching floor plans:", error);
+    } finally {
+      setLoadingState(false);
     }
   };
 
@@ -113,7 +115,7 @@ const Workspaces = () => {
         // Form data submitted successfully
         const result = await response.json();
         console.log(result.message);
-        fetchFloorPlans(currentUser.user._id)
+        fetchFloorPlans(currentUser.user._id);
       } else {
         console.log(response);
         // Handle errors
@@ -128,7 +130,7 @@ const Workspaces = () => {
     setInputDesc("");
   };
 
-  const handleDownload = () => {
+  const handleDownload = async () => {
     if (floorPlansData) {
       console.log("Downloading floor plan:", floorPlansData);
   
@@ -142,19 +144,28 @@ const Workspaces = () => {
         return;
       }
   
-      // Create a temporary anchor element
-      const downloadLink = document.createElement("a");
-      downloadLink.href = selectedPath;
-      downloadLink.download = `floor_plan.${downloadOption}`; // Set a default file name and extension
+      try {
+        // Get the download URL for the selectedPath
+        const downloadURL = await getDownloadURL(
+          storageRef(storage, selectedPath)
+        );
   
-      // Append the anchor element to the document body
-      document.body.appendChild(downloadLink);
+        // Create a temporary anchor element
+        const downloadLink = document.createElement("a");
+        downloadLink.href = downloadURL;
+        downloadLink.download = `floor_plan.${downloadOption}`; // Set a default file name and extension
   
-      // Trigger a click event on the anchor element
-      downloadLink.click();
+        // Append the anchor element to the document body
+        document.body.appendChild(downloadLink);
   
-      // Remove the anchor element from the document body
-      document.body.removeChild(downloadLink);
+        // Trigger a click event on the anchor element
+        downloadLink.click();
+  
+        // Remove the anchor element from the document body
+        document.body.removeChild(downloadLink);
+      } catch (error) {
+        console.error("Error fetching download URL:", error);
+      }
     } else {
       console.error("No floor plan data available for download.");
     }
@@ -163,6 +174,10 @@ const Workspaces = () => {
     if (currentUser?.user?.role === "individual") {
       navigate("/download");
     }
+  };
+
+  const handleTextSelect = (text) => {
+    setInputDesc(text);
   };
 
   return (
@@ -205,9 +220,6 @@ const Workspaces = () => {
           transition={{ duration: 2 }}
           className="flex-1 bg-[#fff] md:flex-[.75] rounded-l-lg rounded-r-3xl overflow-y-scroll px-4"
         >
-          <div className="absolute mt-10 z-50 w-[68vw]">
-            <Preview onTextSelect={handleTextSelect} />
-          </div>
           <div className="absolute right-14 mt-4 mr-3 flex items-center space-x-2 z-40">
             <label></label>
             <select
@@ -236,23 +248,30 @@ const Workspaces = () => {
                 onSubmit={handleGenerate}
                 className="absolute bottom-0 flex items-center justify-between w-full space-x-2"
               >
-                <input
-                  type="text"
-                  className="rounded-full w-full p-2 px-4 outline-none bg-[#0047FF33] flex-1"
-                  value={inputDesc}
-                  onChange={(e) => setInputDesc(e.target.value)}
-                />
-                <div
-                  className="bg-[#0065FF] rounded-full text-sm flex flex-0 items-center md:p-2.5 px-2 pl-1 md:px-4 space-x-2 text-white cursor-pointer"
-                  onClick={handleGenerate}
-                >
-                  <button type="submit" className="hidden md:block">
-                    Generate
-                  </button>
-                  <SendIcon
-                    className="text-white md:-ml-3 md:mr-4 m-2 md:m-0"
-                    fontSize="small"
-                  />
+                <div className="mt-10 z-50 w-[68vw]">
+                  {location.pathname == "/workspace" && (
+                    <Preview onTextSelect={handleTextSelect} />
+                  )}
+                  <div className="flex mt-10">
+                    <input
+                      type="text"
+                      className="rounded-full w-full p-2 px-4 outline-none bg-[#0047FF33] flex-1"
+                      value={inputDesc}
+                      onChange={(e) => setInputDesc(e.target.value)}
+                    />
+                    <div
+                      className="bg-[#0065FF] rounded-full text-sm flex flex-0 items-center md:p-2.5 px-2 pl-1 md:px-4 space-x-2 text-white cursor-pointer"
+                      onClick={handleGenerate}
+                    >
+                      <button type="submit" className="hidden md:block">
+                        Generate
+                      </button>
+                      <SendIcon
+                        className="text-white md:-ml-3 md:mr-4 m-2 md:m-0"
+                        fontSize="small"
+                      />
+                    </div>
+                  </div>
                 </div>
               </form>
             </div>

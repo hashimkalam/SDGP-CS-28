@@ -420,7 +420,7 @@ function Register() {
             </div>
 
             <div className="flex flex-col justify-center mt-6">
-              <div className="flex flex-col sm:flex-row gap-x-2">
+              <div className="flex flex-col sm:flex-row ml-5">
                 <Button style={styles} onClick={handleGoogleButton}>
                   <img
                     src={googleLogo}
@@ -429,10 +429,10 @@ function Register() {
                   />
                   Sign in with Google
                 </Button>
-                <Button style={styles}>
+                {/* <Button style={styles}>
                   <AppleIcon className="mr-2" />
                   Sign in with Apple
-                </Button>
+                </Button> */}
               </div>
 
               <div className="mt-4 -mb-[4vh]">
