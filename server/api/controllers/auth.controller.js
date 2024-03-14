@@ -310,7 +310,6 @@ export const google = async (req, res, next) => {
           sameSite: "None",
         })
         .status(200)
-
         .send({
           message: "User created and logged in successfully",
           user,

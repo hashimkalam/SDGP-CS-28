@@ -86,7 +86,7 @@ const ResetPassword = () => {
     if (password == confirmPassword) {
       try {
         const response = await fetch(
-          "http://localhost:3000/api/password/resetpassword",
+          "https://sdgp-cs-28-backend-final-cp24t3kdkq-uc.a.run.app/api/password/resetpassword",
           {
             // Updated URL
             method: "POST",

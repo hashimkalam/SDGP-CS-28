@@ -71,7 +71,7 @@ function userProfile() {
       }
 
       // Custom user deletion logic for users not authenticated through Firebase
-      const res = await fetch("http://localhost:3000/api/auth/delete", {
+      const res = await fetch("https://sdgp-cs-28-backend-final-cp24t3kdkq-uc.a.run.app/api/auth/delete", {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",

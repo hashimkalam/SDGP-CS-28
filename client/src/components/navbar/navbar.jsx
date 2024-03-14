@@ -77,7 +77,8 @@ const Navbar = () => {
         {currentUser?.user && (
           <div className="flex items-center">
             <img
-              src={currentUser?.user?.profilePicture}
+            // if no profile picture is available, use a default image profile-user
+              src={currentUser?.user?.profilePicture || "/images/profile-user.png"}
               alt="profilePicture"
               className="h-9 w-9 md:mr-2 rounded-full object-cover cursor-pointer"
               onClick={navigateToProfileOrDashboard}
