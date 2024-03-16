@@ -14,7 +14,7 @@ function LoadingState({ planLoading, height }) {
   return (
     <div
       className={`h-screen flex flex-col items-center justify-center z-50 ${
-        planLoading && "bg-sky-200 h-[79.5vh]"
+        planLoading && "bg-white h-[90  vh]"
       }`}
     >
       <div className="flex items-center justify-center space-x-3 mb-10">

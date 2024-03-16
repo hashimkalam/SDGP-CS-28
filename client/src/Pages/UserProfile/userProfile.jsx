@@ -4,7 +4,8 @@ import { useSnackbar } from "notistack";
 import { useNavigate, useLocation } from "react-router-dom";
 import { signOut } from "../../redux/user/userSlice";
 
-import { onAuthStateChanged, getAuth } from "firebase/auth";
+import { onAuthStateChanged, getAuth,reauthenticateWithPopup, GoogleAuthProvider } from "firebase/auth";
+
 import UserDelete from "../../components/model/UserDelete";
 
 import { ref, remove } from "firebase/database";
@@ -31,7 +32,7 @@ function userProfile() {
   // logout
   const navigateToLogout = async () => {
     try {
-      await fetch("http://localhost:3000/api/auth/signout");
+      await fetch("https://sdgp-cs-28-backend-final-cp24t3kdkq-uc.a.run.app/api/auth/signout");
       dispatch(signOut());
       navigate("/");
     } catch (error) {
@@ -62,11 +63,15 @@ function userProfile() {
 
       // Delete user from Firebase Authentication
       if (firebaseUser) {
+        const user = getAuth().currentUser;
+        const provider = new GoogleAuthProvider();
+
+        await reauthenticateWithPopup(user, provider);
         await firebaseUser.delete();
       }
 
       // Custom user deletion logic for users not authenticated through Firebase
-      const res = await fetch("http://localhost:3000/api/auth/delete", {
+      const res = await fetch("https://sdgp-cs-28-backend-final-cp24t3kdkq-uc.a.run.app/api/auth/delete", {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",

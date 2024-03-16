@@ -135,7 +135,7 @@ const Panel = () => {
                   setOpenImage(dataVal);
                 }}
               />
-              <div className="absolute bottom-2 right-4 bg-sky-400 pb-[2px]">
+              <div className="absolute bottom-2 right-4 bg-blue-950 p-2 rounded-lg">
                 <DeleteIcon
                   className="text-white hover:text-red-500 cursor-pointer"
                   onClick={(e) => {
@@ -147,7 +147,7 @@ const Panel = () => {
           ))}
           {openImage && (
             <div
-              className="fixed inset-0 z-50 bg-black bg-opacity-20 flex items-center justify-center transform transition-transform duration-500 ease-in-out hover:scale-105 cursor-pointer"
+              className="fixed inset-0 z-50 bg-black bg-opacity-50 flex items-center justify-center transform transition-transform duration-500 ease-in-out hover:scale-105 cursor-pointer"
               onClick={() => setOpenImage(null)}
             >
               <img
