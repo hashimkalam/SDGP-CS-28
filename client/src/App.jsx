@@ -21,6 +21,16 @@ function App() {
     <div className="min-h-screen">
       <Router>
         <Routes>
+          <Route
+            path="/"
+            element={
+              <div className="bg-[#5E5ABA] h-screen">
+                <Navbar />
+                <Home />
+              </div>
+            }
+          />
+
           {!currentUser?.user && (
             <Route
               path="/login"
@@ -130,16 +140,6 @@ function App() {
               }
             />
           )}
-
-          <Route
-            path="/"
-            element={
-              <div className="bg-[#5E5ABA] h-screen">
-                <Navbar />
-                <Home />
-              </div>
-            }
-          />
 
           <Route path="*" exact={true} element={<PageNotFound />} />
         </Routes>
