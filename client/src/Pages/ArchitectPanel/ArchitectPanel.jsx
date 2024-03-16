@@ -17,7 +17,7 @@ const ArchitectPanel = () => {
     const fetchArchitects = async () => {
       try {
         const response = await fetch(
-          "http://localhost:3000/api/user/architectpanel"
+          "https://sdgp-cs-28-backend-final-cp24t3kdkq-uc.a.run.app/api/user/architectpanel"
         );
         const data = await response.json();
         console.log(data);

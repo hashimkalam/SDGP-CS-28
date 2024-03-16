@@ -57,7 +57,8 @@ const LeftChat = ({ userId, click, floorPlanPath, description }) => {
       onClick={click}
     >
       <h5 className="text-black text-1xl font-bold text-center items-center flex justify-center">
-        {description.length > 20 && description.substring(0, 20) + "..."}
+        {(description.length > 20) ? description.substring(0, 20) + '...' : description         
+        }
       </h5>
 
       <FaTrash

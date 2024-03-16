@@ -214,7 +214,7 @@ function Register() {
 
             if (result && result.user) {
               // User exists, proceed with login
-              const res = await fetch("http://localhost:3000/api/auth/google", {
+              const res = await fetch("https://sdgp-cs-28-backend-final-cp24t3kdkq-uc.a.run.app/api/auth/google", {
                 method: "POST",
                 headers: {
                   "Content-Type": "application/json",
@@ -421,7 +421,7 @@ function Register() {
             </div>
 
             <div className="flex flex-col justify-center mt-6">
-              <div className="flex flex-col sm:flex-row gap-x-2">
+              <div className="flex flex-col sm:flex-row ml-5">
                 <Button style={styles} onClick={handleGoogleButton}>
                   <img
                     src={googleLogo}
@@ -430,10 +430,10 @@ function Register() {
                   />
                   Sign in with Google
                 </Button>
-                <Button style={styles}>
+                {/* <Button style={styles}>
                   <AppleIcon className="mr-2" />
                   Sign in with Apple
-                </Button>
+                </Button> */}
               </div>
 
               <div className="mt-4 -mb-[4vh]">
