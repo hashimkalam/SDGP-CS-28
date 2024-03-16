@@ -1,4 +1,3 @@
-import React from "react";
 import { FaTrash } from "react-icons/fa";
 
 import { deleteObject, ref } from "firebase/storage";
@@ -12,7 +11,7 @@ const LeftChat = ({ userId, click, floorPlanPath, description }) => {
     const desertRefPng = ref(storage, floorPlanPath.floorPlanPathPng);
     const desertRefDxf = ref(storage, floorPlanPath.floorPlanPathDxf);
 
-    console.log(floorPlanPath,"hi")
+    console.log(floorPlanPath, "hi");
 
     const deletePath = dbRef(
       database,
