@@ -1,4 +1,9 @@
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Redirect,
+} from "react-router-dom";
 import Home from "./Pages/Home/Home";
 import ForgotPassword from "./Pages/ForgotPassword/ForgotPassword";
 import Register from "./Pages/Register/Register";
@@ -152,7 +157,9 @@ function App() {
             />
           )}
 
-          <Route path="*" element={<PageNotFound />} />
+          <Redirect to="/" />
+
+          {/* <Route path="*" element={<PageNotFound />} /> */}
         </Routes>
       </Router>
     </div>
