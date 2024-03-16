@@ -1,8 +1,4 @@
-import {
-  BrowserRouter as Router,
-  Routes,
-  Route,
-} from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Home from "./Pages/Home/Home";
 import ForgotPassword from "./Pages/ForgotPassword/ForgotPassword";
 import Register from "./Pages/Register/Register";
@@ -27,7 +23,7 @@ function App() {
         <Routes>
           <Route
             path="/"
-            exact={true}
+            //exact={true}
             element={
               <div className="bg-[#5E5ABA] h-screen">
                 <Navbar />
@@ -39,7 +35,7 @@ function App() {
           {!currentUser?.user && (
             <Route
               path="/login"
-              exact={true}
+              //exact={true}
               element={
                 <div>
                   <Register />
@@ -49,7 +45,7 @@ function App() {
           )}
           {!currentUser?.user && (
             <Route
-              exact={true}
+              //exact={true}
               path="/signup"
               element={
                 <div>
@@ -61,7 +57,7 @@ function App() {
           {!currentUser?.user && (
             <Route
               path="/forgotpassword"
-              exact={true}
+              //exact={true}
               element={
                 <div>
                   <ForgotPassword />
@@ -72,7 +68,7 @@ function App() {
           {!currentUser?.user && (
             <Route
               path="/resetpassword"
-              exact={true}
+              //exact={true}
               element={
                 <div>
                   <ResetPassword />
@@ -82,7 +78,7 @@ function App() {
           )}
           <Route
             path="/workspace"
-            exact={true}
+            //exact={true}
             element={
               <div>
                 {currentUser ? (
@@ -98,7 +94,7 @@ function App() {
           />
           {currentUser?.user?.role === "individual" && (
             <Route
-              exact={true}
+              // exact={true}
               path="/download"
               element={
                 <div className="bg-[#090E34]">
@@ -110,7 +106,7 @@ function App() {
           )}
           <Route
             path="/architectpanel"
-            exact={true}
+            // exact={true}
             element={
               <div className="bg-[#005BE2]">
                 <Navbar />
@@ -122,7 +118,7 @@ function App() {
           {currentUser?.user?.role === "individual" && (
             <Route
               path="/appointment"
-              exact={true}
+              //  exact={true}
               element={
                 <div className="bg- bg-[#005BE2] h-screen">
                   <Navbar />
@@ -134,7 +130,7 @@ function App() {
           {currentUser?.user?.role === "individual" && (
             <Route
               path="/userprofile"
-              exact={true}
+              // exact={true}
               element={
                 <div className="bg-[#090E34] min-h-screen">
                   <Navbar />
@@ -146,7 +142,7 @@ function App() {
           {currentUser?.user?.role === "architect" && (
             <Route
               path="/dashboard"
-              exact={true}
+              // exact={true}
               element={
                 <div className="bg-gray-100 h-screen">
                   <Navbar />
