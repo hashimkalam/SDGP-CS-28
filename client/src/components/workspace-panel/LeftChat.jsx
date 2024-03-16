@@ -1,4 +1,3 @@
-import React from "react";
 import { FaTrash } from "react-icons/fa";
 
 import { deleteObject, ref } from "firebase/storage";
@@ -12,7 +11,7 @@ const LeftChat = ({ userId, click, floorPlanPath, description }) => {
     const desertRefPng = ref(storage, floorPlanPath.floorPlanPathPng);
     const desertRefDxf = ref(storage, floorPlanPath.floorPlanPathDxf);
 
-    console.log(floorPlanPath,"hi")
+    console.log(floorPlanPath, "hi");
 
     const deletePath = dbRef(
       database,
@@ -58,8 +57,7 @@ const LeftChat = ({ userId, click, floorPlanPath, description }) => {
       onClick={click}
     >
       <h5 className="text-black text-1xl font-bold text-center items-center flex justify-center">
-        {(description.length > 20) && description.substring(0, 20) + '...'          
-        }
+        {description.length > 20 && description.substring(0, 20) + "..."}
       </h5>
 
       <FaTrash

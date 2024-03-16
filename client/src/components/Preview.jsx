@@ -25,7 +25,7 @@ function Preview({ onTextSelect }) {
 
   return (
     <div className="w-[50vw] mx-auto space-y-5">
-      <div className=" bg-gradient-to-r from-[#003380] to-[#011635] text-white p-4 py-6 rounded-2xl space-y-4">
+      <div className="bg-gradient-to-r from-[#003380] to-[#011635] text-white p-4 py-6 rounded-2xl space-y-4">
         <p className="text-xl font-semibold">
           <span className="bg-gradient-text">Welcome to EliteBluPrint</span>
         </p>
