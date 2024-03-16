@@ -36,7 +36,7 @@ const Navbar = () => {
 
   const navigateToLogout = async () => {
     try {
-      await fetch("http://localhost:3000/api/auth/signout");
+      await fetch("https://sdgp-cs-28-backend-final-cp24t3kdkq-uc.a.run.app/api/auth/signout");
       dispatch(signOut());
     } catch (error) {
       console.log(error);
