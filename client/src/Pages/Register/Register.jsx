@@ -396,6 +396,7 @@ function Register() {
 
               {loginPage ? (
                 <Button
+                
                   type="submit"
                   style={buttonStyles}
                   onSubmit={submitHandler}
