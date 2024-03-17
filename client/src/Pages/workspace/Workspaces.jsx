@@ -21,6 +21,7 @@ const Workspaces = () => {
   const [inputDesc, setInputDesc] = useState("");
   const [loadingState, setLoadingState] = useState(false);
   const [downloadOption, setDownloadOption] = useState("dxf"); // Default to DXF
+  const [showLeftChat, setShowLeftChat] = useState(false); // State variable for left chat visibility
 
   useEffect(() => {
     if (currentUser) {
@@ -190,16 +191,22 @@ const Workspaces = () => {
     }
   };
 
+  // Toggle function for left chat visibility
+  const toggleLeftChat = () => {
+    setShowLeftChat(!showLeftChat);
+  };
+
   return (
     <div className="m-10 mt-5 gap-1 md:gap-5 flex h-[80vh]">
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 2 }}
-        className="bg-[#005BE2] flex-0 md:flex-[.25] rounded-xl overflow-y-scroll overflow-x-hidden"
+        className="bg-[#005BE2] flex-0 md:flex-[.25] rounded-xl overflow-y-scroll overflow-x-hidden  md:block hidden" // Hide on small screens
       >
+        
         {floorPlans.map((floorPlan) => (
-          <div className="flex flex-row">
+          <div className="flex flex-row ">
             <LeftChat
               key={`left-${floorPlan.id}`}
               userId={currentUser.user._id}
@@ -219,6 +226,70 @@ const Workspaces = () => {
           </h5>
         </div>
       </motion.div>
+
+
+      {/* <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 2 }}
+        className="bg-[#005BE2] flex-0 md:flex-[.25] rounded-xl overflow-y-scroll overflow-x-hidden block md:hidden " // Hide on large screens
+      >
+        
+        {showLeftChat && (
+          <div className="flex flex-row">
+            {floorPlans.map((floorPlan) => (
+              <LeftChat
+                key={`left-${floorPlan.id}`}
+                userId={currentUser.user._id}
+                click={() => handleOnClick(floorPlan.id)}
+                floorPlanPath={floorPlan.floorPlanPathPng}
+                description={floorPlan.description}
+              />
+            ))}
+          </div>
+        )}
+
+        <div
+          className="bg-white hover:bg-slate-200 ease-out duration-150 mt-5 cursor-pointer w-auto px-2 md:py-3 mx-5 rounded-l-xl rounded-r-lg"
+          onClick={() => handleOnClickNewChat("")}
+        >
+          <h5 className="text-[#5b5353] ease-out duration-150 text-1xl font-semibold text-center items-center flex justify-center">
+            + <span className="hidden md:block">Add New Description</span>
+          </h5>
+        </div>
+      </motion.div> */}
+
+      {/* <motion.div
+          initial={{ x: "-100%" }}
+          animate={{ x: 0 }}
+          transition={{ duration: 0.5, type: "tween" }}
+          className="absolute top-0 left-0 bg-[#005BE2] flex-0 md:flex-[.25] rounded-xl overflow-y-scroll overflow-x-hidden  block md:hidden "
+        >
+          
+          <div className="flex flex-col">
+            {showLeftChat &&
+              floorPlans.map((floorPlan) => (
+                <LeftChat
+                  key={`left-${floorPlan.id}`}
+                  userId={currentUser.user._id}
+                  click={() => handleOnClick(floorPlan.id)}
+                  floorPlanPath={floorPlan.floorPlanPathPng}
+                  description={floorPlan.description}
+                />
+              ))}
+          </div>
+          
+          <div
+            className="bg-white hover:bg-slate-200 ease-out duration-150 mt-5 cursor-pointer w-auto px-2 md:py-3 mx-5 rounded-l-xl rounded-r-lg"
+            onClick={() => handleOnClickNewChat("")}
+          >
+            <h5 className="text-[#5b5353] ease-out duration-150 text-1xl font-semibold text-center items-center flex justify-center">
+              + <span className="hidden md:block">Add New Description</span>
+            </h5>
+          </div>
+        </motion.div> */}
+
+
       {loadingState ? (
         <div className="flex-1 bg-white flex-0 md:flex-[.75] rounded-l-lg rounded-r-3xl overflow-y-scroll px-4">
           <LoadingState planLoading={true} height="20vh" />
@@ -228,9 +299,9 @@ const Workspaces = () => {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 2 }}
-          className="flex-1 bg-[#fff] flex-0 md:flex-[.75] rounded-l-lg rounded-r-3xl overflow-y-scroll px-4"
+          className="flex-1 bg-[#fff] md:flex-[.75] rounded-l-lg rounded-r-3xl overflow-y-scroll px-4 relative md:block hidden"
         >
-          <div className="absolute right-14 mt-4 mr-3 flex items-center space-x-2 z-40">
+          <div className="absolute right-[5px] mt-6 mr-3 flex items-center space-x-2 z-40">
             <label></label>
             <select
               className="px-4 mt-[110px] w-[113px] absolute bg-[#0065FF]/85 hover:bg-[#0065FF] duration-150 ease-out text-white p-3 rounded-lg outline-none"
@@ -281,6 +352,96 @@ const Workspaces = () => {
           )}
         </motion.div>
       )}
+
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 2 }}
+        className="flex-1 bg-[#fff] md:flex-[.75] rounded-l-md rounded-r-4xl overflow-y-scroll px-4 relative block md:hidden"
+      >
+        {/* Right Chat Section */}
+        {floorPlansData ? (
+          <RightChat
+            key={`right-${floorPlansData.id}`}
+            floorPlanPathPng={floorPlansData.floorPlanPathPng}
+          />
+        ) : (
+          <div className="input-field flex flex-row relative h-[77.2vh] ">
+            <form
+              onSubmit={handleGenerate}
+              className="absolute bottom-0 flex items-center justify-between w-full space-x-2"
+            >
+              <input
+                type="text"
+                className="rounded-full w-full p-2 px-4 outline-none bg-[#0047FF33] flex-1"
+                value={inputDesc}
+                onChange={(e) => setInputDesc(e.target.value)}
+              />
+              <div
+                className="bg-[#0065FF] rounded-full text-sm flex flex-0 items-center md:p-2.5 px-2 pl-1 md:px-4 space-x-2 text-white cursor-pointer"
+                onClick={handleGenerate}
+              >
+                <button type="submit" className="hidden md:block">
+                  Generate
+                </button>
+                <SendIcon
+                  className="text-white md:-ml-3 md:mr-4 m-2 md:m-0"
+                  fontSize="small"
+                />
+              </div>
+            </form>
+          </div>
+        )}
+
+        
+        <div className="absolute top-0 left-0 bg-[#005BE2] flex-0 md:flex-[.25] rounded overflow-y-scroll overflow-x-hidden">
+          
+          <div className="flex flex-col">
+            {showLeftChat &&
+              floorPlans.map((floorPlan) => (
+                <LeftChat
+                  key={`left-${floorPlan.id}`}
+                  userId={currentUser.user._id}
+                  click={() => handleOnClick(floorPlan.id)}
+                  floorPlanPath={floorPlan.floorPlanPathPng}
+                  description={floorPlan.description}
+                />
+              ))}
+          </div>
+          
+          <div
+            className="bg-white hover:bg-slate-200 ease-out duration-150 mt-5 cursor-pointer w-auto px-2 md:py-3 mx-5 rounded-l-xl rounded-r-lg"
+            onClick={() => handleOnClickNewChat("")}
+          >
+            <h5 className="text-[#5b5353] ease-out duration-150 text-2xl font-semibold text-center items-center flex justify-center">
+              +
+            </h5>
+          </div>
+        </div>
+
+        <div className="absolute left-[170px] top-[10px] mr-3 flex items-center space-x-2 z-40">
+          <label></label>
+          <select
+            className="px-4 mt-[100px] w-[85px] absolute bg-[#0065FF]/85 hover:bg-[#0065FF] duration-150 ease-out text-white text-[14px] p-3 rounded-lg outline-none"
+            value={downloadOption}
+            onChange={(e) => setDownloadOption(e.target.value)}
+          >
+            <option value="dxf">DXF</option>
+            <option value="png">PNG</option>
+          </select>
+          <button
+            className="px-4 bg-[#0065FF]/85 hover:bg-[#0065FF] duration-150 ease-out text-white text-[14px] p-3 rounded-lg"
+            onClick={handleDownload}
+          >
+            Download
+          </button>
+        </div>
+      </motion.div>
+
+      <button className="absolute left-6 top-[100px]  bg-[#0065FF] hover:bg-[#0065FF] duration-150 ease-out text-white text-md font-semibold px-3 py-[5px] my-2 rounded-full md:hidden cursor-pointer"
+      onClick={toggleLeftChat}> 
+      +
+      </button>
     </div>
   );
 };

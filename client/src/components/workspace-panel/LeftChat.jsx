@@ -52,20 +52,39 @@ const LeftChat = ({ userId, click, floorPlanPath, description }) => {
   };
 
   return (
-    <div
-      className="flex justify-between bg-[rgb(255,255,255)] hover:bg-slate-500 delay-300 cursor-pointer w-full h-auto mt-5 py-3 align-middle mx-5 pl-10 pr-5  rounded-3xl"
-      onClick={click}
-    >
-      <h5 className="text-black text-1xl font-bold text-center items-center flex justify-center">
-        {(description.length > 20) ? description.substring(0, 20) + '...' : description         
-        }
-      </h5>
 
-      <FaTrash
-        onClick={deletePlan}
-        className="delay-50 hover:scale-150 hover:text-red-900 text-black text-1xl font-bold text-center items-center flex justify-center"
-      />
+    <div>
+        <div
+        className="md:flex hidden justify-between bg-[rgb(255,255,255)] hover:bg-slate-500 delay-300 cursor-pointer w-full h-auto mt-5 py-3 align-middle mx-5 pl-10 pr-5  rounded-3xl"
+        onClick={click}
+        >
+          <h5 className="text-black text-1xl font-bold text-center items-center flex justify-center">
+            {(description.length > 20) ? description.substring(0, 20) + '...' : description         
+            }
+          </h5>
+
+          <FaTrash
+            onClick={deletePlan}
+            className="delay-50 hover:scale-150 hover:text-red-900 text-black text-1xl font-bold text-center items-center flex justify-center"
+          />
+        </div>
+
+        <div
+        className="md:hidden flex justify-between bg-[rgb(255,255,255)] hover:bg-slate-500 delay-300 cursor-pointer w-auto h-auto mt-5 py-3 align-middle mx-5 pl-5 pr-5  rounded-3xl"
+        onClick={click}
+        >
+          <h5 className="text-black text-1xl font-bold text-center items-center flex justify-center">
+            {(description.length > 20) ? description.substring(0, 20) + '...' : description         
+            }
+          </h5>
+
+          <FaTrash
+            onClick={deletePlan}
+            className="delay-50 hover:scale-150 hover:text-red-900 text-black text-1xl font-bold text-center items-center flex justify-center"
+          />
+        </div>
     </div>
+
   );
 };
 
