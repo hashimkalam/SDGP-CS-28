@@ -41,6 +41,7 @@ const Workspaces = () => {
           const floorPlansList = [];
 
           for (const floorPlanId in floorPlansData) {
+
             const floorPlan = floorPlansData[floorPlanId];
             console.log("Fetching floor plan:", floorPlanId, floorPlan);
             try {
@@ -65,16 +66,15 @@ const Workspaces = () => {
             }
           }
 
-          floorPlansList.sort(function(x, y){
-            return y.timeStamp - x.timeStamp;
-        })
-        
-          floorPlansList.sort((a, b) => new Date(b.timeStamp) - new Date(a.timeStamp)); // Change to a.timestamp - b.timestamp for ascending order
+          floorPlansList.sort((a, b) => new Date(b.timeStamp) - new Date(a.timeStamp));
           console.log("Fetched floor plans list:", floorPlansList);
           setFloorPlans(floorPlansList);
-          
+
         }
       );
+      useEffect(() => {
+      
+      }, [floorPlans]);
 
       return () => {
         off(floorPlansRef, "value", floorPlansSnapshot);
@@ -124,7 +124,7 @@ const Workspaces = () => {
         const result = await response.json();
         console.log(result.message);
         fetchFloorPlans(currentUser.user._id
-          );
+        );
       } else {
         console.log(response);
         // Handle errors
@@ -142,34 +142,34 @@ const Workspaces = () => {
   const handleDownload = async () => {
     if (floorPlansData) {
       console.log("Downloading floor plan:", floorPlansData);
-  
+
       const selectedPath =
         downloadOption === "dxf"
           ? floorPlansData.floorPlanPathDxf
           : floorPlansData.floorPlanPathPng;
-  
+
       if (!selectedPath) {
         console.error("Selected path is undefined or null.");
         return;
       }
-  
+
       try {
         // Get the download URL for the selectedPath
         const downloadURL = await getDownloadURL(
           storageRef(storage, selectedPath)
         );
-  
+
         // Create a temporary anchor element
         const downloadLink = document.createElement("a");
         downloadLink.href = downloadURL;
         downloadLink.download = `floor_plan.${downloadOption}`; // Set a default file name and extension
-  
+
         // Append the anchor element to the document body
         document.body.appendChild(downloadLink);
-  
+
         // Trigger a click event on the anchor element
         downloadLink.click();
-  
+
         // Remove the anchor element from the document body
         document.body.removeChild(downloadLink);
       } catch (error) {
@@ -178,7 +178,7 @@ const Workspaces = () => {
     } else {
       console.error("No floor plan data available for download.");
     }
-  
+
     // Redirect to the download page if the user is an individual
     if (currentUser?.user?.role === "individual") {
       navigate("/download");
