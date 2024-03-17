@@ -45,7 +45,6 @@ const Workspaces = () => {
     console.log("Fetching floor plans for user:", userId);
 
     try {
-      
       const floorPlansRef = ref(database, `users/${userId}/floorPlans`);
 
       const floorPlansSnapshot = await onValue(
@@ -53,10 +52,8 @@ const Workspaces = () => {
         async (snapshot) => {
           const floorPlansData = snapshot.val();
           var floorPlansList = [];
-          
 
           for (const floorPlanId in floorPlansData) {
-
             const floorPlan = floorPlansData[floorPlanId];
             console.log("Fetching floor plan:", floorPlanId, floorPlan);
             try {
@@ -81,20 +78,21 @@ const Workspaces = () => {
             }
           }
 
-          floorPlansList.sort((a, b) => new Date(b.timeStamp) - new Date(a.timeStamp));
+          floorPlansList.sort(
+            (a, b) => new Date(b.timeStamp) - new Date(a.timeStamp)
+          );
           console.log("Fetched floor plans list:", floorPlansList);
-          if (initialRender){
+          if (initialRender) {
             setInitialRender(false);
-          }else {setFloorPlansData(floorPlansList[0]);
+          } else {
+            setFloorPlansData(floorPlansList[0]);
             setLoadingState(false);
-          
           }
 
           setFloorPlans(floorPlansList);
-
         }
       );
-      
+
       return () => {
         off(floorPlansRef, "value", floorPlansSnapshot);
       };
@@ -102,10 +100,6 @@ const Workspaces = () => {
       console.error("Error fetching floor plans:", error);
     }
   };
-
- 
-
-
 
   const [floorPlansData, setFloorPlansData] = useState(null);
 
@@ -144,10 +138,8 @@ const Workspaces = () => {
         // Form data submitted successfully
         const result = await response.json();
         console.log(result.message);
-        fetchFloorPlans(currentUser.user._id
-        );
+        fetchFloorPlans(currentUser.user._id);
       } else {
-        
         console.log(response);
         // Handle errors
         console.error("Failed to submit form data");
@@ -164,7 +156,6 @@ const Workspaces = () => {
   const handleDownload = async () => {
     if (floorPlansData) {
       console.log("Downloading floor plan:", floorPlansData);
-
 
       const selectedPath =
         downloadOption === "dxf"
@@ -220,7 +211,7 @@ const Workspaces = () => {
         transition={{ duration: 2 }}
         className="bg-[#005BE2] flex-0 md:flex-[.25] rounded-xl overflow-y-scroll overflow-x-hidden"
       >
-        {floorPlans.map((floorPlan) => (
+        {floorPlans.map((floorPlan, index) => (
           <div className="flex flex-row">
             <LeftChat
               key={`left-${index}`}
