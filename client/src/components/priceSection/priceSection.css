@@ -1,10 +1,6 @@
 .PriceSection {
   background: linear-gradient(180deg, #00265f 0%, rgba(0, 47, 215, 0.84) 100%);
-  color: #ffffff;
-  display: flex;
-  flex-direction: column;
-  text-align: center;
-  justify-content: center;
+
   min-height: 100vh;
 }
 

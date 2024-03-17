@@ -8,6 +8,7 @@ import pattern_img from "../../assets/pattern.png";
 import resetImage from "../../assets/login_person.png";
 import logo from "../../assets/Logo.png";
 import Alert from "@mui/material/Alert";
+import { useSnackbar } from "notistack";
 
 // Import other necessary assets, styles, and components
 
@@ -26,16 +27,14 @@ const buttonStyles = {
 const ResetPassword = () => {
   const location = useLocation();
   const navigate = useNavigate();
+  const { enqueueSnackbar } = useSnackbar();
+
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [passPlaceholder, setPassPlaceholder] = useState(true);
   const [confirmPassPlaceholder, setConfirmPassPlaceholder] = useState(true);
   const [visibility, setVisibility] = useState(false);
   const [confirmVisibility, setConfirmVisibility] = useState(false);
-  const [passwordError, setPasswordError] = useState("");
-  const [confirmPasswordError, setConfirmPasswordError] = useState("");
-  const [successMessage, setSuccessMessage] = useState("");
-  const [errorMessage, setErrorMessage] = useState("");
 
   const handlePasswordVisibility = () => {
     setPassPlaceholder(!passPlaceholder);
@@ -52,46 +51,42 @@ const ResetPassword = () => {
     return regex.test(password);
   };
 
-  const setErrorWithTimeout = (e_message) => {
-    setPasswordError(e_message);
-    setTimeout(() => {
-      setPasswordError(false);
-    }, 3000);
-  };
+  const handleResetPassword = async (e) => {
+    e.preventDefault();
 
-  const handleResetPassword = async () => {
     if (!location.state) {
       console.error("No email provided.");
       return;
     }
-    setPasswordError("");
-    setConfirmPasswordError("");
 
     if (!password) {
-      setErrorWithTimeout("Password is required");
+      enqueueSnackbar("Password is required!", {
+        variant: "error",
+      });
       return;
     }
 
     if (!validatePassword(password)) {
-      setErrorWithTimeout(
-        "Password must be at least 8 characters and contain at least one digit"
+      enqueueSnackbar(
+        "Password must contain at least 8 characters and a digit!",
+        {
+          variant: "error",
+        }
       );
       return;
     }
 
     if (password && !confirmPassword) {
-      setConfirmPasswordError("Confirm password is required");
-      setTimeout(() => {
-        setConfirmPasswordError(false);
-      }, 3000);
+      enqueueSnackbar("Confirm password is required!", {
+        variant: "error",
+      });
       return;
     }
 
     if (password == confirmPassword) {
-      setSuccessMessage("");
       try {
         const response = await fetch(
-          "http://localhost:3000/api/password/resetpassword",
+          "https://sdgp-cs-28-backend-final-cp24t3kdkq-uc.a.run.app/api/password/resetpassword",
           {
             // Updated URL
             method: "POST",
@@ -105,17 +100,16 @@ const ResetPassword = () => {
           }
         );
 
-        setSuccessMessage("");
-
         const data = await response.json();
 
         if (!response.ok) {
           throw new Error(data.message || "Could not reset password");
         }
 
-        setSuccessMessage("Password reset successful!");
+        enqueueSnackbar("Password reset successful!", {
+          variant: "success",
+        });
         setTimeout(() => {
-          setSuccessMessage(false);
           navigate("/login");
         }, 3000);
 
@@ -124,15 +118,17 @@ const ResetPassword = () => {
       } catch (error) {
         // Handle error
         console.error(error);
-        setErrorMessage(error.message);
+        enqueueSnackbar(error.message, {
+          variant: "error",
+        });
       }
     } else {
-      setErrorMessage(
-        "Password reset unseccessful. Not the same password entered"
+      enqueueSnackbar(
+        "Password reset unseccessful. Not the same password entered!",
+        {
+          variant: "error",
+        }
       );
-      setTimeout(() => {
-        setErrorMessage(false);
-      }, 3000);
 
       setPassword("");
       setConfirmPassword("");
@@ -151,17 +147,14 @@ const ResetPassword = () => {
         </Link>
 
         <div className="grid place-items-center h-[85vh] lg:h-[83vh]">
-          {errorMessage && (
-            <Alert severity="error" onClose={() => setErrorMessage("")}>
-              {errorMessage}
-            </Alert>
-          )}
-          {successMessage && <Alert severity="success">{successMessage}</Alert>}
           <div className="displayFlex flex-col w-full -mt-[4vh]">
             <h2 className="uppercase font-bold text-2xl text-center pt-5 pb-10">
               Reset Password
             </h2>
-            <form className="w-3/4 sm:w-2/4 md:w-3/4 displayFlex flex-col ">
+            <form
+              onSubmit={handleResetPassword}
+              className="w-3/4 sm:w-2/4 md:w-3/4 displayFlex flex-col "
+            >
               <div className="link p-3 py-2">
                 <LockIcon />
                 <input
@@ -171,7 +164,6 @@ const ResetPassword = () => {
                   value={password}
                   onChange={(e) => {
                     setPassword(e.target.value);
-                    setPasswordError("");
                   }}
                 />
 
@@ -179,9 +171,6 @@ const ResetPassword = () => {
                   {visibility ? <VisibilityOffIcon /> : <VisibilityIcon />}
                 </IconButton>
               </div>
-              {passwordError && (
-                <div style={{ color: "red" }}>{passwordError}</div>
-              )}
 
               <div className="link p-3 py-2">
                 <LockIcon />
@@ -192,7 +181,6 @@ const ResetPassword = () => {
                   value={confirmPassword}
                   onChange={(e) => {
                     setConfirmPassword(e.target.value);
-                    setConfirmPasswordError("");
                   }}
                 />
 
@@ -204,12 +192,9 @@ const ResetPassword = () => {
                   )}
                 </IconButton>
               </div>
-              {confirmPasswordError && (
-                <div style={{ color: "red" }}>{confirmPasswordError}</div>
-              )}
 
               <Button
-                type="button"
+                type="submit"
                 style={buttonStyles}
                 onClick={handleResetPassword}
               >

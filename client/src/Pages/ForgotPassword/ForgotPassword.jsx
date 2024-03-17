@@ -3,6 +3,8 @@ import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@mui/material";
 
+import { useSnackbar } from "notistack";
+
 function ForgotPassword() {
   const [nextSlide, setNextSlide] = useState(false);
   const [otpValues, setOtpValues] = useState(["", "", "", ""]);
@@ -11,10 +13,9 @@ function ForgotPassword() {
   const [otpVerified, setOtpVerified] = useState(false);
   const [generatedOtp, setGeneratedOtp] = useState("");
 
-  const [errorMsg, setErrorMsg] = useState("");
-
   const navigate = useNavigate();
   const inputRefs = useRef([]);
+  const { enqueueSnackbar } = useSnackbar();
 
   useEffect(() => {
     inputRefs.current[0]?.current?.focus();
@@ -26,10 +27,10 @@ function ForgotPassword() {
 
   const handleInputChange = (e, index) => {
     const newValue = e.target.value;
+    const newOtpValues = [...otpValues];
 
     if (newValue === "") {
       // removing the values if backspace clicked
-      const newOtpValues = [...otpValues];
       newOtpValues[index] = "";
       setOtpValues(newOtpValues);
 
@@ -40,7 +41,6 @@ function ForgotPassword() {
     }
 
     if (/^\d+$/.test(newValue) && newValue.length <= 1) {
-      const newOtpValues = [...otpValues];
       newOtpValues[index] = newValue;
       setOtpValues(newOtpValues);
 
@@ -64,25 +64,23 @@ function ForgotPassword() {
     width: "40%",
   };
 
-  const setErrorWithTimeout = (e_message) => {
-    setErrorMsg(e_message);
-    setTimeout(() => {
-      setErrorMsg(false);
-    }, 3000);
-  };
-
   const formSubmit = async (e) => {
     e.preventDefault();
+    console.log("Entered Email:", enteredEmail);
 
     const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
     if (enteredEmail === "") {
-      setErrorWithTimeout("Fill in the container!");
+      enqueueSnackbar("Fill in the container!", {
+        variant: "error",
+      });
       return;
     }
 
     if (!emailPattern.test(enteredEmail)) {
-      setErrorWithTimeout("Please enter a valid email address.");
+      enqueueSnackbar("Enter a valid email address!", {
+        variant: "error",
+      });
       return;
     }
 
@@ -90,7 +88,7 @@ function ForgotPassword() {
 
     // Call your backend API to send OTP email
     const response = await fetch(
-      "http://localhost:3000/forgotpassword/submit",
+      "https://sdgp-cs-28-backend-final-cp24t3kdkq-uc.a.run.app/forgotpassword/submit",
       {
         // Replace "http://localhost:3000" with the actual URL where your backend is running
         method: "POST",
@@ -109,8 +107,6 @@ function ForgotPassword() {
       setNextSlide(true);
       const generatedOtp = result.generatedOtp;
       setGeneratedOtp(generatedOtp);
-
-      setErrorMsg("");
     } else {
       // Handle error case
       console.error("Error:", result.message);
@@ -129,8 +125,10 @@ function ForgotPassword() {
       navigate("/resetpassword", { state: { email: enteredEmail } });
     } else {
       // Show an error message
-      console.error("The entered OTP is not correct.");
-      setErrorWithTimeout("The entered OTP is not correct.");
+      enqueueSnackbar("Incorrect OTP!", {
+        variant: "error",
+      });
+      // setOtpValues(inputRefs.current[0].current.focus());
     }
   };
 
@@ -164,10 +162,6 @@ function ForgotPassword() {
                 onChange={(e) => setEnteredEmail(e.target.value)}
                 className="link w-[60%]"
               />
-
-              <p className="text-red-700 font-semibold text-center">
-                {errorMsg}
-              </p>
 
               <Button type="submit" style={styles} onClick={formSubmit}>
                 Next
@@ -213,10 +207,6 @@ function ForgotPassword() {
                       />
                     ))}
                   </div>
-
-                  <p className="text-red-700 font-semibold text-center">
-                    {errorMsg}
-                  </p>
 
                   <Button type="submit" style={styles} onClick={otpSubmit}>
                     Next
