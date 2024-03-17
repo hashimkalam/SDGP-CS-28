@@ -20,7 +20,7 @@ const Workspaces = () => {
   const [inputDesc, setInputDesc] = useState("");
   const [loadingState, setLoadingState] = useState(false);
   const [downloadOption, setDownloadOption] = useState("dxf"); // Default to DXF
-
+  const [initialRender, setInitialRender] = useState(true);
 
   useEffect(() => {
     if (currentUser) {
@@ -70,7 +70,9 @@ const Workspaces = () => {
 
           floorPlansList.sort((a, b) => new Date(b.timeStamp) - new Date(a.timeStamp));
           console.log("Fetched floor plans list:", floorPlansList);
-          
+          if (initialRender){
+            setInitialRender(false);
+          }else {setFloorPlansData(floorPlansList[0]);}
 
           setFloorPlans(floorPlansList);
 
@@ -130,8 +132,6 @@ const Workspaces = () => {
         console.log(result.message);
         fetchFloorPlans(currentUser.user._id
         );
-        
-       setFloorPlansData(floorPlans[0]);
       } else {
         console.log(response);
         // Handle errors
