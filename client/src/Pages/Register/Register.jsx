@@ -146,8 +146,8 @@ function Register() {
 
       const res = await fetch(
         loginPage
-          ? "http://localhost:3000/api/auth/signin"
-          : "http://localhost:3000/api/auth/signup",
+          ? "https://sdgp-cs-28-backend-final-cp24t3kdkq-uc.a.run.app/api/auth/signin"
+          : "https://sdgp-cs-28-backend-final-cp24t3kdkq-uc.a.run.app/api/auth/signup",
         {
           method: "POST",
           headers: {

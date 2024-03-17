@@ -5,7 +5,7 @@ import RightChat from "../../components/workspace-panel/RightChat.jsx";
 import SendIcon from "@mui/icons-material/Send";
 import { useSelector } from "react-redux";
 
-import { ref, onValue } from "firebase/database";
+import { ref, onValue, set } from "firebase/database";
 import { getDownloadURL, ref as storageRef } from "firebase/storage";
 import { database, storage } from "../../firebase";
 import { useNavigate } from "react-router-dom";
@@ -21,6 +21,7 @@ const Workspaces = () => {
   const [inputDesc, setInputDesc] = useState("");
   const [loadingState, setLoadingState] = useState(false);
   const [downloadOption, setDownloadOption] = useState("dxf"); // Default to DXF
+  const [initialRender, setInitialRender] = useState(true);
 
   useEffect(() => {
     if (currentUser) {
@@ -28,20 +29,34 @@ const Workspaces = () => {
     }
   }, [currentUser]);
 
+  useEffect(() => {
+    // Check if the currently selected floor plan is still in the floorPlans array
+    const selectedFloorPlanExists = floorPlans.some(
+      (floorPlan) => floorPlan.id === floorPlansData?.id
+    );
+
+    // If the selected floor plan does not exist, set floorPlansData to null
+    if (!selectedFloorPlanExists) {
+      setFloorPlansData(null);
+    }
+  }, [floorPlans]);
+
   const fetchFloorPlans = async (userId) => {
     console.log("Fetching floor plans for user:", userId);
 
     try {
-      setLoadingState(true);
+      
       const floorPlansRef = ref(database, `users/${userId}/floorPlans`);
 
       const floorPlansSnapshot = await onValue(
         floorPlansRef,
         async (snapshot) => {
           const floorPlansData = snapshot.val();
-          const floorPlansList = [];
+          var floorPlansList = [];
+          
 
           for (const floorPlanId in floorPlansData) {
+
             const floorPlan = floorPlansData[floorPlanId];
             console.log("Fetching floor plan:", floorPlanId, floorPlan);
             try {
@@ -58,26 +73,39 @@ const Workspaces = () => {
                 floorPlanPathPng: downloadURLPng,
                 floorPlanPathDxf: downloadURLDxf,
                 description: floorPlan.Description,
+                timeStamp: floorPlan.timestamp,
               });
               console.log(floorPlansList);
             } catch (error) {
               console.error("Error fetching download URL:", error);
             }
           }
+
+          floorPlansList.sort((a, b) => new Date(b.timeStamp) - new Date(a.timeStamp));
           console.log("Fetched floor plans list:", floorPlansList);
+          if (initialRender){
+            setInitialRender(false);
+          }else {setFloorPlansData(floorPlansList[0]);
+            setLoadingState(false);
+          
+          }
+
           setFloorPlans(floorPlansList);
+
         }
       );
-
+      
       return () => {
         off(floorPlansRef, "value", floorPlansSnapshot);
       };
     } catch (error) {
       console.error("Error fetching floor plans:", error);
-    } finally {
-      setLoadingState(false);
     }
   };
+
+ 
+
+
 
   const [floorPlansData, setFloorPlansData] = useState(null);
 
@@ -116,15 +144,17 @@ const Workspaces = () => {
         // Form data submitted successfully
         const result = await response.json();
         console.log(result.message);
-        fetchFloorPlans(currentUser.user._id);
+        fetchFloorPlans(currentUser.user._id
+        );
       } else {
+        
         console.log(response);
         // Handle errors
         console.error("Failed to submit form data");
+        setLoadingState(false);
       }
     } catch (error) {
       console.error(error);
-    } finally {
       setLoadingState(false);
     }
 
@@ -134,6 +164,7 @@ const Workspaces = () => {
   const handleDownload = async () => {
     if (floorPlansData) {
       console.log("Downloading floor plan:", floorPlansData);
+
 
       const selectedPath =
         downloadOption === "dxf"
@@ -189,21 +220,10 @@ const Workspaces = () => {
         transition={{ duration: 2 }}
         className="bg-[#005BE2] flex-0 md:flex-[.25] rounded-xl overflow-y-scroll overflow-x-hidden"
       >
-        <div
-          className="bg-white hover:bg-slate-200 ease-out duration-150 mt-5 cursor-pointer w-auto px-2 md:py-3 mx-2 md:mx-5 rounded-lg"
-          onClick={() => handleOnClickNewChat("")}
-        >
-          <h5 className="text-[#5b5353] ease-out duration-150 text-1xl font-semibold justify-start text-center items-center flex space-x-4">
-            <AddIcon className="border border-[#6CB2EB] rounded-full text-blue-300 items-start" />
-            <span className="hidden md:block">Add New Description</span>
-          </h5>
-        </div>
-
-        <p className="text-white font-bold mx-2 md:mx-5 mt-5 -mb-2">Recent</p>
         {floorPlans.map((floorPlan) => (
           <div className="flex flex-row">
             <LeftChat
-              key={`left-${floorPlan.id}`}
+              key={`left-${index}`}
               userId={currentUser.user._id}
               click={() => handleOnClick(floorPlan.id)}
               floorPlanPath={floorPlan}
@@ -211,6 +231,15 @@ const Workspaces = () => {
             />
           </div>
         ))}
+
+        <div
+          className="bg-white hover:bg-slate-200 ease-out duration-150 mt-5 cursor-pointer w-auto px-2 md:py-3 mx-5 rounded-l-xl rounded-r-lg"
+          onClick={() => handleOnClickNewChat("")}
+        >
+          <h5 className="text-[#5b5353] ease-out duration-150 text-1xl font-semibold text-center items-center flex justify-center">
+            + <span className="hidden md:block">Add New Description</span>
+          </h5>
+        </div>
       </motion.div>
       {loadingState ? (
         <div className="flex-1 bg-white flex-0 md:flex-[.75] rounded-r-3xl overflow-y-scroll px-4">
