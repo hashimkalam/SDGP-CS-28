@@ -1,17 +1,18 @@
-import React, { useState } from "react";
-import { useEffect } from "react";
+import React from "react";
+import { useState, useEffect } from "react";
 import LeftChat from "../../components/workspace-panel/LeftChat.jsx";
 import RightChat from "../../components/workspace-panel/RightChat.jsx";
 import SendIcon from "@mui/icons-material/Send";
+
 import { useSelector } from "react-redux";
 
-import { ref, onValue } from "firebase/database";
+import { ref, onValue, off } from "firebase/database";
 import { getDownloadURL, ref as storageRef } from "firebase/storage";
 import { database, storage } from "../../firebase";
 import { useNavigate } from "react-router-dom";
+
 import { motion } from "framer-motion";
 import LoadingState from "../../components/loadingState/LoadingState";
-import Preview from "../../components/Preview.jsx";
 
 const Workspaces = () => {
   const navigate = useNavigate();
@@ -19,10 +20,6 @@ const Workspaces = () => {
   const [floorPlans, setFloorPlans] = useState([]);
   const [inputDesc, setInputDesc] = useState("");
   const [loadingState, setLoadingState] = useState(false);
-  const [downloadOption, setDownloadOption] = useState("dxf"); // Default to DXF
-
-  const [inputDesc, setInputDesc] = useState("");
-
   const [downloadOption, setDownloadOption] = useState("dxf"); // Default to DXF
 
   useEffect(() => {
@@ -97,13 +94,12 @@ const Workspaces = () => {
     setFloorPlansData(null);
   };
 
+  console.log("floorPlansData:", floorPlans);
+
   const handleGenerate = async (e) => {
     e.preventDefault();
-
-    console.log("working");
     try {
-      setLoadingState(true);
-      const response = await fetch("http://localhost:5000/submit-textInput", {
+      const response = await fetch("http://127.0.0.1:5000/submit-textInput", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -127,61 +123,71 @@ const Workspaces = () => {
       }
     } catch (error) {
       console.error(error);
-    } finally {
-      setLoadingState(false);
     }
 
     setInputDesc("");
   };
 
-  const handleDownload = async () => {
+  const handleDownload = () => {
     if (floorPlansData) {
       console.log("Downloading floor plan:", floorPlansData);
-  
+
       const selectedPath =
-        downloadOption === "dxf"
-          ? floorPlansData.floorPlanPathDxf
-          : floorPlansData.floorPlanPathPng;
-  
+      downloadOption === "dxf"
+        ? floorPlansData.floorPlanPathDxf
+        : floorPlansData.floorPlanPathPng;
+
+      getDownloadURL(ref(storage, selectedPath))
+        .then((selectedPath) => {
+          // This can be downloaded directly:
+          const xhr = new XMLHttpRequest();
+          xhr.responseType = "blob";
+          xhr.onload = (event) => {
+            const blob = xhr.response;
+          };
+          xhr.open("GET", selectedPath);
+          xhr.send();
+
+          // Or inserted into an <img> element
+        //   const img = document.getElementById("myimg");
+        //   img.setAttribute("src", selectedPath);
+
+        })
+        .catch((error) => {
+          // Handle any errors
+        });
+
+
+
       if (!selectedPath) {
         console.error("Selected path is undefined or null.");
         return;
       }
-  
-      try {
-        // Get the download URL for the selectedPath
-        const downloadURL = await getDownloadURL(
-          storageRef(storage, selectedPath)
-        );
-  
-        // Create a temporary anchor element
-        const downloadLink = document.createElement("a");
-        downloadLink.href = downloadURL;
-        downloadLink.download = `floor_plan.${downloadOption}`; // Set a default file name and extension
-  
-        // Append the anchor element to the document body
-        document.body.appendChild(downloadLink);
-  
-        // Trigger a click event on the anchor element
-        downloadLink.click();
-  
-        // Remove the anchor element from the document body
-        document.body.removeChild(downloadLink);
-      } catch (error) {
-        console.error("Error fetching download URL:", error);
-      }
+
+      // const url = selectedPath;
+      // console.log("URL:", url);
+
+      // // Create a link element
+      // const link = document.createElement("a");
+      // link.href = url;
+      // link.download = `floor_plan.${downloadOption}`; // Use the selected download option as the file extension
+      // link.target = "_blank";
+      // link.rel = "noopener noreferrer";
+
+      // // Append the link to the body and click it programmatically
+      // document.body.appendChild(link);
+      // link.click();
+
+      // Remove the link from the body after the download
+      // document.body.removeChild(link);
     } else {
       console.error("No floor plan data available for download.");
     }
-  
+
     // Redirect to the download page if the user is an individual
     if (currentUser?.user?.role === "individual") {
       navigate("/download");
     }
-  };
-
-  const handleTextSelect = (text) => {
-    setInputDesc(text);
   };
 
   return (
@@ -196,11 +202,9 @@ const Workspaces = () => {
           <div className="flex flex-row">
             <LeftChat
               key={`left-${floorPlan.id}`}
-              floorPlanDetails={floorPlan.formData}
-              floorPlanPath={floorPlan}
               userId={currentUser.user._id}
               click={() => handleOnClick(floorPlan.id)}
-              // floorPlanPath={floorPlan.floorPlanPathPng}
+              floorPlanPath={floorPlan.floorPlanPathPng}
               description={floorPlan.description}
             />
           </div>
@@ -224,7 +228,7 @@ const Workspaces = () => {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 2 }}
-          className="flex-1 bg-[#fff] md:flex-[.75] rounded-l-lg rounded-r-3xl overflow-y-scroll px-4"
+          className="flex-1 bg-[#fff] flex-0 md:flex-[.75] rounded-l-lg rounded-r-3xl overflow-y-scroll px-4"
         >
           <div className="absolute right-14 mt-4 mr-3 flex items-center space-x-2 z-40">
             <label></label>
@@ -249,82 +253,36 @@ const Workspaces = () => {
               floorPlanPathPng={floorPlansData.floorPlanPathPng}
             />
           ) : (
-            <div className="input-field flex flex-row relative h-[77.2vh]">
+            <div className="input-field flex flex-row relative h-[77.2vh] ">
               <form
                 onSubmit={handleGenerate}
                 className="absolute bottom-0 flex items-center justify-between w-full space-x-2"
               >
-                <div className="mt-10 z-50 w-[68vw]">
-                  {location.pathname == "/workspace" && (
-                    <Preview onTextSelect={handleTextSelect} />
-                  )}
-                  <div className="flex mt-10">
-                    <input
-                      type="text"
-                      className="rounded-full w-full p-2 px-4 outline-none bg-[#0047FF33] flex-1"
-                      value={inputDesc}
-                      onChange={(e) => setInputDesc(e.target.value)}
-                    />
-                    <div
-                      className="bg-[#0065FF] rounded-full text-sm flex flex-0 items-center md:p-2.5 px-2 pl-1 md:px-4 space-x-2 text-white cursor-pointer"
-                      onClick={handleGenerate}
-                    >
-                      <button type="submit" className="hidden md:block">
-                        Generate
-                      </button>
-                      <SendIcon
-                        className="text-white md:-ml-3 md:mr-4 m-2 md:m-0"
-                        fontSize="small"
-                      />
-                    </div>
-                  </div>
+                <input
+                  type="text"
+                  className="rounded-full w-full p-2 px-4 outline-none bg-[#0047FF33] flex-1"
+                  value={inputDesc}
+                  onChange={(e) => setInputDesc(e.target.value)}
+                />
+                <div
+                  className="bg-[#0065FF] rounded-full text-sm flex flex-0 items-center md:p-2.5 px-2 pl-1 md:px-4 space-x-2 text-white cursor-pointer"
+                  onClick={handleGenerate}
+                >
+                  <button type="submit" className="hidden md:block">
+                    Generate
+                  </button>
+                  <SendIcon
+                    className="text-white md:-ml-3 md:mr-4 m-2 md:m-0"
+                    fontSize="small"
+                  />
                 </div>
               </form>
             </div>
           )}
-        </div>
-        {floorPlansData ? (
-          <RightChat
-            key={`right-${floorPlansData.id}`}
-            floorPlanPathPng={floorPlansData.floorPlanPathPng}
-          />
-        ) : (
-          <div className="input-field flex flex-row relative h-[77.2vh] ">
-            <form
-              onSubmit={handleGenerate}
-              className="absolute bottom-0 flex items-center justify-between w-full space-x-2"
-            >
-              <input
-                type="text"
-                className="rounded-full w-full p-2 px-4 outline-none bg-[#0047FF33] flex-1"
-                value={inputDesc}
-                onChange={(e) => setInputDesc(e.target.value)}
-              />
-              <div
-                className="bg-[#0065FF] rounded-full text-sm flex flex-0 items-center md:p-2.5 px-2 pl-1 md:px-4 space-x-2 text-white cursor-pointer"
-                onClick={handleGenerate}
-              >
-                <button type="submit" className="hidden md:block">
-                  Generate
-                </button>
-                <SendIcon
-                  className="text-white md:-ml-3 md:mr-4 m-2 md:m-0"
-                  fontSize="small"
-                />
-              </div>
-            </form>
-          </div>
-        )}
-      </motion.div>
+        </motion.div>
       )}
     </div>
   );
 };
 
 export default Workspaces;
-
-
-
-
-
-
