@@ -134,12 +134,15 @@ const Workspaces = () => {
         fetchFloorPlans(currentUser.user._id
         );
       } else {
+        
         console.log(response);
         // Handle errors
         console.error("Failed to submit form data");
+        setLoadingState(false);
       }
     } catch (error) {
       console.error(error);
+      setLoadingState(false);
     }
 
     setInputDesc("");
