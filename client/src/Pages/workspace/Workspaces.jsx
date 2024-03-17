@@ -38,7 +38,8 @@ const Workspaces = () => {
         floorPlansRef,
         async (snapshot) => {
           const floorPlansData = snapshot.val();
-          const floorPlansList = [];
+          var floorPlansList = [];
+          
 
           for (const floorPlanId in floorPlansData) {
 
@@ -72,10 +73,7 @@ const Workspaces = () => {
 
         }
       );
-      useEffect(() => {
       
-      }, [floorPlans]);
-
       return () => {
         off(floorPlansRef, "value", floorPlansSnapshot);
       };
@@ -85,6 +83,8 @@ const Workspaces = () => {
       setLoadingState(false);
     }
   };
+
+
 
   const [floorPlansData, setFloorPlansData] = useState(null);
 
@@ -197,18 +197,6 @@ const Workspaces = () => {
         transition={{ duration: 2 }}
         className="bg-[#005BE2] flex-0 md:flex-[.25] rounded-xl overflow-y-scroll overflow-x-hidden"
       >
-        {floorPlans.map((floorPlan) => (
-          <div className="flex flex-row">
-            <LeftChat
-              key={`left-${floorPlan.id}`}
-              userId={currentUser.user._id}
-              click={() => handleOnClick(floorPlan.id)}
-              floorPlanPath={floorPlan}
-              description={floorPlan.description}
-            />
-          </div>
-        ))}
-
         <div
           className="bg-white hover:bg-slate-200 ease-out duration-150 mt-5 cursor-pointer w-auto px-2 md:py-3 mx-5 rounded-l-xl rounded-r-lg"
           onClick={() => handleOnClickNewChat("")}
@@ -217,6 +205,18 @@ const Workspaces = () => {
             + <span className="hidden md:block">Add New Description</span>
           </h5>
         </div>
+        {floorPlans.map((floorPlan,index) => (
+          <div className="flex flex-row">
+            <LeftChat
+              key={`left-${index}`}
+              userId={currentUser.user._id}
+              click={() => handleOnClick(floorPlan.id)}
+              floorPlanPath={floorPlan}
+              description={floorPlan.description}
+            />
+          </div>
+        ))}
+
       </motion.div>
       {loadingState ? (
         <div className="flex-1 bg-white flex-0 md:flex-[.75] rounded-l-lg rounded-r-3xl overflow-y-scroll px-4">
