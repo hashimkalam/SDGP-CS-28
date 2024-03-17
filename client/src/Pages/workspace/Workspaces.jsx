@@ -5,7 +5,7 @@ import RightChat from "../../components/workspace-panel/RightChat.jsx";
 import SendIcon from "@mui/icons-material/Send";
 import { useSelector } from "react-redux";
 
-import { ref, onValue } from "firebase/database";
+import { ref, onValue, set } from "firebase/database";
 import { getDownloadURL, ref as storageRef } from "firebase/storage";
 import { database, storage } from "../../firebase";
 import { useNavigate } from "react-router-dom";
@@ -20,6 +20,7 @@ const Workspaces = () => {
   const [inputDesc, setInputDesc] = useState("");
   const [loadingState, setLoadingState] = useState(false);
   const [downloadOption, setDownloadOption] = useState("dxf"); // Default to DXF
+  const [initialRender, setInitialRender] = useState(true);
 
   useEffect(() => {
     if (currentUser) {
@@ -38,9 +39,11 @@ const Workspaces = () => {
         floorPlansRef,
         async (snapshot) => {
           const floorPlansData = snapshot.val();
-          const floorPlansList = [];
+          var floorPlansList = [];
+          
 
           for (const floorPlanId in floorPlansData) {
+
             const floorPlan = floorPlansData[floorPlanId];
             console.log("Fetching floor plan:", floorPlanId, floorPlan);
             try {
@@ -65,17 +68,17 @@ const Workspaces = () => {
             }
           }
 
-          floorPlansList.sort(function(x, y){
-            return y.timeStamp - x.timeStamp;
-        })
-        
-          floorPlansList.sort((a, b) => new Date(b.timeStamp) - new Date(a.timeStamp)); // Change to a.timestamp - b.timestamp for ascending order
+          floorPlansList.sort((a, b) => new Date(b.timeStamp) - new Date(a.timeStamp));
           console.log("Fetched floor plans list:", floorPlansList);
+          if (initialRender){
+            setInitialRender(false);
+          }else {setFloorPlansData(floorPlansList[0]);}
+
           setFloorPlans(floorPlansList);
-          
+
         }
       );
-
+      
       return () => {
         off(floorPlansRef, "value", floorPlansSnapshot);
       };
@@ -85,6 +88,10 @@ const Workspaces = () => {
       setLoadingState(false);
     }
   };
+
+ 
+
+
 
   const [floorPlansData, setFloorPlansData] = useState(null);
 
@@ -124,7 +131,7 @@ const Workspaces = () => {
         const result = await response.json();
         console.log(result.message);
         fetchFloorPlans(currentUser.user._id
-          );
+        );
       } else {
         console.log(response);
         // Handle errors
@@ -142,34 +149,34 @@ const Workspaces = () => {
   const handleDownload = async () => {
     if (floorPlansData) {
       console.log("Downloading floor plan:", floorPlansData);
-  
+
       const selectedPath =
         downloadOption === "dxf"
           ? floorPlansData.floorPlanPathDxf
           : floorPlansData.floorPlanPathPng;
-  
+
       if (!selectedPath) {
         console.error("Selected path is undefined or null.");
         return;
       }
-  
+
       try {
         // Get the download URL for the selectedPath
         const downloadURL = await getDownloadURL(
           storageRef(storage, selectedPath)
         );
-  
+
         // Create a temporary anchor element
         const downloadLink = document.createElement("a");
         downloadLink.href = downloadURL;
         downloadLink.download = `floor_plan.${downloadOption}`; // Set a default file name and extension
-  
+
         // Append the anchor element to the document body
         document.body.appendChild(downloadLink);
-  
+
         // Trigger a click event on the anchor element
         downloadLink.click();
-  
+
         // Remove the anchor element from the document body
         document.body.removeChild(downloadLink);
       } catch (error) {
@@ -178,7 +185,7 @@ const Workspaces = () => {
     } else {
       console.error("No floor plan data available for download.");
     }
-  
+
     // Redirect to the download page if the user is an individual
     if (currentUser?.user?.role === "individual") {
       navigate("/download");
@@ -197,18 +204,6 @@ const Workspaces = () => {
         transition={{ duration: 2 }}
         className="bg-[#005BE2] flex-0 md:flex-[.25] rounded-xl overflow-y-scroll overflow-x-hidden"
       >
-        {floorPlans.map((floorPlan) => (
-          <div className="flex flex-row">
-            <LeftChat
-              key={`left-${floorPlan.id}`}
-              userId={currentUser.user._id}
-              click={() => handleOnClick(floorPlan.id)}
-              floorPlanPath={floorPlan}
-              description={floorPlan.description}
-            />
-          </div>
-        ))}
-
         <div
           className="bg-white hover:bg-slate-200 ease-out duration-150 mt-5 cursor-pointer w-auto px-2 md:py-3 mx-5 rounded-l-xl rounded-r-lg"
           onClick={() => handleOnClickNewChat("")}
@@ -217,6 +212,18 @@ const Workspaces = () => {
             + <span className="hidden md:block">Add New Description</span>
           </h5>
         </div>
+        {floorPlans.map((floorPlan,index) => (
+          <div className="flex flex-row">
+            <LeftChat
+              key={`left-${index}`}
+              userId={currentUser.user._id}
+              click={() => handleOnClick(floorPlan.id)}
+              floorPlanPath={floorPlan}
+              description={floorPlan.description}
+            />
+          </div>
+        ))}
+
       </motion.div>
       {loadingState ? (
         <div className="flex-1 bg-white flex-0 md:flex-[.75] rounded-l-lg rounded-r-3xl overflow-y-scroll px-4">
