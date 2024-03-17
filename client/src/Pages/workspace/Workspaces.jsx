@@ -32,7 +32,7 @@ const Workspaces = () => {
     console.log("Fetching floor plans for user:", userId);
 
     try {
-      setLoadingState(true);
+      
       const floorPlansRef = ref(database, `users/${userId}/floorPlans`);
 
       const floorPlansSnapshot = await onValue(
@@ -72,7 +72,10 @@ const Workspaces = () => {
           console.log("Fetched floor plans list:", floorPlansList);
           if (initialRender){
             setInitialRender(false);
-          }else {setFloorPlansData(floorPlansList[0]);}
+          }else {setFloorPlansData(floorPlansList[0]);
+            setLoadingState(false);
+          
+          }
 
           setFloorPlans(floorPlansList);
 
@@ -84,8 +87,6 @@ const Workspaces = () => {
       };
     } catch (error) {
       console.error("Error fetching floor plans:", error);
-    } finally {
-      setLoadingState(false);
     }
   };
 
@@ -139,8 +140,6 @@ const Workspaces = () => {
       }
     } catch (error) {
       console.error(error);
-    } finally {
-      setLoadingState(false);
     }
 
     setInputDesc("");
