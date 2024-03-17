@@ -62,7 +62,7 @@ const NameEdit = () => {
       }
     } catch (error) {
       console.error(error.message);
-      enqueueSnackbar("Cannot update Now Sorry", { variant: "warning" });
+      enqueueSnackbar("Failed to update username", { variant: "warning" });
       return;
     }
 
