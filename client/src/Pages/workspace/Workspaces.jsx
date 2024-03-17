@@ -28,6 +28,18 @@ const Workspaces = () => {
     }
   }, [currentUser]);
 
+  useEffect(() => {
+    // Check if the currently selected floor plan is still in the floorPlans array
+    const selectedFloorPlanExists = floorPlans.some(
+      (floorPlan) => floorPlan.id === floorPlansData?.id
+    );
+
+    // If the selected floor plan does not exist, set floorPlansData to null
+    if (!selectedFloorPlanExists) {
+      setFloorPlansData(null);
+    }
+  }, [floorPlans]);
+
   const fetchFloorPlans = async (userId) => {
     console.log("Fetching floor plans for user:", userId);
 
