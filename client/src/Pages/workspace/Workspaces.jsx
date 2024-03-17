@@ -5,7 +5,7 @@ import RightChat from "../../components/workspace-panel/RightChat.jsx";
 import SendIcon from "@mui/icons-material/Send";
 import { useSelector } from "react-redux";
 
-import { ref, onValue } from "firebase/database";
+import { ref, onValue, set } from "firebase/database";
 import { getDownloadURL, ref as storageRef } from "firebase/storage";
 import { database, storage } from "../../firebase";
 import { useNavigate } from "react-router-dom";
@@ -20,6 +20,7 @@ const Workspaces = () => {
   const [inputDesc, setInputDesc] = useState("");
   const [loadingState, setLoadingState] = useState(false);
   const [downloadOption, setDownloadOption] = useState("dxf"); // Default to DXF
+
 
   useEffect(() => {
     if (currentUser) {
@@ -69,6 +70,8 @@ const Workspaces = () => {
 
           floorPlansList.sort((a, b) => new Date(b.timeStamp) - new Date(a.timeStamp));
           console.log("Fetched floor plans list:", floorPlansList);
+          
+
           setFloorPlans(floorPlansList);
 
         }
@@ -83,6 +86,8 @@ const Workspaces = () => {
       setLoadingState(false);
     }
   };
+
+ 
 
 
 
@@ -125,6 +130,8 @@ const Workspaces = () => {
         console.log(result.message);
         fetchFloorPlans(currentUser.user._id
         );
+        
+       setFloorPlansData(floorPlans[0]);
       } else {
         console.log(response);
         // Handle errors
