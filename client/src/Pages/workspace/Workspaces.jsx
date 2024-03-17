@@ -57,14 +57,22 @@ const Workspaces = () => {
                 floorPlanPathPng: downloadURLPng,
                 floorPlanPathDxf: downloadURLDxf,
                 description: floorPlan.Description,
+                timeStamp: floorPlan.timestamp,
               });
               console.log(floorPlansList);
             } catch (error) {
               console.error("Error fetching download URL:", error);
             }
           }
+
+          floorPlansList.sort(function(x, y){
+            return y.timeStamp - x.timeStamp;
+        })
+        
+          floorPlansList.sort((a, b) => new Date(b.timeStamp) - new Date(a.timeStamp)); // Change to a.timestamp - b.timestamp for ascending order
           console.log("Fetched floor plans list:", floorPlansList);
           setFloorPlans(floorPlansList);
+          
         }
       );
 
@@ -115,7 +123,8 @@ const Workspaces = () => {
         // Form data submitted successfully
         const result = await response.json();
         console.log(result.message);
-        fetchFloorPlans(currentUser.user._id);
+        fetchFloorPlans(currentUser.user._id
+          );
       } else {
         console.log(response);
         // Handle errors
