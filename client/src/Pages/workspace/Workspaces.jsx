@@ -211,6 +211,15 @@ const Workspaces = () => {
         transition={{ duration: 2 }}
         className="bg-[#005BE2] flex-0 md:flex-[.25] rounded-xl overflow-y-scroll overflow-x-hidden"
       >
+        <div
+          className="bg-white hover:bg-slate-200 ease-out duration-150 mt-5 cursor-pointer w-auto px-2 md:py-3 mx-5 rounded-lg"
+          onClick={() => handleOnClickNewChat("")}
+        >
+          <h5 className="text-[#5b5353] ease-out items-start duration-150 text-1xl font-semibold space-x-2 text-center flex">
+            <AddIcon className="border border-[#6CB2EB] mr-1 rounded-full text-[#6CB2EB]" />
+            <span className="hidden md:block">Add New Description</span>
+          </h5>
+        </div>
         {floorPlans.map((floorPlan, index) => (
           <div className="flex flex-row">
             <LeftChat
@@ -222,15 +231,6 @@ const Workspaces = () => {
             />
           </div>
         ))}
-
-        <div
-          className="bg-white hover:bg-slate-200 ease-out duration-150 mt-5 cursor-pointer w-auto px-2 md:py-3 mx-5 rounded-l-xl rounded-r-lg"
-          onClick={() => handleOnClickNewChat("")}
-        >
-          <h5 className="text-[#5b5353] ease-out duration-150 text-1xl font-semibold text-center items-center flex justify-center">
-            + <span className="hidden md:block">Add New Description</span>
-          </h5>
-        </div>
       </motion.div>
       {loadingState ? (
         <div className="flex-1 bg-white flex-0 md:flex-[.75] rounded-r-3xl overflow-y-scroll px-4">
