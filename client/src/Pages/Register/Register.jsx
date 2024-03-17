@@ -417,7 +417,7 @@ function Register() {
             <div className="flex items-center">
               <hr className="w-[13vw] bg-[#525252] " />
               <p className="mx-4 text-[#707070]">or</p>
-              <hr className="w-[13vw] bg-[#525252] " />
+              <hr className="w-[13vw] bg-[#525252]" />
             </div>
 
             <div className="flex flex-col justify-center mt-6">

@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import { useState } from "react";
+import image from "../../public/images/code1.png";
 
 const options = [
   {
@@ -24,11 +25,13 @@ function Preview({ onTextSelect }) {
   };
 
   return (
-    <div className="w-[50vw] mx-auto space-y-5">
-      <div className="bg-gradient-to-r from-[#003380] to-[#011635] text-white p-4 py-6 rounded-2xl space-y-4">
-        <p className="text-xl font-semibold">
-          <span className="bg-gradient-text">Welcome to EliteBluPrint</span>
-        </p>
+    <div className="w-[60vw] mx-auto space-y-5">
+      <p className="text-xl font-semibold">
+        <span className="bg-gradient-text text-5xl">
+          Welcome to EliteBluPrint!
+        </span>
+      </p>
+      <div className="text-[#004EC3] px-4 py-3 hidden lg:block rounded-2xl space-y-4 border-2 border-black">
         <p>
           You can customize your dream space by choosing from the following room
           types: Bedroom, Washroom, Kitchen, Living Room,Dining Room
@@ -41,17 +44,22 @@ function Preview({ onTextSelect }) {
           plan ideas
         </p>
       </div>
-
-      <h2>Try These Dream Configurations</h2>
-
-      <div className="flex items-center justify-between max-xl:flex-wrap space-x-2">
+      <h2 className="hidden">Try These Dream Configurations</h2>
+      <h2 className="lg:hidden">How can I help you today?</h2>
+      <div className="lg:flex items-center justify-between hidden max-xl:flex-wrap space-x-6">
         {options.map((option, index) => (
           <div
             key={index}
             onClick={() => handleSelect(option.value)}
-            className="bg-[#999]/50 hover:bg-[#999]/75 w-[33%] min-h-[120px] duration-150 ease-in-out p-2 rounded-xl cursor-pointer"
+            className="workspace_shadow lg:w-[30%] relative min-h-[150px] duration-150 ease-in-out p-3 rounded-xl cursor-pointer"
           >
             <p className="text-sm text-justify">{option.value}</p>
+
+            <img
+              src={image}
+              alt="code image"
+              className="absolute bottom-2 right-2"
+            />
           </div>
         ))}
       </div>

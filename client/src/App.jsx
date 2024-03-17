@@ -97,7 +97,7 @@ function App() {
               // exact={true}
               path="/download"
               element={
-                <div className="bg-[#090E34]">
+                <div className="bg-[#090E34] min-h-screen">
                   <Navbar />
                   <Download />
                 </div>
