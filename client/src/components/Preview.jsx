@@ -51,7 +51,7 @@ function Preview({ onTextSelect }) {
           <div
             key={index}
             onClick={() => handleSelect(option.value)}
-            className="workspace_shadow lg:w-[30%] relative min-h-[150px] duration-150 ease-in-out p-3 rounded-xl cursor-pointer"
+            className="workspace_shadow hover:bg-[#0065FF]/75 hover:text-white lg:w-[30%] relative min-h-[150px] duration-150 ease-in-out p-3 rounded-xl cursor-pointer"
           >
             <p className="text-sm text-justify">{option.value}</p>
 

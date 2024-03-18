@@ -54,7 +54,7 @@ const LeftChat = ({ userId, click, floorPlanPath, description, styles }) => {
 
   return (
     <div
-      className={`flex justify-between items-center space-x-4 ${styles} text-white cursor-pointer w-full h-auto mt-5 py-3 align-middle mx-5 rounded-lg px-2`}
+      className={`flex justify-between items-center space-x-4 ${styles} text-white cursor-pointer hover:bg-[#090E34]/50 w-full h-auto mt-5 py-3 align-middle mx-5 rounded-lg px-2`}
       onClick={click}
     >
       <ChatBubbleOutlineIcon />
