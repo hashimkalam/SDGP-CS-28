@@ -1,8 +1,11 @@
-import React from "react";
-
 const MenuItem = ({ imageUrl, altText, label }) => (
   <div className="flex gap-5 justify-between">
-    <img src={imageUrl} alt={altText} className="aspect-square w-[35px]" />
+    <img
+      src={imageUrl}
+      alt={altText}
+      className="aspect-square w-[35px]"
+      loading="lazy"
+    />
     <p className="self-start mt-4">{label}</p>
   </div>
 );

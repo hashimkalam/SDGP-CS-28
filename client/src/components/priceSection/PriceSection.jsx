@@ -38,7 +38,7 @@ function PriceSection() {
 
   return (
     <div
-      className="PriceSection text-white flex items-center flex-col justify-center"
+      className="PriceSection min-h-screen py-10 text-white flex items-center flex-col justify-center"
       id="pricing"
       ref={ref}
     >

@@ -4,9 +4,6 @@ import HowItWorks from "../../components/how-it-works/howitworks";
 import PriceSection from "../../components/priceSection/PriceSection";
 import Footer from "../../components/footer/footer";
 
-
-
-
 function Home() {
   return (
     <div>

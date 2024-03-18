@@ -114,34 +114,33 @@ function ForgotPassword() {
     }
   };
 
+  const otpSubmit = (e) => {
+    e.preventDefault();
 
-const otpSubmit = (e) => {
-  e.preventDefault();
+    const enteredOtp = otpValues.join("");
 
-  const enteredOtp = otpValues.join("");
-
-  // If the user has made 3 or more attempts, show an error message
-  if (attempts >= 3) {
-    enqueueSnackbar("You have reached the maximum number of attempts.", {
-      variant: "error",
-    });
-  } else {
-    if (generatedOtp === enteredOtp) {
-      setOtpPass(true);
-
-      // Navigate to the reset password page
-      navigate("/resetpassword", { state: { email: enteredEmail } });
-    } else {
-      // Increment the number of attempts
-      setAttempts(attempts + 1);
-
-      // Show an error message
-      enqueueSnackbar("Incorrect OTP!", {
+    // If the user has made 3 or more attempts, show an error message
+    if (attempts >= 3) {
+      enqueueSnackbar("You have reached the maximum number of attempts.", {
         variant: "error",
       });
+    } else {
+      if (generatedOtp === enteredOtp) {
+        setOtpPass(true);
+
+        // Navigate to the reset password page
+        navigate("/resetpassword", { state: { email: enteredEmail } });
+      } else {
+        // Increment the number of attempts
+        setAttempts(attempts + 1);
+
+        // Show an error message
+        enqueueSnackbar("Incorrect OTP!", {
+          variant: "error",
+        });
+      }
     }
-  }
-};
+  };
 
   return (
     <div className="flex flex-col items-center justify-center mx-auto h-screen -z-10">
