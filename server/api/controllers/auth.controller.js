@@ -75,9 +75,6 @@ export const signup = async (req, res, next) => {
       <h2 style="color: #333;">Welcome to our platform, <strong>${username}</strong>!</h2>
       <p style="color: #555; font-size: 16px;">Your account has been created successfully. We're glad to have you on board.</p>
       <p style="font-size: 24px;">🚀 Let the journey begin! 🌟</p>
-      <div style="margin-top: 20px;">
-        <img src="#" alt="Welcome Banner" style="max-width: 100%; border-radius: 10px;">
-      </div>
     </div>
   `,
       },

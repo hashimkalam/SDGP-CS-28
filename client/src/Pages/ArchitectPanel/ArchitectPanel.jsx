@@ -49,9 +49,9 @@ const ArchitectPanel = () => {
  
 
   return (
-    <div className="h-full bg-custom-blue">
-      <div className="flex flex-col justify-center items-center">
-        <h1 className="text-lg sm:text-xl md:text-2xl lg:text-3xl xl:text-4xl font-bold text-center text-white">
+    <div className="h-full bg-custom-blue ">
+      <div className="flex flex-col justify-center items-center ">
+        <h1 className="text-lg sm:text-xl md:text-2xl lg:text-3xl xl:text-4xl font-bold text-center text-white mt-3">
           Our Panel of Architects
         </h1>
         <h5 className="text-xs sm:text-sm md:text-base lg:text-lg xl:text-xl 2xl:text-2xl text-center text-white">
