@@ -1,7 +1,6 @@
-import React from "react";
 import { FaTrash } from "react-icons/fa";
 
-import { ref } from "firebase/storage";
+import { deleteObject, ref } from "firebase/storage";
 import { storage, database } from "../../firebase";
 import { ref as dbRef, remove } from "firebase/database";
 
@@ -12,16 +11,21 @@ const LeftChat = ({ userId, click, floorPlanPath, description }) => {
     const desertRefPng = ref(storage, floorPlanPath.floorPlanPathPng);
     const desertRefDxf = ref(storage, floorPlanPath.floorPlanPathDxf);
 
+    console.log(floorPlanPath, "hi");
+
     const deletePath = dbRef(
       database,
       `users/${userId}/floorPlans/${floorPlanPath.id}`
     );
 
+    console.log("userId", userId);
+    console.log("floorPlanPath", floorPlanPath);
+    console.log("floorPlanPath.id", floorPlanPath.id);
     console.log("desertRefPng", desertRefPng);
     console.log("desertRefDxf", desertRefDxf);
     console.log("deletePath", deletePath);
 
-    // Delete the file
+    //Delete the file
     deleteObject(desertRefPng)
       .then(() => {
         console.log("png File deleted successfully");
@@ -53,7 +57,7 @@ const LeftChat = ({ userId, click, floorPlanPath, description }) => {
       onClick={click}
     >
       <h5 className="text-black text-1xl font-bold text-center items-center flex justify-center">
-        {(description.length > 20) && description.substring(0, 20) + '...'          
+        {(description.length > 20) ? description.substring(0, 20) + '...' : description         
         }
       </h5>
 

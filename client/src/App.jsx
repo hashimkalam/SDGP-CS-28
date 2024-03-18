@@ -8,7 +8,7 @@ import ArchitectPanel from "./Pages/ArchitectPanel/ArchitectPanel";
 import Workspaces from "./Pages/workspace/Workspaces";
 import Panel from "./Pages/dashboard/Panel";
 import Navbar from "./components/navbar/navbar";
-
+import AppointmentForm from "./components/AppointmentForm";
 import UserProfile from "./Pages/UserProfile/userProfile";
 import { useSelector } from "react-redux";
 import PageNotFound from "./components/PageNotFound/PageNotFound";
@@ -18,45 +18,67 @@ function App() {
   const currentUser = useSelector((state) => state?.user?.currentUser);
 
   return (
-    <div className="bg-[#5E5ABA] min-h-screen">
+    <div className="min-h-screen">
       <Router>
         <Routes>
           <Route
-            path="/login"
+            path="/"
+            //exact={true}
             element={
-              <div>
-                <Register />
-              </div>
-            }
-          />
-          <Route
-            path="/signup"
-            element={
-              <div>
-                <Register />
+              <div className="bg-[#5E5ABA] h-screen">
+                <Navbar />
+                <Home />
               </div>
             }
           />
 
-          <Route
-            path="/forgotpassword"
-            element={
-              <div>
-                <ForgotPassword />
-              </div>
-            }
-          />
-
-          <Route
-            path="/resetpassword"
-            element={
-              <div>
-                <ResetPassword />
-              </div>
-            }
-          />
+          {!currentUser?.user && (
+            <Route
+              path="/login"
+              //exact={true}
+              element={
+                <div>
+                  <Register />
+                </div>
+              }
+            />
+          )}
+          {!currentUser?.user && (
+            <Route
+              //exact={true}
+              path="/signup"
+              element={
+                <div>
+                  <Register />
+                </div>
+              }
+            />
+          )}
+          {!currentUser?.user && (
+            <Route
+              path="/forgotpassword"
+              //exact={true}
+              element={
+                <div>
+                  <ForgotPassword />
+                </div>
+              }
+            />
+          )}
+          {!currentUser?.user && (
+            <Route
+              path="/resetpassword"
+              //exact={true}
+              element={
+                <div>
+                  <ResetPassword />
+                </div>
+              }
+            />
+          )}
           <Route
             path="/workspace"
+            //exact={true}
             element={
               <div>
                 {currentUser ? (
@@ -70,33 +92,21 @@ function App() {
               </div>
             }
           />
-
-          <Route
-            path="/userprofile"
-            element={
-              <div className="bg-[#090E34]">
-                {currentUser ? (
-                  <>
-                    <Navbar />
-                    <UserProfile />
-                  </>
-                ) : (
-                  <PageNotFound />
-                )}
-              </div>
-            }
-          />
-          <Route
-            path="/download"
-            element={
-              <div className="bg-[#090E34]">
-                <Navbar />
-                <Download />
-              </div>
-            }
-          />
+          {currentUser?.user?.role === "individual" && (
+            <Route
+              // exact={true}
+              path="/download"
+              element={
+                <div className="bg-[#090E34]">
+                  <Navbar />
+                  <Download />
+                </div>
+              }
+            />
+          )}
           <Route
             path="/architectpanel"
+            // exact={true}
             element={
               <div className="bg-[#005BE2]">
                 <Navbar />
@@ -105,17 +115,34 @@ function App() {
               </div>
             }
           />
-          <Route
-            path="/userprofile"
-            element={
-              <div className="bg-[#090E34] h-screen">
-                <UserProfile />
-              </div>
-            }
-          />
+          {currentUser?.user?.role === "individual" && (
+            <Route
+              path="/appointment"
+              //  exact={true}
+              element={
+                <div className="bg- bg-[#005BE2] h-screen">
+                  <Navbar />
+                  <AppointmentForm />
+                </div>
+              }
+            />
+          )}
+          {currentUser?.user?.role === "individual" && (
+            <Route
+              path="/userprofile"
+              // exact={true}
+              element={
+                <div className="bg-[#090E34] min-h-screen">
+                  <Navbar />
+                  <UserProfile />
+                </div>
+              }
+            />
+          )}
           {currentUser?.user?.role === "architect" && (
             <Route
               path="/dashboard"
+              // exact={true}
               element={
                 <div className="bg-gray-100 h-screen">
                   <Navbar />
@@ -124,16 +151,6 @@ function App() {
               }
             />
           )}
-
-          <Route
-            path="/"
-            element={
-              <div className="bg-[#5E5ABA] h-screen">
-                <Navbar />
-                <Home />
-              </div>
-            }
-          />
 
           <Route path="*" element={<PageNotFound />} />
         </Routes>

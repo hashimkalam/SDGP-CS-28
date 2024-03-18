@@ -1,7 +1,12 @@
 import { Button, Modal, Box, Typography } from "@mui/material";
+
 import { useState } from "react";
 
-function UserDelete({ name, deleteUser }) {
+
+import NameEdit from "./NameEdit";
+import PasswordEdit from "./PasswordEdit";
+
+const EditUser = () => {
   const [open, setOpen] = useState(false);
 
   const handleOpen = () => setOpen(true);
@@ -16,8 +21,11 @@ function UserDelete({ name, deleteUser }) {
 
   return (
     <>
-      <button onClick={handleOpen} className="w-full p-2 rounded-b-xl">
-        {name}
+      <button
+        onClick={handleOpen}
+        className="w-full p-2 rounded-br-xl hover:text-white hover:bg-emerald-600 duration-300 ease-in-out"
+      >
+        Edit
       </button>
       <Modal
         open={open}
@@ -28,34 +36,32 @@ function UserDelete({ name, deleteUser }) {
       >
         <Box
           sx={style}
-          className="rounded-xl bg-white/90 absolute p-4 shadow-2xl px-8 w-[50vw] md:w-[40vw] lg:w-[30vw] text-center"
+          className="rounded-xl bg-white/90 absolute p-4 shadow-2xl w-[45vw] text-center"
         >
-          <h1 className="mt-0 font-semibold text-lg md:text-2xl lg:text-3xl">
-            Delete Confirmation
-          </h1>
+          <h1 className="mt-0 font-semibold">Edit Informations</h1>
 
-          <Typography
+          <div className="flex flex-col space-y-2 m-5 ">
+    
+            <NameEdit />
+            <PasswordEdit />
+          </div>
+
+          <div
             id="modal-modal-description"
             sx={{ mt: 2 }}
             className="flex justify-evenly space-x-2"
           >
             <button
-              className="p-1 text-sm md:text-md bg-green-400 hover:bg-green-600 hover:font-bold hover:text-white duration-200 ease-in-out flex-[.5]"
-              onClick={deleteUser}
-            >
-              Yes
-            </button>
-            <button
-              className="p-1 text-sm md:text-md bg-red-400 hover:bg-red-600 hover:font-bold hover:text-white duration-200 ease-in-out flex-[.5]"
+              className="p-1 bg-red-400 hover:bg-red-600 hover:font-bold hover:text-white duration-200 ease-in-out flex-[.5]"
               onClick={() => setOpen(false)}
             >
-              No
+              Back
             </button>
-          </Typography>
+          </div>
         </Box>
       </Modal>
     </>
   );
-}
+};
 
-export default UserDelete;
+export default EditUser;

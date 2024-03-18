@@ -61,11 +61,7 @@ function Register() {
   const [password, setPassword] = useState("");
   const [passPlaceholder, setPassPlaceholder] = useState(true);
   const [visibility, setVisibility] = useState(false);
-  const [errorMsg, setErrorMessage] = useState(false);
   const [formData, setFormData] = useState({});
-  const [message, setMessage] = useState("");
-
-  const { error, loading } = useSelector((state) => state.user);
 
   const [showRoleSelectionModal, setShowRoleSelectionModal] = useState(false);
   const selectedOption = useSelector(selectSelectedOption);
@@ -92,13 +88,6 @@ function Register() {
     boxShadow: "0px 8px 21px 0px rgba(0, 0, 0, .16)",
   };
 
-  const setErrorWithTimeout = (e_message) => {
-    setErrorMessage(e_message);
-    setTimeout(() => {
-      setErrorMessage(false);
-    }, 3000);
-  };
-
   const submitHandler = async (e) => {
     e.preventDefault();
 
@@ -106,24 +95,50 @@ function Register() {
     const passwordPattern = /^(?=.*\d)/;
 
     if (email === "" || password === "") {
-      setErrorWithTimeout("Fill in the containers!");
+      enqueueSnackbar("Fill in the containers!", {
+        variant: "error",
+      });
       return;
+    }
+    if (location.pathname === "/signup") {
+      if (username.length < 4) {
+        enqueueSnackbar("Username should be at least 4 characters!", {
+          variant: "error",
+        });
+        return;
+      } else if (username.includes(" ")) {
+        enqueueSnackbar("Username should not contain spaces!", {
+          variant: "error",
+        });
+        return;
+      }
     }
 
     if (!emailPattern.test(email)) {
-      setErrorWithTimeout("Please enter a valid email address.");
+      enqueueSnackbar("Enter a valid email address!", {
+        variant: "error",
+      });
       return;
     }
 
     if (password === "") {
       setErrorWithTimeout("Password is required.");
       return;
-    } else if (password.length < 8) {
-      setErrorWithTimeout("Password must be at least 8 characters long.");
-      return;
-    } else if (!passwordPattern.test(password)) {
-      setErrorWithTimeout("Password must contain at least one digit.");
-      return;
+    }
+
+    if (location.pathname === "/signup") {
+      if (password.length < 8) {
+        enqueueSnackbar("Password must be at least 8 characters long!", {
+          variant: "error",
+        });
+        return;
+      }
+      if (!passwordPattern.test(password)) {
+        enqueueSnackbar("Password must contain at least one digit!", {
+          variant: "error",
+        });
+        return;
+      }
     }
 
     try {
@@ -131,8 +146,8 @@ function Register() {
 
       const res = await fetch(
         loginPage
-          ? "http://localhost:3000/api/auth/signin"
-          : "http://localhost:3000/api/auth/signup",
+          ? "https://sdgp-cs-28-backend-final-cp24t3kdkq-uc.a.run.app/api/auth/signin"
+          : "https://sdgp-cs-28-backend-final-cp24t3kdkq-uc.a.run.app/api/auth/signup",
         {
           method: "POST",
           headers: {
@@ -147,30 +162,36 @@ function Register() {
 
       if (res.ok === false) {
         dispatch(signInFailure(data.message));
-        setErrorWithTimeout(data.message);
-
+        enqueueSnackbar(data.message, {
+          variant: "error",
+        });
         return;
       }
       dispatch(signInSuccess(data));
 
-      setMessage(data.message);
+      enqueueSnackbar(data.message, {
+        variant: "success",
+      });
 
       if (res.ok) {
         // success message
-        {
-          location.pathname === "/login"
-            ? enqueueSnackbar("Logged In Successfully", {
-                variant: "success",
-              })
-            : enqueueSnackbar("Signed In Successfully", {
-                variant: "success",
-              });
+        if (location.pathname === "/login") {
+          enqueueSnackbar("Logged In Successfully", {
+            variant: "success",
+          });
+        } else {
+          enqueueSnackbar("Signed In Successfully", {
+            variant: "success",
+          });
         }
         navigate("/workspace");
       }
     } catch (error) {
+      console.error(error);
       dispatch(signInFailure(error));
-      setErrorWithTimeout(error);
+      enqueueSnackbar(error, {
+        variant: "error",
+      });
     }
   };
 
@@ -193,7 +214,7 @@ function Register() {
 
             if (result && result.user) {
               // User exists, proceed with login
-              const res = await fetch("http://localhost:3000/api/auth/google", {
+              const res = await fetch("https://sdgp-cs-28-backend-final-cp24t3kdkq-uc.a.run.app/api/auth/google", {
                 method: "POST",
                 headers: {
                   "Content-Type": "application/json",
@@ -259,7 +280,6 @@ function Register() {
     setEmail("");
     dispatch(setSelectedOption(""));
     setPassword("");
-    setErrorMessage("");
 
     setLoginPage(!loginPage);
   };
@@ -365,11 +385,6 @@ function Register() {
                 </IconButton>
               </div>
 
-              <p className="text-red-700 font-semibold text-center">
-                {/*{error ? error || "Something went wrong!" : ""}*/}
-                {errorMsg}
-              </p>
-
               {loginPage && (
                 <Link
                   to="/forgotpassword"
@@ -381,6 +396,7 @@ function Register() {
 
               {loginPage ? (
                 <Button
+                
                   type="submit"
                   style={buttonStyles}
                   onSubmit={submitHandler}
@@ -405,7 +421,7 @@ function Register() {
             </div>
 
             <div className="flex flex-col justify-center mt-6">
-              <div className="flex flex-col sm:flex-row gap-x-2">
+              <div className="flex flex-col sm:flex-row ml-5">
                 <Button style={styles} onClick={handleGoogleButton}>
                   <img
                     src={googleLogo}
@@ -414,10 +430,10 @@ function Register() {
                   />
                   Sign in with Google
                 </Button>
-                <Button style={styles}>
+                {/* <Button style={styles}>
                   <AppleIcon className="mr-2" />
                   Sign in with Apple
-                </Button>
+                </Button> */}
               </div>
 
               <div className="mt-4 -mb-[4vh]">
