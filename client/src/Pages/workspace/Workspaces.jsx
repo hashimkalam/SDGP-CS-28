@@ -104,12 +104,19 @@ const Workspaces = () => {
   const [floorPlansData, setFloorPlansData] = useState(null);
 
   const handleOnClick = (id) => {
-    console.log("id:", id);
-    const selectedFloorPlan = floorPlans.find(
-      (floorPlan) => floorPlan.id === id
-    );
-    console.log("selectedFloorPlan:", selectedFloorPlan);
-    setFloorPlansData(selectedFloorPlan);
+    try {
+      setLoadingState(true);
+      console.log("id:", id);
+      const selectedFloorPlan = floorPlans.find(
+        (floorPlan) => floorPlan.id === id
+      );
+      console.log("selectedFloorPlan:", selectedFloorPlan);
+      setFloorPlansData(selectedFloorPlan);
+    } catch (error) {
+      console.error("Error fetching stored plan's data: ", error);
+    } finally {
+      setLoadingState(false);
+    }
   };
 
   const handleOnClickNewChat = () => {
@@ -228,6 +235,7 @@ const Workspaces = () => {
               click={() => handleOnClick(floorPlan.id)}
               floorPlanPath={floorPlan}
               description={floorPlan.description}
+              styles={floorPlansData?.id === floorPlan.id && "bg-[#090E34]"}
             />
           </div>
         ))}
@@ -269,7 +277,7 @@ const Workspaces = () => {
             <div className="input-field flex flex-row relative h-[77.2vh]">
               <form
                 onSubmit={handleGenerate}
-                className="absolute bottom-0 flex items-center justify-between w-full space-x-2"
+                className="absolute bottom-0 flex items-center justify-center w-full space-x-2"
               >
                 <div className="-mb-5 z-50 w-[68vw]">
                   {location.pathname == "/workspace" && (
