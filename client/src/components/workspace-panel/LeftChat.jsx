@@ -1,12 +1,11 @@
 import { FaTrash } from "react-icons/fa";
 import ChatBubbleOutlineIcon from "@mui/icons-material/ChatBubbleOutline";
+
 import { deleteObject, ref } from "firebase/storage";
 import { storage, database } from "../../firebase";
 import { ref as dbRef, remove } from "firebase/database";
 
 const LeftChat = ({ userId, click, floorPlanPath, description }) => {
-
-
   console.log(userId, "id");
 
   const deletePlan = () => {
@@ -52,7 +51,6 @@ const LeftChat = ({ userId, click, floorPlanPath, description }) => {
         console.log("Error deleting file", error);
       });
   };
-  
 
   return (
     <div
@@ -68,7 +66,7 @@ const LeftChat = ({ userId, click, floorPlanPath, description }) => {
 
       <FaTrash
         onClick={deletePlan}
-        className="delay-50 hover:scale-110 hover:text-red-600 text-1xl font-bold text-center items-center flex justify-center"
+        className="delay-50 hover:scale-110 hover:text-red-900 text-1xl font-bold text-center items-center flex justify-center"
       />
     </div>
   );
