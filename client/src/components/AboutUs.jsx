@@ -52,7 +52,7 @@ const data = [
     styles: "z-30 -ml-16",
     image: yasisuru,
     git: "https://github.com/YasisuruArachchi",
-    linkdn: "linkedin.com/in/yasisuru-denagamaarachchi-6b73882b7",
+    linkdn: "https://www.linkedin.com/in/yasisurudenagamaarachchi/",
     web: "",
   },
 ];
