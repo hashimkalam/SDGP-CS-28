@@ -2,7 +2,7 @@ import hashim from "../../public/images/hashim.png";
 import salman from "../../public/images/salman.png";
 import riyazath from "../../public/images/riyazath.png";
 import loshan from "../../public/images/loshan.png";
-import yasisuru from "../../public/images/yasisuru.png";
+import yasisuru from "../../public/images/yasisiru.jpg";
 
 import git from "../../public/images/git.png";
 import linkdn from "../../public/images/linkdn.png";
@@ -11,17 +11,17 @@ import { IconButton } from "@mui/material";
 
 const data = [
   {
-    name: "Hashim Kalam",
-    desc: "Hashim  played a pivotal role in developing the machine learning model, NLP, and the frontend for EliteBluPrint. His skills were instrumental in bringing this feature to life.",
+    name: "Salman Faraj",
+    desc: "Salman played a pivotal role in crafting the core algorithm that powers EliteBluPrint's floor plan generation, he wasn't just coding, he also designed the UI of the application",
     styles: "z-30 -mr-16",
     image: salman,
-    git: "https://github.com/hashimkalam",
-    linkdn: "https://www.linkedin.com/in/hashimkalam/",
-    web: "https://hashimkalam.vercel.app/",
+    git: "https://github.com/salmanfaraj06",
+    linkdn: "https://www.linkedin.com/in/salman-faraj-2617a924b/",
+    web: "https://salmanfr.me/",
   },
   {
-    name: "Hashim Kalam",
-    desc: "Hashim  played a pivotal role in developing the machine learning model, NLP, and the frontend for EliteBluPrint. His skills were instrumental in bringing this feature to life.",
+    name: "Mohamed Riyazath",
+    desc: "Riyazath brings a blend of passion and technical expertise to the table. He played a key role in crafting the machine learning model and NLP that power EliteBluPrint",
     styles: "z-40 -mr-16",
     image: riyazath,
     git: "https://github.com/hashimkalam",
@@ -38,8 +38,8 @@ const data = [
     web: "https://hashimkalam.vercel.app/",
   },
   {
-    name: "Hashim Kalam",
-    desc: "Hashim  played a pivotal role in developing the machine learning model, NLP, and the frontend for EliteBluPrint. His skills were instrumental in bringing this feature to life.",
+    name: "Loshan Selvaraj",
+    desc: "Loshan's passion was the spark that ignited the entire concept. Not only did he conceive the idea, but he also spearheaded the development of the   application's backend",
     styles: "z-40 -ml-16",
     image: loshan,
     git: "https://github.com/hashimkalam",
