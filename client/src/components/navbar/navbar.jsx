@@ -132,6 +132,14 @@ const Navbar = () => {
               <span>PRICING</span>
             </a>
           </li>
+          <li className="md:my-0 my-5">
+            <a
+              href="#aboutus"
+              className="transition-all duration-500 md:text-xl font-Inter-Regular text-lg"
+            >
+              <span>ABOUT US</span>
+            </a>
+          </li>
 
           {/* Buttons for small devices */}
 
