@@ -10,9 +10,6 @@ import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import AddCardIcon from "@mui/icons-material/AddCard";
 
-import pattern_img from "../../assets/pattern.png";
-import logInPersonImage from "../../assets/login_person.png";
-import signUpPersonImage from "../../assets/signup_person.png";
 import googleLogo from "../../assets/google_logo.jpg";
 import logo from "../../assets/Logo.png";
 import Select from "react-select";
@@ -29,6 +26,7 @@ import { app } from "../../firebase";
 import SignInModel from "../../components/model/SignInModel";
 
 import { useSnackbar } from "notistack";
+import RegisterImage from "../../components/RegisterImage/RegisterImage";
 
 const options = [
   { value: "individual", label: "Individual" },
@@ -61,11 +59,7 @@ function Register() {
   const [password, setPassword] = useState("");
   const [passPlaceholder, setPassPlaceholder] = useState(true);
   const [visibility, setVisibility] = useState(false);
-  const [errorMsg, setErrorMessage] = useState(false);
   const [formData, setFormData] = useState({});
-  const [message, setMessage] = useState("");
-
-  const { error, loading } = useSelector((state) => state.user);
 
   const [showRoleSelectionModal, setShowRoleSelectionModal] = useState(false);
   const selectedOption = useSelector(selectSelectedOption);
@@ -92,13 +86,6 @@ function Register() {
     boxShadow: "0px 8px 21px 0px rgba(0, 0, 0, .16)",
   };
 
-  const setErrorWithTimeout = (e_message) => {
-    setErrorMessage(e_message);
-    setTimeout(() => {
-      setErrorMessage(false);
-    }, 3000);
-  };
-
   const submitHandler = async (e) => {
     e.preventDefault();
 
@@ -106,24 +93,50 @@ function Register() {
     const passwordPattern = /^(?=.*\d)/;
 
     if (email === "" || password === "") {
-      setErrorWithTimeout("Fill in the containers!");
+      enqueueSnackbar("Fill in the containers!", {
+        variant: "error",
+      });
       return;
+    }
+    if (location.pathname === "/signup") {
+      if (username.length < 4) {
+        enqueueSnackbar("Username should be at least 4 characters!", {
+          variant: "error",
+        });
+        return;
+      } else if (username.includes(" ")) {
+        enqueueSnackbar("Username should not contain spaces!", {
+          variant: "error",
+        });
+        return;
+      }
     }
 
     if (!emailPattern.test(email)) {
-      setErrorWithTimeout("Please enter a valid email address.");
+      enqueueSnackbar("Enter a valid email address!", {
+        variant: "error",
+      });
       return;
     }
 
     if (password === "") {
       setErrorWithTimeout("Password is required.");
       return;
-    } else if (password.length < 8) {
-      setErrorWithTimeout("Password must be at least 8 characters long.");
-      return;
-    } else if (!passwordPattern.test(password)) {
-      setErrorWithTimeout("Password must contain at least one digit.");
-      return;
+    }
+
+    if (location.pathname === "/signup") {
+      if (password.length < 8) {
+        enqueueSnackbar("Password must be at least 8 characters long!", {
+          variant: "error",
+        });
+        return;
+      }
+      if (!passwordPattern.test(password)) {
+        enqueueSnackbar("Password must contain at least one digit!", {
+          variant: "error",
+        });
+        return;
+      }
     }
 
     try {
@@ -131,8 +144,8 @@ function Register() {
 
       const res = await fetch(
         loginPage
-          ? "http://localhost:3000/api/auth/signin"
-          : "http://localhost:3000/api/auth/signup",
+          ? "https://sdgp-cs-28-backend-final-cp24t3kdkq-uc.a.run.app/api/auth/signin"
+          : "https://sdgp-cs-28-backend-final-cp24t3kdkq-uc.a.run.app/api/auth/signup",
         {
           method: "POST",
           headers: {
@@ -147,30 +160,36 @@ function Register() {
 
       if (res.ok === false) {
         dispatch(signInFailure(data.message));
-        setErrorWithTimeout(data.message);
-
+        enqueueSnackbar(data.message, {
+          variant: "error",
+        });
         return;
       }
       dispatch(signInSuccess(data));
 
-      setMessage(data.message);
+      enqueueSnackbar(data.message, {
+        variant: "success",
+      });
 
       if (res.ok) {
         // success message
-        {
-          location.pathname === "/login"
-            ? enqueueSnackbar("Logged In Successfully", {
-                variant: "success",
-              })
-            : enqueueSnackbar("Signed In Successfully", {
-                variant: "success",
-              });
+        if (location.pathname === "/login") {
+          enqueueSnackbar("Logged In Successfully", {
+            variant: "success",
+          });
+        } else {
+          enqueueSnackbar("Signed In Successfully", {
+            variant: "success",
+          });
         }
         navigate("/workspace");
       }
     } catch (error) {
+      console.error(error);
       dispatch(signInFailure(error));
-      setErrorWithTimeout(error);
+      enqueueSnackbar(error, {
+        variant: "error",
+      });
     }
   };
 
@@ -193,18 +212,21 @@ function Register() {
 
             if (result && result.user) {
               // User exists, proceed with login
-              const res = await fetch("http://localhost:3000/api/auth/google", {
-                method: "POST",
-                headers: {
-                  "Content-Type": "application/json",
-                },
-                body: JSON.stringify({
-                  name: result.user.displayName,
-                  email: result.user.email,
-                  photo: result?.user?.photoURL,
-                  role: option,
-                }),
-              });
+              const res = await fetch(
+                "https://sdgp-cs-28-backend-final-cp24t3kdkq-uc.a.run.app/api/auth/google",
+                {
+                  method: "POST",
+                  headers: {
+                    "Content-Type": "application/json",
+                  },
+                  body: JSON.stringify({
+                    name: result.user.displayName,
+                    email: result.user.email,
+                    photo: result?.user?.photoURL,
+                    role: option,
+                  }),
+                }
+              );
 
               if (res.ok) {
                 const data = await res.json();
@@ -259,7 +281,6 @@ function Register() {
     setEmail("");
     dispatch(setSelectedOption(""));
     setPassword("");
-    setErrorMessage("");
 
     setLoginPage(!loginPage);
   };
@@ -365,11 +386,6 @@ function Register() {
                 </IconButton>
               </div>
 
-              <p className="text-red-700 font-semibold text-center">
-                {/*{error ? error || "Something went wrong!" : ""}*/}
-                {errorMsg}
-              </p>
-
               {loginPage && (
                 <Link
                   to="/forgotpassword"
@@ -401,11 +417,11 @@ function Register() {
             <div className="flex items-center">
               <hr className="w-[13vw] bg-[#525252] " />
               <p className="mx-4 text-[#707070]">or</p>
-              <hr className="w-[13vw] bg-[#525252] " />
+              <hr className="w-[13vw] bg-[#525252]" />
             </div>
 
             <div className="flex flex-col justify-center mt-6">
-              <div className="flex flex-col sm:flex-row gap-x-2">
+              <div className="flex flex-col sm:flex-row ml-5">
                 <Button style={styles} onClick={handleGoogleButton}>
                   <img
                     src={googleLogo}
@@ -413,10 +429,6 @@ function Register() {
                     alt="Google Logo"
                   />
                   Sign in with Google
-                </Button>
-                <Button style={styles}>
-                  <AppleIcon className="mr-2" />
-                  Sign in with Apple
                 </Button>
               </div>
 
@@ -453,31 +465,7 @@ function Register() {
           handleContinue={() => handleRoleSelection(selectedOption)}
         />
       )}
-      <div
-        style={{ backgroundImage: `url(${pattern_img})` }}
-        className="bg-cover hidden sm:hidden lg:flex justify-center items-center md:w-1/2"
-      >
-        <div className="relative md:w-[40vw] lg:w-[30vw] lg:h-[65vh] xl:h-[55vh] border border-[white] -z-1 p-5 rounded-2xl lg:text-center xl:text-left backdrop-blur-lg">
-          <p className="text-white text-sm md:text-md lg:text-lg xl:text-xl font-extrabold xl:w-1/2">
-            No more complex CAD operations. Describe your ideal space, and we'll
-            bring it to life
-          </p>
-
-          {loginPage ? (
-            <img
-              src={logInPersonImage}
-              className="registerImg lg:right-[-20px] xl:right-[-80px] scale-90 lg:scale-100"
-              alt="Person"
-            />
-          ) : (
-            <img
-              src={signUpPersonImage}
-              className="registerImg lg:right-[0px] xl:right-[-50px] scale-100"
-              alt="Person"
-            />
-          )}
-        </div>
-      </div>
+      <RegisterImage />
     </div>
   );
 }

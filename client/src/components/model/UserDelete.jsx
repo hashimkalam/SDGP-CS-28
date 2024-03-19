@@ -28,9 +28,11 @@ function UserDelete({ name, deleteUser }) {
       >
         <Box
           sx={style}
-          className="rounded-xl bg-white/90 absolute p-4 shadow-2xl w-[45vw] text-center"
+          className="rounded-xl bg-white/90 absolute p-4 shadow-2xl px-8 w-[50vw] md:w-[40vw] lg:w-[30vw] text-center"
         >
-          <h1 className="mt-0 font-semibold">Delete Confirmation</h1>
+          <h1 className="mt-0 font-semibold text-lg md:text-2xl lg:text-3xl">
+            Delete Confirmation
+          </h1>
 
           <Typography
             id="modal-modal-description"
@@ -38,13 +40,13 @@ function UserDelete({ name, deleteUser }) {
             className="flex justify-evenly space-x-2"
           >
             <button
-              className="p-1 bg-green-400 hover:bg-green-600 hover:font-bold hover:text-white duration-200 ease-in-out flex-[.5]"
+              className="p-1 text-sm md:text-md bg-green-400 hover:bg-green-600 hover:font-bold hover:text-white duration-200 ease-in-out flex-[.5]"
               onClick={deleteUser}
             >
               Yes
             </button>
             <button
-              className="p-1 bg-red-400 hover:bg-red-600 hover:font-bold hover:text-white duration-200 ease-in-out flex-[.5]"
+              className="p-1 text-sm md:text-md bg-red-400 hover:bg-red-600 hover:font-bold hover:text-white duration-200 ease-in-out flex-[.5]"
               onClick={() => setOpen(false)}
             >
               No

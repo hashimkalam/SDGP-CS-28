@@ -1,8 +1,12 @@
 import React, { useEffect, useState } from "react";
-import Navbar from "../../components/navbar/navbar";
 import Architect from "./Architect";
+import { useNavigate } from "react-router-dom";
+
+import LoadingState from "../../components/loadingState/LoadingState";
 
 const ArchitectPanel = () => {
+  const navigate = useNavigate();
+
   const [architects, setArchitects] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -10,7 +14,9 @@ const ArchitectPanel = () => {
   useEffect(() => {
     const fetchArchitects = async () => {
       try {
-        const response = await fetch("http://localhost:3000/api/user/architectpanel");
+        const response = await fetch(
+          "https://sdgp-cs-28-backend-final-cp24t3kdkq-uc.a.run.app/api/user/architectpanel"
+        );
         const data = await response.json();
         console.log(data);
         setArchitects(data.architects);
@@ -27,7 +33,11 @@ const ArchitectPanel = () => {
   }, []); // Empty dependency array means this effect will only run once, similar to componentDidMount
 
   if (loading) {
-    return <div>Loading...</div>;
+    return (
+      <div>
+        <LoadingState />
+      </div>
+    );
   }
 
   if (error) {
@@ -35,13 +45,14 @@ const ArchitectPanel = () => {
   }
 
   return (
-    <div className="h-full">
-      <Navbar />
-
+    <div className="h-full bg-custom-blue">
       <div className="flex flex-col justify-center items-center">
-        <h1 className="text-4xl font-bold">Our Panel of Architects</h1>
-        <h5 className="text-2xl">
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suscipit tristique volutp
+        <h1 className="text-lg sm:text-xl md:text-2xl lg:text-3xl xl:text-4xl font-bold text-center text-white">
+          Our Panel of Architects
+        </h1>
+        <h5 className="text-xs sm:text-sm md:text-base lg:text-lg xl:text-xl 2xl:text-2xl text-center text-white">
+          Choose an architect to meet and discuss your project with them in
+          detail
         </h5>
       </div>
 
@@ -51,10 +62,14 @@ const ArchitectPanel = () => {
         ))}
       </div>
 
-      <button 
-        className="bg-gradient-to-r from-[#667EEA] to-[#5E5ABA] hover:from-[#5E5ABA] hover:to-[#667EEA] text-white p-4 rounded-md m-10">
-        Book an appointment to meet an architect
-      </button>
+      <div className="flex justify-center">
+        <button
+          className="bg-gradient-to-r from-[#667EEA] to-[#5E5ABA] hover:from-[#5E5ABA] hover:to-[#667EEA] text-white p-4 rounded-md m-10"
+          onClick={() => navigate("/appointment")}
+        >
+          Book an appointment to meet an architect
+        </button>
+      </div>
     </div>
   );
 };

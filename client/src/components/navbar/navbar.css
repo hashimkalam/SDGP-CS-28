@@ -2,33 +2,19 @@
   scroll-behavior: smooth;
 }
 
- .navbar {
-
-  /*display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 15px;
-  background: linear-gradient(91deg, #002865 0.25%, #004ec3 100%);*/
-  
+.navbar {
   z-index: 999;
-} 
-
-/* .logo-container {
-  display: flex;
-  align-items: center;
-  cursor: pointer;
-} */
+}
 
 .login,
 .signup,
 .logout {
-  
   color: #0b113a;
-  
+
   font-family: "Work Sans", sans-serif;
-  
+
   word-wrap: break-word;
-  
+
   border: none;
   margin-right: 15px;
   cursor: pointer;
