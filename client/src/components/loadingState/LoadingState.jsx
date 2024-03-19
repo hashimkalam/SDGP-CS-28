@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 
-function LoadingState({ planLoading, height }) {
+function LoadingState({ planLoading }) {
   const [currentAnimation, setCurrentAnimation] = useState(0);
 
   useEffect(() => {

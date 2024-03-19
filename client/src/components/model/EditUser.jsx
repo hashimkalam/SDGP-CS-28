@@ -2,7 +2,6 @@ import { Button, Modal, Box, Typography } from "@mui/material";
 
 import { useState } from "react";
 
-
 import NameEdit from "./NameEdit";
 import PasswordEdit from "./PasswordEdit";
 
@@ -41,7 +40,6 @@ const EditUser = () => {
           <h1 className="mt-0 font-semibold">Edit Informations</h1>
 
           <div className="flex flex-col space-y-2 m-5 ">
-    
             <NameEdit />
             <PasswordEdit />
           </div>

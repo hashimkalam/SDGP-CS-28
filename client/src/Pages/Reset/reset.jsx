@@ -7,10 +7,8 @@ import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import pattern_img from "../../assets/pattern.png";
 import resetImage from "../../assets/login_person.png";
 import logo from "../../assets/Logo.png";
-import Alert from "@mui/material/Alert";
 import { useSnackbar } from "notistack";
-
-// Import other necessary assets, styles, and components
+import RegisterImage from "../../components/RegisterImage/RegisterImage";
 
 const buttonStyles = {
   margin: "20px",
@@ -214,26 +212,7 @@ const ResetPassword = () => {
         </div>
       </div>
 
-      <div
-        style={{
-          backgroundImage: `url(${pattern_img})`,
-          backgroundRepeat: "no-repeat",
-          backgroundSize: "cover",
-          backgroundPosition: "center",
-        }}
-        className="bg-cover hidden sm:hidden lg:flex justify-center items-center md:w-1/2"
-      >
-        <div className="relative md:w-[40vw] lg:w-[30vw] lg:h-[65vh] xl:h-[55vh] border border-[white] -z-1 p-5 rounded-2xl lg:text-center xl:text-left backdrop-blur-lg">
-          <p className="text-white text-sm md:text-md lg:text-lg xl:text-xl font-extrabold xl:w-1/2">
-            Reset your password and get back to your account
-          </p>
-          <img
-            src={resetImage}
-            className="registerImg lg:right-[-20px] xl:right-[-80px] scale-100 lg:scale-100 "
-            alt
-          />
-        </div>
-      </div>
+      <RegisterImage />
     </div>
   );
 };

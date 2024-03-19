@@ -36,7 +36,9 @@ const Navbar = () => {
 
   const navigateToLogout = async () => {
     try {
-      await fetch("https://sdgp-cs-28-backend-final-cp24t3kdkq-uc.a.run.app/api/auth/signout");
+      await fetch(
+        "https://sdgp-cs-28-backend-final-cp24t3kdkq-uc.a.run.app/api/auth/signout"
+      );
       dispatch(signOut());
     } catch (error) {
       console.log(error);
@@ -60,6 +62,7 @@ const Navbar = () => {
           onClick={() => navigate("/")}
           className="cursor-pointer"
           alt="Logo"
+          loading="lazy"
         />
       ) : (
         <motion.a
@@ -77,11 +80,14 @@ const Navbar = () => {
         {currentUser?.user && (
           <div className="flex items-center">
             <img
-            // if no profile picture is available, use a default image profile-user
-              src={currentUser?.user?.profilePicture || "/images/profile-user.png"}
+              // if no profile picture is available, use a default image profile-user
+              src={
+                currentUser?.user?.profilePicture || "/images/profile-user.png"
+              }
               alt="profilePicture"
               className="h-9 w-9 md:mr-2 rounded-full object-cover cursor-pointer"
               onClick={navigateToProfileOrDashboard}
+              loading="lazy"
             />
           </div>
         )}
@@ -124,6 +130,14 @@ const Navbar = () => {
               className="transition-all duration-500 md:text-xl font-Inter-Regular text-lg"
             >
               <span>PRICING</span>
+            </a>
+          </li>
+          <li className="md:my-0 my-5">
+            <a
+              href="#aboutus"
+              className="transition-all duration-500 md:text-xl font-Inter-Regular text-lg"
+            >
+              <span>ABOUT US</span>
             </a>
           </li>
 
@@ -219,6 +233,7 @@ const Navbar = () => {
             alt="profilePicture"
             className="h-9 w-9 md:mr-2 rounded-full object-cover cursor-pointer"
             onClick={navigateToProfileOrDashboard}
+            loading="lazy"
           />
         </motion.div>
       ) : (

@@ -5,7 +5,7 @@ import { deleteObject, ref } from "firebase/storage";
 import { storage, database } from "../../firebase";
 import { ref as dbRef, remove } from "firebase/database";
 
-const LeftChat = ({ userId, click, floorPlanPath, description }) => {
+const LeftChat = ({ userId, click, floorPlanPath, description, styles }) => {
   console.log(userId, "id");
 
   const deletePlan = () => {
@@ -45,7 +45,7 @@ const LeftChat = ({ userId, click, floorPlanPath, description }) => {
 
   return (
     <div
-      className="flex justify-between space-x-4 text-white cursor-pointer w-full h-auto mt-5 p-3 align-middle mx-5 rounded-3xl hover:bg-custom-blue transition-colors duration-200"
+      className={`flex justify-between items-center space-x-4 ${styles} text-white cursor-pointer hover:bg-[#090E34]/50 w-full h-auto mt-5 py-3 align-middle mx-5 rounded-lg px-2`}
       onClick={click}
     >
       <ChatBubbleOutlineIcon />

@@ -2,13 +2,11 @@ import React, { useEffect, useState } from "react";
 import Architect from "./Architect";
 import { useNavigate } from "react-router-dom";
 
-
 import LoadingState from "../../components/loadingState/LoadingState";
 
 const ArchitectPanel = () => {
-
   const navigate = useNavigate();
-  
+
   const [architects, setArchitects] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -45,8 +43,6 @@ const ArchitectPanel = () => {
   if (error) {
     return <div>Error: {error}</div>;
   }
-
- 
 
   return (
     <div className="h-full bg-custom-blue ">

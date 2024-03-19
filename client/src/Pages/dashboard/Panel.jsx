@@ -128,6 +128,7 @@ const Panel = () => {
               className="relative flex items-center bg-white shadow rounded-lg h-[10rem] w-[20rem] xl:h-[200px] cursor-pointer transform transition-transform hover:scale-105 duration-500"
             >
               <img
+                loading="lazy"
                 src={dataVal}
                 className="h-full w-full rounded-lg"
                 alt={`Image ${index}`}
@@ -151,6 +152,7 @@ const Panel = () => {
               onClick={() => setOpenImage(null)}
             >
               <img
+                loading="lazy"
                 src={openImage}
                 className="h-5/6 w-5/6 object-contain"
                 alt="Image"

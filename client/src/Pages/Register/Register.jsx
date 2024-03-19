@@ -10,9 +10,6 @@ import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import AddCardIcon from "@mui/icons-material/AddCard";
 
-import pattern_img from "../../assets/pattern.png";
-import logInPersonImage from "../../assets/login_person.png";
-import signUpPersonImage from "../../assets/signup_person.png";
 import googleLogo from "../../assets/google_logo.jpg";
 import logo from "../../assets/Logo.png";
 import Select from "react-select";
@@ -29,6 +26,7 @@ import { app } from "../../firebase";
 import SignInModel from "../../components/model/SignInModel";
 
 import { useSnackbar } from "notistack";
+import RegisterImage from "../../components/RegisterImage/RegisterImage";
 
 const options = [
   { value: "individual", label: "Individual" },
@@ -214,18 +212,21 @@ function Register() {
 
             if (result && result.user) {
               // User exists, proceed with login
-              const res = await fetch("https://sdgp-cs-28-backend-final-cp24t3kdkq-uc.a.run.app/api/auth/google", {
-                method: "POST",
-                headers: {
-                  "Content-Type": "application/json",
-                },
-                body: JSON.stringify({
-                  name: result.user.displayName,
-                  email: result.user.email,
-                  photo: result?.user?.photoURL,
-                  role: option,
-                }),
-              });
+              const res = await fetch(
+                "https://sdgp-cs-28-backend-final-cp24t3kdkq-uc.a.run.app/api/auth/google",
+                {
+                  method: "POST",
+                  headers: {
+                    "Content-Type": "application/json",
+                  },
+                  body: JSON.stringify({
+                    name: result.user.displayName,
+                    email: result.user.email,
+                    photo: result?.user?.photoURL,
+                    role: option,
+                  }),
+                }
+              );
 
               if (res.ok) {
                 const data = await res.json();
@@ -396,7 +397,6 @@ function Register() {
 
               {loginPage ? (
                 <Button
-                
                   type="submit"
                   style={buttonStyles}
                   onSubmit={submitHandler}
@@ -430,10 +430,6 @@ function Register() {
                   />
                   Sign in with Google
                 </Button>
-                {/* <Button style={styles}>
-                  <AppleIcon className="mr-2" />
-                  Sign in with Apple
-                </Button> */}
               </div>
 
               <div className="mt-4 -mb-[4vh]">
@@ -469,31 +465,7 @@ function Register() {
           handleContinue={() => handleRoleSelection(selectedOption)}
         />
       )}
-      <div
-        style={{ backgroundImage: `url(${pattern_img})` }}
-        className="bg-cover hidden sm:hidden lg:flex justify-center items-center md:w-1/2"
-      >
-        <div className="relative md:w-[40vw] lg:w-[30vw] lg:h-[65vh] xl:h-[55vh] border border-[white] -z-1 p-5 rounded-2xl lg:text-center xl:text-left backdrop-blur-lg">
-          <p className="text-white text-sm md:text-md lg:text-lg xl:text-xl font-extrabold xl:w-1/2">
-            No more complex CAD operations. Describe your ideal space, and we'll
-            bring it to life
-          </p>
-
-          {loginPage ? (
-            <img
-              src={logInPersonImage}
-              className="registerImg lg:right-[-20px] xl:right-[-80px] scale-90 lg:scale-100"
-              alt="Person"
-            />
-          ) : (
-            <img
-              src={signUpPersonImage}
-              className="registerImg lg:right-[0px] xl:right-[-50px] scale-100"
-              alt="Person"
-            />
-          )}
-        </div>
-      </div>
+      <RegisterImage />
     </div>
   );
 }
