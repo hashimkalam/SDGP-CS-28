@@ -47,13 +47,13 @@ const data = [
     web: "https://hashimkalam.vercel.app/",
   },
   {
-    name: "Hashim Kalam",
-    desc: "Hashim  played a pivotal role in developing the machine learning model, NLP, and the frontend for EliteBluPrint. His skills were instrumental in bringing this feature to life.",
+    name: "Yasisuru.D.Arachchi",
+    desc: "Yasisuru played an important role in developing EliteBluPrint's frontend, using his skills to make this feature a reality.",
     styles: "z-30 -ml-16",
     image: yasisuru,
-    git: "https://github.com/hashimkalam",
-    linkdn: "https://www.linkedin.com/in/hashimkalam/",
-    web: "https://hashimkalam.vercel.app/",
+    git: "https://github.com/YasisuruArachchi",
+    linkdn: "linkedin.com/in/yasisuru-denagamaarachchi-6b73882b7",
+    web: "",
   },
 ];
 
