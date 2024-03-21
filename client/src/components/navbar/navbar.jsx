@@ -121,7 +121,7 @@ const Navbar = () => {
               href="#how_it_works"
               className="transition-all duration-500 md:text-xl font-Inter-Regular text-lg"
             >
-              <span>HOW IT WOKRS</span>
+              <span>HOW IT WORKS</span>
             </a>
           </li>
           <li className="md:my-0 my-5">
@@ -214,7 +214,7 @@ const Navbar = () => {
                   onClick={() => navigate("/download")}
                   className="bg-[#0065FF]/85 font-Inter-Regular hover:bg-[#0065FF] duration-150 ease-out text-white p-3 rounded-lg"
                 >
-                  Explore Achitect Consultatiom
+                  Explore Achitect Consultation
                 </button>
               )}
             </div>
