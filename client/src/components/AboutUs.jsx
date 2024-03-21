@@ -48,7 +48,7 @@ const data = [
   },
   {
     name: "Yasisuru.D.Arachchi",
-    desc: "Yasisuru played an important role in developing EliteBluPrint's frontend, using his skills to make this feature a reality.",
+    desc: "Loshan's passion was the spark that ignited the entire concept. Not only did he conceive the idea, but he also spearheaded the development of the   application's backend",
     styles: "z-30 -ml-16",
     image: yasisuru,
     git: "https://github.com/YasisuruArachchi",
@@ -70,22 +70,24 @@ function AboutUs() {
         with transforming the way floor plans come to life. Think of us as
         architects of a new kind, wielding code instead of blueprints.
       </p>
-      <div className="flex relative mt-8 w-[80%]">
+      <div className="flex relative mt-8 w-[85%]">
         {data.map((item, index) => (
           <div
             key={index}
             className={`${item.styles} flex flex-col items-center justify-center`}
           >
             <img
+            width={250}
+            height={250}
               src={item.image}
-              className={`w-[250px] bg-[#090E34] p-2 rounded-full`}
+              className={`bg-[#090E34] p-2 rounded-full`}
             />
 
             <div className="w-[60%] space-y-4 mt-4">
               <p>{item.name}</p>
-
+              <div>
               <p className="text-[12px] ">{item.desc}</p>
-
+              </div>
               <div className="flex items-center justify-center">
                 <IconButton href={item.git}>
                   <img src={git} alt="git logo" />
