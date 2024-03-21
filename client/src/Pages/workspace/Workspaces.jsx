@@ -130,7 +130,7 @@ const Workspaces = () => {
     console.log("working");
     try {
       setLoadingState(true);
-      const response = await fetch("http://localhost:5000/submit-textInput", {
+      const response = await fetch("https://mlmodel3-cp24t3kdkq-uc.a.run.app/submit-textInput", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
