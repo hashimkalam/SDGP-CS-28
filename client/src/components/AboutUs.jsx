@@ -1,19 +1,19 @@
-import hashim from "../../public/images/hashim.png";
-import salman from "../../public/images/salman.png";
-import riyazath from "../../public/images/riyazath.png";
-import loshan from "../../public/images/loshan.png";
-import yasisuru from "../../public/images/yasisiru.jpg";
+import hashim from "/images/hashim.png";
+import salman from "/images/salman.png";
+import riyazath from "/images/riyazath.png";
+import loshan from "/images/loshan.png";
+import yasisuru from "/images/yasisiru.jpg";
 
-import git from "../../public/images/git.png";
-import linkdn from "../../public/images/linkdn.png";
-import web from "../../public/images/web.png";
+import git from "/public/images/git.png";
+import linkdn from "/public/images/linkdn.png";
+import web from "/public/images/web.png";
 import { IconButton } from "@mui/material";
 
 const data = [
   {
     name: "Salman Faraj",
     desc: "Salman played a pivotal role in crafting the core algorithm that powers EliteBluPrint's floor plan generation, he wasn't just coding, he also designed the UI of the application",
-    styles: "z-30 -mr-16",
+    styles: "z-30 lg:-mr-24",
     image: salman,
     git: "https://github.com/salmanfaraj06",
     linkdn: "https://www.linkedin.com/in/salman-faraj-2617a924b/",
@@ -22,17 +22,8 @@ const data = [
   {
     name: "Mohamed Riyazath",
     desc: "Riyazath brings a blend of passion and technical expertise to the table. He played a key role in crafting the machine learning model and NLP that power EliteBluPrint",
-    styles: "z-40 -mr-16",
+    styles: "z-40 lg:-mr-24",
     image: riyazath,
-    git: "https://github.com/hashimkalam",
-    linkdn: "https://www.linkedin.com/in/hashimkalam/",
-    web: "https://hashimkalam.vercel.app/",
-  },
-  {
-    name: "Hashim Kalam",
-    desc: "Hashim  played a pivotal role in developing the machine learning model, NLP, and the frontend for EliteBluPrint. His skills were instrumental in bringing this feature to life.",
-    styles: "z-50",
-    image: hashim,
     git: "https://github.com/hashimkalam",
     linkdn: "https://www.linkedin.com/in/hashimkalam/",
     web: "https://hashimkalam.vercel.app/",
@@ -40,16 +31,26 @@ const data = [
   {
     name: "Loshan Selvaraj",
     desc: "Loshan's passion was the spark that ignited the entire concept. Not only did he conceive the idea, but he also spearheaded the development of the   application's backend",
-    styles: "z-40 -ml-16",
+    styles: "z-50",
     image: loshan,
     git: "https://github.com/hashimkalam",
     linkdn: "https://www.linkedin.com/in/hashimkalam/",
     web: "https://hashimkalam.vercel.app/",
   },
   {
+    name: "Hashim Kalam",
+    desc: "Hashim  played a pivotal role in developing the machine learning model, NLP, and the frontend for EliteBluPrint. His skills were instrumental in bringing this feature to life.",
+    styles: "z-40 lg:-ml-24",
+    image: hashim,
+    git: "https://github.com/hashimkalam",
+    linkdn: "https://www.linkedin.com/in/hashimkalam/",
+    web: "https://hashimkalam.vercel.app/",
+  },
+
+  {
     name: "Yasisuru.D.Arachchi",
-    desc: "Yasisuru played an important role in developing EliteBluPrint's frontend, using his skills to make this feature a reality.",
-    styles: "z-30 -ml-16",
+    desc: "Yasisuru played an important role in developing EliteBluPrint's frontend, using his skills to make such an application a reality with its user friendly interface.",
+    styles: "z-30 lg:-ml-24",
     image: yasisuru,
     git: "https://github.com/YasisuruArachchi",
     linkdn: "https://www.linkedin.com/in/yasisurudenagamaarachchi/",
@@ -70,15 +71,15 @@ function AboutUs() {
         with transforming the way floor plans come to life. Think of us as
         architects of a new kind, wielding code instead of blueprints.
       </p>
-      <div className="flex relative mt-8 w-[80%]">
+      <div className="lg:flex relative mt-8 lg:w-[85%]">
         {data.map((item, index) => (
           <div
             key={index}
-            className={`${item.styles} flex flex-col items-center justify-center`}
+            className={`${item.styles} flex flex-col mb-10 lg:mb-0 items-center justify-center`}
           >
             <img
               src={item.image}
-              className={`w-[250px] bg-[#090E34] p-2 rounded-full`}
+              className={`w-[250px] h-[250px] bg-[#090E34] p-2 rounded-full`}
             />
 
             <div className="w-[60%] space-y-4 mt-4">
