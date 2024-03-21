@@ -25,9 +25,9 @@ function Preview({ onTextSelect }) {
   };
 
   return (
-    <div className="w-[60vw] mx-auto space-y-5 h-[65vh] flex flex-col justify-center">
+    <div className="md:w-[60vw] w-auto mx-auto space-y-5 h-[65vh] flex flex-col justify-center">
       <p className="text-xl font-semibold">
-        <span className="bg-gradient-text text-5xl">
+        <span className="bg-gradient-text md:text-5xl text-[42px]">
           Welcome to EliteBluPrint!
         </span>
       </p>

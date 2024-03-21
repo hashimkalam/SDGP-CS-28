@@ -304,11 +304,11 @@ const Workspaces = () => {
                 onSubmit={handleGenerate}
                 className="absolute bottom-0 flex items-center justify-center w-full space-x-2"
               >
-                <div className="-mb-5 z-50 w-[68vw]">
+                <div className="-mb-5 z-auto w-[68vw]">
                   {location.pathname == "/workspace" && (
                     <Preview onTextSelect={handleTextSelect} />
                   )}
-                  <div className="flex mt-10 mx-5 justify-between bg-[#0047FF33] rounded-full">
+                  <div className="flex mt-10 md:mx-5 mx-2 justify-between bg-[#0047FF33] rounded-full">
                     <input
                       type="text"
                       className="w-full p-2 px-4 outline-none bg-transparent  flex-1"
@@ -335,7 +335,7 @@ const Workspaces = () => {
 
           {/* flex-0 md:flex-[.25] rounded-xl overflow-y-scroll overflow-x-hidden */}
           {showLeftChat && (
-            <div className="bg-[#005BE2] absolute inset-0 flex flex-col md:hidden"> 
+            <div className="bg-[#005BE2] absolute inset-0 flex flex-col w-[93%] rounded-r-md md:hidden"> 
               <div
                 className="bg-white hover:bg-slate-200 ease-out duration-150 mt-5 cursor-pointer w-auto px-2 md:py-3 mx-5 rounded-lg"
                 onClick={() => handleOnClickNewChat("")}
