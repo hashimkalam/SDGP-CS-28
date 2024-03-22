@@ -233,23 +233,22 @@ const Navbar = () => {
         </motion.div>
       ) : (
         <div className="md:flex md:flex-row flex-col md:my-0 my-7 items-center">
-          {location.pathname === "/" ||
-            (location.pathname === "/aboutus" && (
-              <div className="md:flex items-center space-x-4 hidden">
-                <button
-                  className="bg-white text-custom-blue md:text-xl text-lg font-Inter-Regular font-semibold py-2 px-6 rounded-full md:mr-1 mr-2 w-[140px] hover:bg-[#004EC3] duration-500"
-                  onClick={navigateToLogin}
-                >
-                  LOGIN
-                </button>
-                <button
-                  className="bg-white text-custom-blue md:text-xl text-lg font-Inter-Regular font-semibold py-2 px-6 rounded-full md:mr-1 mr-2 w-[140px] hover:bg-[#004EC3] duration-500"
-                  onClick={navigateToSignup}
-                >
-                  SIGNUP
-                </button>
-              </div>
-            ))}
+          {(location.pathname === "/" || location.pathname === "/aboutus") && (
+            <div className="md:flex items-center space-x-4 hidden">
+              <button
+                className="bg-white text-custom-blue md:text-xl text-lg font-Inter-Regular font-semibold py-2 px-6 rounded-full md:mr-1 mr-2 w-[140px] hover:bg-[#004EC3] duration-500"
+                onClick={navigateToLogin}
+              >
+                LOGIN
+              </button>
+              <button
+                className="bg-white text-custom-blue md:text-xl text-lg font-Inter-Regular font-semibold py-2 px-6 rounded-full md:mr-1 mr-2 w-[140px] hover:bg-[#004EC3] duration-500"
+                onClick={navigateToSignup}
+              >
+                SIGNUP
+              </button>
+            </div>
+          )}
         </div>
       )}
 
