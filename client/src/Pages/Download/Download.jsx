@@ -29,7 +29,7 @@ function Download() {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 1, delay: 0.5 }}
-      className="max-w-[1560px] mx-auto min-h-[80vh] -mt-5 overflow-hidden lg:overflow-auto flex flex-col lg:flex-row text-white p-10"
+      className="max-w-[1560px] mx-auto min-h-[88vh] -mt-5 overflow-hidden lg:overflow-auto flex flex-col lg:flex-row text-white p-10"
     >
       <div className="lg:flex-[.5] flex flex-col justify-center relative mt-0 lg:-mt-20">
         <motion.h1
@@ -68,12 +68,14 @@ function Download() {
                 src={tick_image}
                 alt="Tick_Image"
                 className="p-[12px] bg-gray-500/25"
+                loading="lazy"
               />
               <p className="text-[#959CB1]">{option.text}</p>
             </motion.div>
           ))}
 
           <motion.img
+            loading="lazy"
             initial={{ opacity: 0, translateY: 50 }}
             animate={{ opacity: 1, translateY: 0 }}
             transition={{ duration: 0.75, delay: 1 }}

@@ -1,8 +1,7 @@
 import { useFormik } from "formik";
 import emailjs from "emailjs-com";
-import React, { useEffect, useState } from "react";
+import { useState } from "react";
 import Alert from "@mui/material/Alert";
-import CheckIcon from "@mui/icons-material/Check";
 
 const AppointmentForm = () => {
   const [submissionSuccessful, setSubmissionSuccessful] = useState(false);

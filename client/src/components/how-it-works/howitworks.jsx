@@ -1,9 +1,7 @@
 import React from "react";
 import Stepcard from "../Stepcard/stepcard";
-import "./how-it-works.css";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
-
 import { motion } from "framer-motion";
 import { useInView } from "react-intersection-observer";
 

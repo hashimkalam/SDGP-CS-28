@@ -1,13 +1,12 @@
-import React from "react";
-import "./logo.css";
-import { useNavigate } from "react-router-dom";
-
 export const Logo = ({ logoIcon = "images/img_logoicon.svg" }) => {
   return (
-    <div className="logo">
-      <div className="overlap-group">
-        <div className="elite-blu-print">EliteBluPrint</div>
-        <img className="logo-icon" alt="Logo icon" src={logoIcon} />
+    <div className="cursor-pointer flex items-center justify-center">
+      <img alt="Logo icon" src={logoIcon} />
+      <div
+        style={{ fontFamily: "Inter-BoldItalic, Helvetica", fontSize: "26px" }}
+        className="text-white italic font-semibold -ml-1.5"
+      >
+        EliteBluPrint
       </div>
     </div>
   );

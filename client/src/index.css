@@ -70,8 +70,11 @@ html {
   scroll-behavior: smooth;
 }
 .bg-gradient-text {
-  background: linear-gradient(to right, #fff, #243be4);
+  background: linear-gradient(to right, #090e34, #243be4);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
+}
+.workspace_shadow {
+  box-shadow: 3px 3px 12px 5px rgba(0, 0, 0, 0.1);
 }

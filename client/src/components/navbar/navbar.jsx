@@ -36,7 +36,9 @@ const Navbar = () => {
 
   const navigateToLogout = async () => {
     try {
-      await fetch("https://sdgp-cs-28-backend-final-cp24t3kdkq-uc.a.run.app/api/auth/signout");
+      await fetch(
+        "https://sdgp-cs-28-backend-final-cp24t3kdkq-uc.a.run.app/api/auth/signout"
+      );
       dispatch(signOut());
     } catch (error) {
       console.log(error);
@@ -49,6 +51,7 @@ const Navbar = () => {
         location.pathname === "/"
           ? "relative bg-gradient-to-r from-[#002865] to-[#004ec3]"
           : location.pathname === "/userprofile" ||
+            location.pathname === "/aboutus" ||
             location.pathname === "/download"
           ? "bg-[#090E34]"
           : ""
@@ -60,6 +63,7 @@ const Navbar = () => {
           onClick={() => navigate("/")}
           className="cursor-pointer"
           alt="Logo"
+          loading="lazy"
         />
       ) : (
         <motion.a
@@ -77,18 +81,22 @@ const Navbar = () => {
         {currentUser?.user && (
           <div className="flex items-center">
             <img
-            // if no profile picture is available, use a default image profile-user
-              src={currentUser?.user?.profilePicture || "/images/profile-user.png"}
+              // if no profile picture is available, use a default image profile-user
+              src={
+                currentUser?.user?.profilePicture || "/images/profile-user.png"
+              }
               alt="profilePicture"
               className="h-9 w-9 md:mr-2 rounded-full object-cover cursor-pointer"
               onClick={navigateToProfileOrDashboard}
+              loading="lazy"
             />
           </div>
         )}
 
         {location.pathname !== "/userprofile" &&
           location.pathname !== "/architectpanel" &&
-          location.pathname !== "/download" && (
+          location.pathname !== "/download" &&
+          location.pathname !== "/aboutus" && (
             <div onClick={() => setOpen(!open)} className="flex items-center">
               <ion-icon name={open ? "close" : "menu"}></ion-icon>
             </div>
@@ -115,7 +123,7 @@ const Navbar = () => {
               href="#how_it_works"
               className="transition-all duration-500 md:text-xl font-Inter-Regular text-lg"
             >
-              <span>HOW IT WOKRS</span>
+              <span>HOW IT WORKS</span>
             </a>
           </li>
           <li className="md:my-0 my-5">
@@ -126,46 +134,47 @@ const Navbar = () => {
               <span>PRICING</span>
             </a>
           </li>
+          <li className="md:my-0 my-5">
+            <a
+              onClick={() => navigate("/aboutus")}
+              className="transition-all duration-500 md:text-xl font-Inter-Regular text-lg cursor-pointer"
+            >
+              <span>ABOUT US</span>
+            </a>
+          </li>
 
           {/* Buttons for small devices */}
 
+          {/* conditions for buttons login - signup - signout */}
           <div className="md:hidden">
             {currentUser ? (
-              <>
-                {/* Looged-in users */}
+              <div className="flex items-center mt-6 space-x-4">
+                <button
+                  className="bg-[#002865] text-white md:text-xl text-lg font-Inter-Regular font-semibold py-2 px-6 rounded-full w-full hover:bg-[#004EC3] duration-500"
+                  onClick={navigateToLogout}
+                >
+                  LOGOUT
+                </button>
 
-                <div className="flex items-center mt-6 space-x-4">
-                  <button
-                    className="bg-[#002865] text-white md:text-xl text-lg font-Inter-Regular font-semibold py-2 px-6 rounded-full w-full hover:bg-[#004EC3] duration-500"
-                    onClick={navigateToLogout}
-                  >
-                    LOGOUT
-                  </button>
-
-                  <div className="text-[#1d2144] font-Inter-Regular text-lg">
-                    {currentUser?.user?.username}
-                  </div>
+                <div className="text-[#1d2144] font-Inter-Regular text-lg">
+                  {currentUser?.user?.username}
                 </div>
-              </>
+              </div>
             ) : (
-              <>
-                {/* unregistered */}
-
-                <div className="flex-col mt-6 space-y-5">
-                  <button
-                    className="bg-[#002865] text-white md:text-xl text-lg font-Inter-Regular font-semibold py-2 px-6 rounded-full w-full hover:bg-[#004EC3] duration-500"
-                    onClick={navigateToLogin}
-                  >
-                    LOGIN
-                  </button>
-                  <button
-                    className="bg-[#002865] text-white md:text-xl text-lg font-Inter-Regular font-semibold py-2 px-6 rounded-full w-full hover:bg-[#004EC3] duration-500"
-                    onClick={navigateToSignup}
-                  >
-                    SIGNUP
-                  </button>
-                </div>
-              </>
+              <div className="flex-col mt-6 space-y-5">
+                <button
+                  className="bg-[#002865] text-white md:text-xl text-lg font-Inter-Regular font-semibold py-2 px-6 rounded-full w-full hover:bg-[#004EC3] duration-500"
+                  onClick={navigateToLogin}
+                >
+                  LOGIN
+                </button>
+                <button
+                  className="bg-[#002865] text-white md:text-xl text-lg font-Inter-Regular font-semibold py-2 px-6 rounded-full w-full hover:bg-[#004EC3] duration-500"
+                  onClick={navigateToSignup}
+                >
+                  SIGNUP
+                </button>
+              </div>
             )}
           </div>
         </motion.ul>
@@ -178,7 +187,7 @@ const Navbar = () => {
           transition={{ duration: 0.5 }}
           className="md:flex items-center hidden"
         >
-          {location.pathname == "/" && (
+          {(location.pathname == "/" || location.pathname === "/aboutus") && (
             <button
               className="bg-white text-custom-blue md:text-xl text-lg font-Inter-Regular font-semibold py-2 px-6 rounded-full md:ml-8 md:mr-4 mr-2 w-[140px] hover:bg-[#fff] duration-500"
               onClick={navigateToLogout}
@@ -200,7 +209,7 @@ const Navbar = () => {
                   onClick={() => navigate("/download")}
                   className="bg-[#0065FF]/85 font-Inter-Regular hover:bg-[#0065FF] duration-150 ease-out text-white p-3 rounded-lg"
                 >
-                  Explore Achitect Consultatiom
+                  Explore Achitect Consultation
                 </button>
               )}
             </div>
@@ -219,11 +228,12 @@ const Navbar = () => {
             alt="profilePicture"
             className="h-9 w-9 md:mr-2 rounded-full object-cover cursor-pointer"
             onClick={navigateToProfileOrDashboard}
+            loading="lazy"
           />
         </motion.div>
       ) : (
         <div className="md:flex md:flex-row flex-col md:my-0 my-7 items-center">
-          {location.pathname === "/" && (
+          {(location.pathname === "/" || location.pathname === "/aboutus") && (
             <div className="md:flex items-center space-x-4 hidden">
               <button
                 className="bg-white text-custom-blue md:text-xl text-lg font-Inter-Regular font-semibold py-2 px-6 rounded-full md:mr-1 mr-2 w-[140px] hover:bg-[#004EC3] duration-500"
