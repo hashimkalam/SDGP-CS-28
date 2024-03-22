@@ -61,7 +61,7 @@ function userProfile() {
       const floorPlansRef = ref(database, `users/${userID}/floorPlans`);
       await remove(floorPlansRef);
 
-      // Delete user from Firebase Authentication
+      // Delete user from Firebase Authenticationsnsnsni
       if (firebaseUser) {
         const user = getAuth().currentUser;
         const provider = new GoogleAuthProvider();

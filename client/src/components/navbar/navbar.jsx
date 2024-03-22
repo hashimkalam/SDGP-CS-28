@@ -51,6 +51,7 @@ const Navbar = () => {
         location.pathname === "/"
           ? "relative bg-gradient-to-r from-[#002865] to-[#004ec3]"
           : location.pathname === "/userprofile" ||
+            location.pathname === "/aboutus" ||
             location.pathname === "/download"
           ? "bg-[#090E34]"
           : ""
@@ -94,7 +95,8 @@ const Navbar = () => {
 
         {location.pathname !== "/userprofile" &&
           location.pathname !== "/architectpanel" &&
-          location.pathname !== "/download" && (
+          location.pathname !== "/download" &&
+          location.pathname !== "/aboutus" && (
             <div onClick={() => setOpen(!open)} className="flex items-center">
               <ion-icon name={open ? "close" : "menu"}></ion-icon>
             </div>
@@ -134,8 +136,8 @@ const Navbar = () => {
           </li>
           <li className="md:my-0 my-5">
             <a
-              href="#aboutus"
-              className="transition-all duration-500 md:text-xl font-Inter-Regular text-lg"
+              onClick={() => navigate("/aboutus")}
+              className="transition-all duration-500 md:text-xl font-Inter-Regular text-lg cursor-pointer"
             >
               <span>ABOUT US</span>
             </a>
@@ -143,43 +145,36 @@ const Navbar = () => {
 
           {/* Buttons for small devices */}
 
+          {/* conditions for buttons login - signup - signout */}
           <div className="md:hidden">
             {currentUser ? (
-              <>
-                {/* Looged-in users */}
+              <div className="flex items-center mt-6 space-x-4">
+                <button
+                  className="bg-[#002865] text-white md:text-xl text-lg font-Inter-Regular font-semibold py-2 px-6 rounded-full w-full hover:bg-[#004EC3] duration-500"
+                  onClick={navigateToLogout}
+                >
+                  LOGOUT
+                </button>
 
-                <div className="flex items-center mt-6 space-x-4">
-                  <button
-                    className="bg-[#002865] text-white md:text-xl text-lg font-Inter-Regular font-semibold py-2 px-6 rounded-full w-full hover:bg-[#004EC3] duration-500"
-                    onClick={navigateToLogout}
-                  >
-                    LOGOUT
-                  </button>
-
-                  <div className="text-[#1d2144] font-Inter-Regular text-lg">
-                    {currentUser?.user?.username}
-                  </div>
+                <div className="text-[#1d2144] font-Inter-Regular text-lg">
+                  {currentUser?.user?.username}
                 </div>
-              </>
+              </div>
             ) : (
-              <>
-                {/* unregistered */}
-
-                <div className="flex-col mt-6 space-y-5">
-                  <button
-                    className="bg-[#002865] text-white md:text-xl text-lg font-Inter-Regular font-semibold py-2 px-6 rounded-full w-full hover:bg-[#004EC3] duration-500"
-                    onClick={navigateToLogin}
-                  >
-                    LOGIN
-                  </button>
-                  <button
-                    className="bg-[#002865] text-white md:text-xl text-lg font-Inter-Regular font-semibold py-2 px-6 rounded-full w-full hover:bg-[#004EC3] duration-500"
-                    onClick={navigateToSignup}
-                  >
-                    SIGNUP
-                  </button>
-                </div>
-              </>
+              <div className="flex-col mt-6 space-y-5">
+                <button
+                  className="bg-[#002865] text-white md:text-xl text-lg font-Inter-Regular font-semibold py-2 px-6 rounded-full w-full hover:bg-[#004EC3] duration-500"
+                  onClick={navigateToLogin}
+                >
+                  LOGIN
+                </button>
+                <button
+                  className="bg-[#002865] text-white md:text-xl text-lg font-Inter-Regular font-semibold py-2 px-6 rounded-full w-full hover:bg-[#004EC3] duration-500"
+                  onClick={navigateToSignup}
+                >
+                  SIGNUP
+                </button>
+              </div>
             )}
           </div>
         </motion.ul>
@@ -192,7 +187,7 @@ const Navbar = () => {
           transition={{ duration: 0.5 }}
           className="md:flex items-center hidden"
         >
-          {location.pathname == "/" && (
+          {(location.pathname == "/" || location.pathname === "/aboutus") && (
             <button
               className="bg-white text-custom-blue md:text-xl text-lg font-Inter-Regular font-semibold py-2 px-6 rounded-full md:ml-8 md:mr-4 mr-2 w-[140px] hover:bg-[#fff] duration-500"
               onClick={navigateToLogout}
@@ -238,22 +233,23 @@ const Navbar = () => {
         </motion.div>
       ) : (
         <div className="md:flex md:flex-row flex-col md:my-0 my-7 items-center">
-          {location.pathname === "/" && (
-            <div className="md:flex items-center space-x-4 hidden">
-              <button
-                className="bg-white text-custom-blue md:text-xl text-lg font-Inter-Regular font-semibold py-2 px-6 rounded-full md:mr-1 mr-2 w-[140px] hover:bg-[#004EC3] duration-500"
-                onClick={navigateToLogin}
-              >
-                LOGIN
-              </button>
-              <button
-                className="bg-white text-custom-blue md:text-xl text-lg font-Inter-Regular font-semibold py-2 px-6 rounded-full md:mr-1 mr-2 w-[140px] hover:bg-[#004EC3] duration-500"
-                onClick={navigateToSignup}
-              >
-                SIGNUP
-              </button>
-            </div>
-          )}
+          {location.pathname === "/" ||
+            (location.pathname === "/aboutus" && (
+              <div className="md:flex items-center space-x-4 hidden">
+                <button
+                  className="bg-white text-custom-blue md:text-xl text-lg font-Inter-Regular font-semibold py-2 px-6 rounded-full md:mr-1 mr-2 w-[140px] hover:bg-[#004EC3] duration-500"
+                  onClick={navigateToLogin}
+                >
+                  LOGIN
+                </button>
+                <button
+                  className="bg-white text-custom-blue md:text-xl text-lg font-Inter-Regular font-semibold py-2 px-6 rounded-full md:mr-1 mr-2 w-[140px] hover:bg-[#004EC3] duration-500"
+                  onClick={navigateToSignup}
+                >
+                  SIGNUP
+                </button>
+              </div>
+            ))}
         </div>
       )}
 

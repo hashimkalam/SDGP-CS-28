@@ -11,7 +11,6 @@ function Home() {
       <Hero />
       <HowItWorks />
       <PriceSection />
-      <AboutUs />
       <Footer />
     </div>
   );

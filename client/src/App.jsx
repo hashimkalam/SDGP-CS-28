@@ -13,6 +13,7 @@ import UserProfile from "./Pages/UserProfile/userProfile";
 import { useSelector } from "react-redux";
 import PageNotFound from "./components/PageNotFound/PageNotFound";
 import Footer from "./components/footer/footer";
+import AboutUs from "./components/AboutUs";
 
 function App() {
   const currentUser = useSelector((state) => state?.user?.currentUser);
@@ -21,16 +22,6 @@ function App() {
     <div className="min-h-screen">
       <Router>
         <Routes>
-          <Route
-            path="/"
-            element={
-              <div className="bg-[#5E5ABA] h-screen">
-                <Navbar />
-                <Home />
-              </div>
-            }
-          />
-
           {!currentUser?.user && (
             <Route
               path="/login"
@@ -141,6 +132,25 @@ function App() {
             />
           )}
 
+          <Route
+            path="/aboutus"
+            element={
+              <div className="bg-[#5E5ABA] h-screen">
+                <Navbar />
+                <AboutUs />
+                <Footer />
+              </div>
+            }
+          />
+          <Route
+            path="/"
+            element={
+              <div className="bg-[#5E5ABA] h-screen">
+                <Navbar />
+                <Home />
+              </div>
+            }
+          />
           <Route path="*" element={<PageNotFound />} />
         </Routes>
       </Router>
