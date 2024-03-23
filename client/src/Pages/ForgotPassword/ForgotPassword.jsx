@@ -89,7 +89,7 @@ function ForgotPassword() {
 
     // Call your backend API to send OTP email
     const response = await fetch(
-      "https://sdgp-cs-28-backend-final-cp24t3kdkq-uc.a.run.app/forgotpassword/submit",
+      "http://localhost:3000/forgotpassword/submit",
       {
         // Replace "http://localhost:3000" with the actual URL where your backend is running
         method: "POST",

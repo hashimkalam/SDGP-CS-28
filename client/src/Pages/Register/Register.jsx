@@ -144,8 +144,8 @@ function Register() {
 
       const res = await fetch(
         loginPage
-          ? "https://sdgp-cs-28-backend-final-cp24t3kdkq-uc.a.run.app/api/auth/signin"
-          : "https://sdgp-cs-28-backend-final-cp24t3kdkq-uc.a.run.app/api/auth/signup",
+          ? "http://localhost:3000/api/auth/signin"
+          : "http://localhost:3000/api/auth/signup",
         {
           method: "POST",
           headers: {
@@ -213,7 +213,7 @@ function Register() {
             if (result && result.user) {
               // User exists, proceed with login
               const res = await fetch(
-                "https://sdgp-cs-28-backend-final-cp24t3kdkq-uc.a.run.app/api/auth/google",
+                "http://localhost:3000/api/auth/google",
                 {
                   method: "POST",
                   headers: {
@@ -237,11 +237,11 @@ function Register() {
                 {
                   location.pathname === "/login"
                     ? enqueueSnackbar("Logged In Successfully", {
-                        variant: "success",
-                      })
+                      variant: "success",
+                    })
                     : enqueueSnackbar("Signed In Successfully", {
-                        variant: "success",
-                      });
+                      variant: "success",
+                    });
                 }
                 navigate("/workspace");
               } else {
