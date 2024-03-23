@@ -58,12 +58,9 @@ const data = [
   },
 ];
 
-function AboutUs() {
+function OurTeam() {
   return (
-    <div
-      id="aboutus"
-      className="min-h-screen py-10 text-white px-10 bg-[#090E34] text-center flex flex-col items-center justify-center"
-    >
+    <div className="min-h-screen py-10 text-white px-10 bg-[#090E34] text-center flex flex-col items-center justify-center">
       <h1 className="text-5xl font-bold">Meet Our Team</h1>
 
       <p className="mt-5 opacity-55 font-thin italic w-[80%]">
@@ -106,4 +103,4 @@ function AboutUs() {
   );
 }
 
-export default AboutUs;
+export default OurTeam;
