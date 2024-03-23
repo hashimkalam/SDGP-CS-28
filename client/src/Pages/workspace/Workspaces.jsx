@@ -129,6 +129,7 @@ const Workspaces = () => {
 
     console.log("working");
     try {
+      
       setLoadingState(true);
       const response = await fetch("https://sdgpmodel-cp24t3kdkq-uc.a.run.app/submit-textInput", {
         method: "POST",
