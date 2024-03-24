@@ -13,7 +13,7 @@ const data = [
   {
     name: "Salman Faraj",
     desc: "Salman played a pivotal role in crafting the core algorithm that powers EliteBluPrint's floor plan generation, he wasn't just coding, he also designed the UI of the application",
-    styles: "z-30 lg:-mr-24",
+    styles: "z-30 lg:-mr-28",
     image: salman,
     git: "https://github.com/salmanfaraj06",
     linkdn: "https://www.linkedin.com/in/salman-faraj-2617a924b/",
@@ -21,8 +21,8 @@ const data = [
   },
   {
     name: "Mohamed Riyazath",
-    desc: "Riyazath brings a blend of passion and technical expertise to the table. He played a key role in crafting the machine learning model and NLP that power EliteBluPrint",
-    styles: "z-40 lg:-mr-24",
+    desc: "Riyazath brings a blend of passion and technical expertise to the table. He played a key role in testing the entire project and integration of OpenAi to increase accuracy!",
+    styles: "z-40 lg:-mr-28",
     image: riyazath,
     git: "https://github.com/hashimkalam",
     linkdn: "https://www.linkedin.com/in/hashimkalam/",
@@ -30,7 +30,7 @@ const data = [
   },
   {
     name: "Loshan Selvaraj",
-    desc: "Loshan's passion was the spark that ignited the entire concept. Not only did he conceive the idea, but he also spearheaded the development of the   application's backend",
+    desc: "Loshan's passion was the spark that ignited the entire concept. Not only did he conceive the idea, but he also spearheaded the development of the  application's backend",
     styles: "z-50",
     image: loshan,
     git: "https://github.com/hashimkalam",
@@ -40,7 +40,7 @@ const data = [
   {
     name: "Hashim Kalam",
     desc: "Hashim  played a pivotal role in developing the machine learning model, NLP, and the frontend for EliteBluPrint. His skills were instrumental in bringing this feature to life.",
-    styles: "z-40 lg:-ml-24",
+    styles: "z-40 lg:-ml-28",
     image: hashim,
     git: "https://github.com/hashimkalam",
     linkdn: "https://www.linkedin.com/in/hashimkalam/",
@@ -49,7 +49,7 @@ const data = [
 
   {
     name: "Yasisuru.D.Arachchi",
-    desc: "Yasisuru played an important role in developing EliteBluPrint's frontend, using his skills to make such an application a reality with its user friendly interface.",
+    desc: "Yasisuru played an important role in developing EliteBluPrint's frontend, using his skills to make such an application a reality with its clean user friendly interface.",
     styles: "z-30 lg:-ml-24",
     image: yasisuru,
     git: "https://github.com/YasisuruArachchi",
