@@ -54,7 +54,7 @@ const data = [
     image: yasisuru,
     git: "https://github.com/YasisuruArachchi",
     linkdn: "https://www.linkedin.com/in/yasisurudenagamaarachchi/",
-    web: "",
+    web: "http://Yasisuru.atomaxia.com",
   },
 ];
 
