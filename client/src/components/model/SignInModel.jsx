@@ -23,7 +23,7 @@ function SignInModel({ handleClose }) {
       aria-labelledby="modal-modal-title"
       aria-describedby="modal-modal-description"
     >
-      <Box className="absolute text-center w-[75%] lg:w-[400px] rounded-xl p-8 shadow-2xl bg-white/90 hover:bg-white duration-150 ease-out top-[50%] left-[50%] transform -translate-x-1/2 -translate-y-1/2">
+      <Box className="absolute text-center w-[75%] sm:w-[60%] lg:w-[400px] rounded-xl p-8 shadow-2xl bg-white/90 hover:bg-white duration-150 ease-out top-[50%] left-[50%] transform -translate-x-1/2 -translate-y-1/2">
         <Typography
           id="modal-modal-title"
           style={{ fontSize: "24px", fontWeight: "600" }}
@@ -45,7 +45,7 @@ function SignInModel({ handleClose }) {
 
         <Typography id="modal-modal-description" sx={{ mt: 2 }}>
           <span
-            className={`cursor-pointer py-2 block w-[50%] mx-auto wlg:-full rounded-lg ${
+            className={`cursor-pointer py-2 block w-[50%] mx-auto lg:w-full rounded-lg ${
               selectedOption === "Architect"
                 ? "bg-black text-white"
                 : "bg-[#F0EDFF] hover:bg-[#bbb0f0] duration-150 ease-in-out"

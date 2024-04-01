@@ -13,7 +13,7 @@ import UserProfile from "./Pages/UserProfile/userProfile";
 import { useSelector } from "react-redux";
 import PageNotFound from "./components/PageNotFound/PageNotFound";
 import Footer from "./components/footer/footer";
-import AboutUs from "./components/AboutUs";
+import AboutUs from "./Pages/AboutUs/AboutUs";
 
 function App() {
   const currentUser = useSelector((state) => state?.user?.currentUser);

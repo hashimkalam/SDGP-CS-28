@@ -10,6 +10,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@emailjs/browser": "^4.3.3",
     "@emotion/react": "^11.11.3",
     "@emotion/styled": "^11.11.0",
     "@mui/icons-material": "^5.15.7",
@@ -17,6 +18,7 @@
     "@mui/styled-engine-sc": "^6.0.0-alpha.14",
     "@reduxjs/toolkit": "^2.1.0",
     "dotenv": "^16.4.2",
+    "emailjs": "^4.0.3",
     "emailjs-com": "^3.2.0",
     "firebase": "^10.8.0",
     "formik": "^2.4.5",
@@ -30,7 +32,9 @@
     "react-router-dom": "^6.22.0",
     "react-scroll": "^1.9.0",
     "react-select": "^5.8.0",
+    "react-slick": "^0.30.2",
     "redux-persist": "^6.0.0",
+    "slick-carousel": "^1.8.1",
     "styled-components": "^6.1.8",
     "tailwind": "^4.0.0",
     "uuid": "^9.0.1"
