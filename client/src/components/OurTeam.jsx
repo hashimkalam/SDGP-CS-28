@@ -33,9 +33,9 @@ const data = [
     desc: "Loshan's passion was the spark that ignited the entire concept. Not only did he conceive the idea, but he also spearheaded the development of the  application's backend",
     styles: "z-50",
     image: loshan,
-    git: "https://github.com/hashimkalam",
-    linkdn: "https://www.linkedin.com/in/hashimkalam/",
-    web: "https://hashimkalam.vercel.app/",
+    git: "https://github.com/loshan20011",
+    linkdn: "www.linkedin.com/in/loshan-selvaraj-a78638215",
+    web: "https://www.loshanselvaraj.live/",
   },
   {
     name: "Hashim Kalam",
