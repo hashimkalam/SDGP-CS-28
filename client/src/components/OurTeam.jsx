@@ -24,9 +24,9 @@ const data = [
     desc: "Riyazath brings a blend of passion and technical expertise to the table. He played a key role in testing the entire project and integration of OpenAi to increase accuracy!",
     styles: "z-40 lg:-mr-28",
     image: riyazath,
-    git: "https://github.com/hashimkalam",
-    linkdn: "https://www.linkedin.com/in/hashimkalam/",
-    web: "https://hashimkalam.vercel.app/",
+    git: "https://github.com/MhMdRiyazath",
+    linkdn: "https://www.linkedin.com/in/mohamed-riyazath-60a72425b/",
+    web: "https://mohamed-riyazath.vercel.app/",
   },
   {
     name: "Loshan Selvaraj",
