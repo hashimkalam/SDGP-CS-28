@@ -79,7 +79,7 @@ function OurTeam() {
               className={`w-[250px] h-[250px] bg-[#090E34] p-2 rounded-full`}
             />
 
-            <div className="w-[60%] space-y-4 mt-4">
+            <div className="text-justify w-[60%] space-y-4 mt-4">
               <p>{item.name}</p>
 
               <p className="text-[12px] ">{item.desc}</p>
