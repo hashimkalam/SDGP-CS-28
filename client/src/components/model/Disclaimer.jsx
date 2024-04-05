@@ -25,9 +25,9 @@ function Disclaimer() {
       >
         <Box
           sx={style}
-          className="rounded-xl bg-white/90 absolute p-4 shadow-2xl px-8 w-[50vw] md:w-[40vw] lg:w-[30vw] text-center"
+          className="rounded-xl bg-white/90 absolute p-4 shadow-2xl px-8 space-y-5 w-[50vw] md:w-[40vw] lg:w-[30vw] text-center"
         >
-          <h1 className="mt-0 font-semibold text-lg md:text-2xl lg:text-3xl mb-5">
+          <h1 className="mt-0 font-semibold text-lg md:text-2xl lg:text-3xl">
             Work in Progress
           </h1>
 
