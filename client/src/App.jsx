@@ -14,12 +14,14 @@ import { useSelector } from "react-redux";
 import PageNotFound from "./components/PageNotFound/PageNotFound";
 import Footer from "./components/footer/footer";
 import AboutUs from "./Pages/AboutUs/AboutUs";
+import Disclaimer from "./components/model/Disclaimer";
 
 function App() {
   const currentUser = useSelector((state) => state?.user?.currentUser);
 
   return (
     <div className="min-h-screen">
+      <Disclaimer />
       <Router>
         <Routes>
           {!currentUser?.user && (
