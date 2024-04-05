@@ -24,18 +24,18 @@ const data = [
     desc: "Riyazath brings a blend of passion and technical expertise to the table. He played a key role in testing the entire project and integration of OpenAi to increase accuracy!",
     styles: "z-40 lg:-mr-28",
     image: riyazath,
-    git: "https://github.com/hashimkalam",
-    linkdn: "https://www.linkedin.com/in/hashimkalam/",
-    web: "https://hashimkalam.vercel.app/",
+    git: "https://github.com/MhMdRiyazath",
+    linkdn: "https://www.linkedin.com/in/mohamed-riyazath-60a72425b/",
+    web: "https://mohamed-riyazath.vercel.app/",
   },
   {
     name: "Loshan Selvaraj",
     desc: "Loshan's passion was the spark that ignited the entire concept. Not only did he conceive the idea, but he also spearheaded the development of the  application's backend",
     styles: "z-50",
     image: loshan,
-    git: "https://github.com/hashimkalam",
-    linkdn: "https://www.linkedin.com/in/hashimkalam/",
-    web: "https://hashimkalam.vercel.app/",
+    git: "https://github.com/loshan20011",
+    linkdn: "www.linkedin.com/in/loshan-selvaraj-a78638215",
+    web: "https://www.loshanselvaraj.live/",
   },
   {
     name: "Hashim Kalam",
@@ -54,7 +54,7 @@ const data = [
     image: yasisuru,
     git: "https://github.com/YasisuruArachchi",
     linkdn: "https://www.linkedin.com/in/yasisurudenagamaarachchi/",
-    web: "",
+    web: "http://Yasisuru.atomaxia.com",
   },
 ];
 
@@ -79,7 +79,7 @@ function OurTeam() {
               className={`w-[250px] h-[250px] bg-[#090E34] p-2 rounded-full`}
             />
 
-            <div className="w-[60%] space-y-4 mt-4">
+            <div className="text-justify w-[60%] space-y-4 mt-4">
               <p>{item.name}</p>
 
               <p className="text-[12px] ">{item.desc}</p>
