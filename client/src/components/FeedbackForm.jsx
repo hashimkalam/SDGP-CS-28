@@ -35,10 +35,10 @@ function FeedbackForm() {
       };
 
       const result = emailjs.sendForm(
-        "service_qk8251g",
-        "template_fb1s51z",
+        "service_3mt8z5o",
+        "template_fhfk3a6",
         e.currentTarget,
-        "ppjRohwSP3-H3etYn",
+        "6MjS_6rHsk0rSdAL-",
         formData
       );
 
